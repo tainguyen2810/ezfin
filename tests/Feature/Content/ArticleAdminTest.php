@@ -29,6 +29,7 @@ beforeEach(function () {
     Filament::setCurrentPanel('admin');
 });
 
+// MySQL lưu JSON theo thứ tự khóa riêng, nên so sánh nguồn tham khảo bằng toEqual (không xét thứ tự khóa).
 function articleForm(array $overrides = []): array
 {
     return [
@@ -80,7 +81,7 @@ it('saves an editor draft, records who wrote it and keeps a first revision', fun
     expect($article->status)->toBe(ArticleStatus::Draft)
         ->and($article->created_by)->toBe($editor->id)
         ->and($article->published_at)->toBeNull()
-        ->and($article->references)->toBe([['title' => 'Thông tư 48/2018/TT-NHNN', 'url' => 'https://sbv.gov.vn']])
+        ->and($article->references)->toEqual([['title' => 'Thông tư 48/2018/TT-NHNN', 'url' => 'https://sbv.gov.vn']])
         ->and($article->revisions()->count())->toBe(1)
         ->and($article->revisions()->first()->user_id)->toBe($editor->id);
 });
@@ -113,7 +114,7 @@ it('refuses reference and profile links that are not http or https', function ()
     $article = Article::factory()->create(['references' => [['title' => 'Nguồn', 'url' => 'javascript:alert(1)'], ['title' => '', 'url' => 'https://a.vn']]]);
     $author = Author::factory()->create(['links' => ['javascript:alert(1)', 'https://linkedin.com/in/a']]);
 
-    expect($article->references)->toBe([['title' => 'Nguồn', 'url' => null]])
+    expect($article->references)->toEqual([['title' => 'Nguồn', 'url' => null]])
         ->and($author->links)->toBe(['https://linkedin.com/in/a']);
 });
 
