@@ -4,8 +4,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 
 | # | Việc | Tiêu chí nghiệm thu | Trạng thái |
 | --- | --- | --- | --- |
-| 1 | Khởi tạo repo, Laravel, Tailwind/Vite, Pest, CLAUDE.md, TASKS.md, CHANGELOG.md, .env.example | Chạy được trên WAMP theo hướng dẫn; CI test xanh | Chờ duyệt |
-| 2 | Khung module, route theo tên miền (ezfin.vn / app.ezfin.vn), feature flag | Tắt flag thì menu ẩn và URL trả 404; có test | Chưa làm |
+| 1 | Khởi tạo repo, Laravel, Tailwind/Vite, Pest, CLAUDE.md, TASKS.md, CHANGELOG.md, .env.example | Chạy được trên WAMP theo hướng dẫn; CI test xanh | Xong |
+| 2 | Khung module, route theo tên miền (ezfin.vn / app.ezfin.vn), feature flag | Tắt flag thì menu ẩn và URL trả 404; có test | Chờ duyệt |
 | 3 | Design token, font Be Vietnam Pro tự host, component dùng chung, trang `/_ui` | Đủ component và trạng thái; ảnh Playwright 360/768/1280px không tràn ngang | Chưa làm |
 | 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Chưa làm |
 | 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Chưa làm |
@@ -26,6 +26,14 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 2
+
+- Xong: lớp `ModuleServiceProvider` (tự nạp route theo tên miền, view, migration), 5 module khung (Core, Compare, Planner, Content, Partner), menu `Navigation` lọc theo route + feature flag, Pennant dùng làm công tắc toàn hệ thống, flag tắt → 404, middleware `noindex` cho tên miền ứng dụng, lệnh `php artisan ezfin:feature`.
+- Test đã chạy: `vendor/bin/pest` (17 test xanh), `vendor/bin/pint --test`.
+- Chưa giải quyết: không.
+- File quan trọng: `config/ezfin.php`, `app/Support/Modules/ModuleServiceProvider.php`, `app/Support/Navigation/*`, `app/Providers/AppServiceProvider.php`.
+- Tiếp theo: task 3 (design system, trang `/_ui`).
 
 ### 29/10/2026 — Task 1
 

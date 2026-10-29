@@ -21,6 +21,8 @@ Môi trường: Ubuntu Server + aaPanel, Apache hoặc Nginx, PHP 8.3, MySQL 8. 
 ```sh
 cd /www/wwwroot/ezfin
 cp .env.example .env    # sửa APP_ENV=production, APP_DEBUG=false, APP_URL=https://ezfin.vn, DB_*, MAIL_*
+                        # EZFIN_PUBLIC_DOMAIN=ezfin.vn, EZFIN_APP_DOMAIN=app.ezfin.vn,
+                        # EZFIN_ADMIN_PATH=<chuỗi khó đoán>, SESSION_DOMAIN=.ezfin.vn, SESSION_SECURE_COOKIE=true
 composer install --no-dev --optimize-autoloader
 php artisan key:generate
 php artisan migrate --force

@@ -16,6 +16,8 @@ Tiến độ và tiêu chí nghiệm thu: `TASKS.md`. Thay đổi quan trọng: 
 ## Kiến trúc
 
 - Modular monolith: mỗi module trong `app/Modules/<Tên>` (Models, Actions, Http, Policies, routes, views, migrations, tests), đăng ký qua ServiceProvider, bật/tắt bằng feature flag.
+- Module mới: tạo `app/Modules/<Tên>/<Tên>ServiceProvider.php` kế thừa `App\Support\Modules\ModuleServiceProvider` (đặt `$feature`, `publicNavigation()`), thêm vào `config/ezfin.php` (`modules`, `features`). Route: `routes/public.php` (ezfin.vn) và `routes/app.php` (app.ezfin.vn, noindex). View namespace = tên module dạng kebab.
+- Feature flag là công tắc toàn hệ thống (Pennant, scope null), không dùng cho quyền theo gói Free/Pro. Xem/đổi: `php artisan ezfin:feature [tên] [on|off]`.
 - Module chỉ gọi nhau qua Action/Service công khai, không đọc thẳng bảng của module khác.
 - Một codebase cho `ezfin.vn` (public, SEO) và `app.ezfin.vn` (ứng dụng, noindex). Admin ở đường dẫn bí mật trên `app` + 2FA.
 - Chỉ tạo schema cho phase hiện tại. Tiền `DECIMAL(18,2)`, lãi suất `DECIMAL(7,4)`; không dùng float cho tiền.
