@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 7: Danh sách thẻ tín dụng
+
+- Trang `ezfin.vn/the-tin-dung`: lọc theo ngân hàng, phí thường niên, nhu cầu, thu nhập; sắp xếp theo tiêu chí người dùng chọn, không theo đối tác.
+- Bộ lọc lưu trên URL dạng gọn, chia sẻ được; trang đã lọc không cho máy tìm kiếm lập chỉ mục.
+- Mỗi thẻ hiển thị ngày cập nhật, nguồn và cảnh báo khi dữ liệu đến hạn kiểm tra lại.
+
 ### Phase 1 — Task 6: Quản lý thẻ tín dụng
 
 - Bảng sản phẩm tài chính dùng chung và bảng thông số thẻ tín dụng (tiền DECIMAL(18,2), tỷ lệ DECIMAL(7,4)).

@@ -14,6 +14,30 @@ enum CardBenefit: string implements HasLabel
     case Dining = 'dining';
     case Installment = 'installment';
 
+    /** Giá trị trên URL công khai (tiếng Việt không dấu). */
+    public function slug(): string
+    {
+        return match ($this) {
+            self::Cashback => 'hoan-tien',
+            self::Miles => 'tich-dam',
+            self::Shopping => 'mua-sam',
+            self::Travel => 'du-lich',
+            self::Dining => 'an-uong',
+            self::Installment => 'tra-gop',
+        };
+    }
+
+    public static function fromSlug(?string $slug): ?self
+    {
+        foreach (self::cases() as $case) {
+            if ($case->slug() === $slug) {
+                return $case;
+            }
+        }
+
+        return null;
+    }
+
     public function getLabel(): string
     {
         return match ($this) {
