@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Chuẩn bị triển khai và nghiệm thu
+
+- Lệnh `php artisan ezfin:check` kiểm tra máy chủ sau khi cài đặt hoặc deploy, có heartbeat cho cron và queue worker.
+- Hướng dẫn staging, khôi phục thử bản sao lưu, checklist nghiệm thu Phase 1.
+- Trợ năng: màu tiền lãi đủ tương phản, ảnh có kích thước, biểu đồ và thứ tự tiêu đề đúng chuẩn.
+
 ### Phase 1 — Task 18: Chuyển hướng đối tác `/di/` và nhật ký click
 
 - Quản lý liên kết đối tác trong admin, gắn với sản phẩm; nút đối tác trên trang so sánh và trang chi tiết, luôn kèm công bố liên kết, `rel="sponsored nofollow"`.

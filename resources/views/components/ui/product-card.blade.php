@@ -8,7 +8,7 @@
     <div class="flex gap-4">
         <div class="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
             @if ($logo)
-                <img src="{{ $logo }}" alt="{{ $institution }}" class="max-h-10 max-w-16 object-contain" loading="lazy">
+                <img src="{{ $logo }}" alt="{{ $institution }}" width="64" height="40" class="max-h-10 max-w-16 object-contain" loading="lazy">
             @else
                 <span class="text-xs font-semibold text-slate-500">{{ Str::limit($institution, 10, '') }}</span>
             @endif

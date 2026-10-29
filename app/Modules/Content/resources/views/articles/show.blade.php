@@ -45,7 +45,7 @@
         </header>
 
         @if ($article->coverUrl())
-            <img src="{{ $article->coverUrl() }}" alt="" class="mt-6 aspect-[16/9] w-full rounded-card object-cover">
+            <img src="{{ $article->coverUrl() }}" alt="" width="1200" height="675" class="mt-6 aspect-[16/9] w-full rounded-card object-cover">
         @endif
 
         {{-- Nội dung đã lọc XSS khi lưu (App\Modules\Content\Support\ArticleHtml). --}}

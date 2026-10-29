@@ -17,7 +17,7 @@
         <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-start">
             <div class="flex h-24 w-36 shrink-0 items-center justify-center overflow-hidden rounded-card border border-slate-200 bg-white">
                 @if ($image)
-                    <img src="{{ $image }}" alt="{{ $card->name }}" class="max-h-20 max-w-32 object-contain">
+                    <img src="{{ $image }}" alt="{{ $card->name }}" width="128" height="80" class="max-h-20 max-w-32 object-contain">
                 @else
                     <span class="text-sm font-semibold text-slate-500">{{ $card->institution->short_name }}</span>
                 @endif

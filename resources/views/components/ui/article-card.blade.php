@@ -2,7 +2,7 @@
 @props(['title', 'url', 'excerpt' => null, 'category' => null, 'author' => null, 'date' => null, 'minutes' => null, 'cover' => null])
 <article {{ $attributes->merge(['class' => 'group relative flex flex-col overflow-hidden rounded-card border border-slate-200 bg-white shadow-card transition hover:border-primary-200']) }}>
     @if ($cover)
-        <img src="{{ $cover }}" alt="" loading="lazy" class="aspect-[16/9] w-full object-cover">
+        <img src="{{ $cover }}" alt="" width="1200" height="675" loading="lazy" class="aspect-[16/9] w-full object-cover">
     @endif
     <div class="flex flex-1 flex-col p-4 sm:p-5">
         @if ($category)<p class="text-xs font-semibold uppercase tracking-wide text-primary-700">{{ $category }}</p>@endif
