@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 5: Ngân hàng và tổ chức tài chính
+
+- Quản trị danh sách ngân hàng, công ty tài chính: tên ngắn, tên đầy đủ, slug duy nhất, logo, website chính thức, trạng thái hoạt động.
+- Upload logo PNG/JPG/WebP tối đa 1 MB; file cũ tự xóa khi thay logo hoặc xóa tổ chức.
+- Vận hành dữ liệu được nhập liệu, Biên tập chỉ xem, chỉ Quản trị cao nhất được xóa. Mọi thay đổi ghi nhật ký.
+- File tải lên dùng đường dẫn `/storage` tương đối để hiển thị đúng trên cả hai tên miền.
+
 ### Phase 1 — Task 4: Quản trị, phân quyền, 2FA, nhật ký
 
 - Trang quản trị Filament tại `app.ezfin.vn/<EZFIN_ADMIN_PATH>`, giao diện tiếng Việt, font Be Vietnam Pro, noindex.
