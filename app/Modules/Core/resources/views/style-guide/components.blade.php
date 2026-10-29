@@ -195,5 +195,17 @@
                     ]" />
             </div>
         </section>
+
+        <section class="{{ $section }}">
+            <h2 class="{{ $h2 }}">Thẻ bài viết</h2>
+            <p class="text-sm text-slate-500">Dùng trong danh sách kiến thức. Ảnh bìa không bắt buộc; cả thẻ bấm được.</p>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <x-ui.article-card title="Lãi kép là gì và vì sao nên bắt đầu tiết kiệm sớm" url="#" category="Tiết kiệm"
+                    excerpt="Giải thích cách tiền lãi được nhập vào gốc, kèm ví dụ tính tay và công cụ tính sẵn."
+                    author="Tên tác giả" :date="\Illuminate\Support\Carbon::parse('2026-10-29')" :minutes="6" />
+                <x-ui.article-card title="Phí thường niên thẻ tín dụng: cách đọc biểu phí" url="#" category="Thẻ tín dụng"
+                    author="Tên tác giả" :date="\Illuminate\Support\Carbon::parse('2026-10-20')" :minutes="4" />
+            </div>
+        </section>
     </div>
 </x-layouts.public>

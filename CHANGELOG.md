@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 15: CMS bài viết
+
+- Quản trị bài viết, chuyên mục, tác giả. Quy trình nháp → chờ duyệt → xuất bản (có hẹn giờ); biên tập viên chỉ gửi duyệt, quản trị cao nhất duyệt, trả lại kèm ghi chú, gỡ bài.
+- Lưu lịch sử sửa (tiêu đề, tóm tắt, nội dung, nguồn tham khảo), xem lại và khôi phục từng bản.
+- Lọc XSS nội dung bài viết khi lưu; liên kết nguồn tham khảo và hồ sơ tác giả chỉ nhận http(s).
+- Trang `ezfin.vn/kien-thuc`, chuyên mục, bài viết (tác giả, ngày xuất bản/cập nhật, nguồn tham khảo, dữ liệu schema.org) và trang tác giả `ezfin.vn/tac-gia/{slug}`.
+
 ### Phase 1 — Task 14: 5 công cụ tính
 
 - Thêm công cụ tính lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp; lãi kép có thêm biểu đồ.
