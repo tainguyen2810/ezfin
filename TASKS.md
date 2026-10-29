@@ -16,8 +16,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Xong |
 | 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Xong |
 | 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Xong |
-| 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Chờ duyệt |
-| 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Chưa làm |
+| 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Xong |
+| 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Chờ duyệt |
 | 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Chưa làm |
 | 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Chưa làm |
 | 17 | Trang chủ, footer, trang pháp lý, phương pháp đánh giá | Không nút giả, số liệu giả; mọi link hoạt động | Chưa làm |
@@ -26,6 +26,20 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 14
+
+- Xong: đủ 5 công cụ tại `ezfin.vn/cong-cu`, mỗi công cụ có kiểm tra đầu vào (thông báo tiếng Việt dưới từng ô), thẻ kết quả, biểu đồ, bảng số liệu, mục "Cách tính và giả định", liên kết chia sẻ:
+  - Lãi kép (`/cong-cu/lai-kep`): thêm biểu đồ tiền bỏ vào + lãi cộng dồn theo năm.
+  - Lãi tiền gửi (`/cong-cu/lai-tien-gui`): lĩnh cuối kỳ hoặc hằng tháng; link sang trang so sánh lãi suất với cùng số tiền và kỳ hạn (ẩn khi tắt module compare).
+  - Tiết kiệm định kỳ (`/cong-cu/tiet-kiem-dinh-ky`): gửi đầu mỗi tháng, có số tiền ban đầu; kỳ trên 36 tháng biểu đồ lấy cuối mỗi năm.
+  - Khoản vay (`/cong-cu/khoan-vay`): dư nợ giảm dần hoặc trả đều, so sánh tổng lãi với cách còn lại; vay trên 3 năm hiện lịch theo năm, lịch từng tháng gập trong `<details>` (mở được khi tắt JS).
+  - Trả góp (`/cong-cu/tra-gop`): giá, % trả trước, lãi phẳng hoặc dư nợ giảm dần; hiện lãi suất dư nợ giảm dần tương đương của lãi phẳng và tiền lãi của cả hai cách với cùng mức lãi suất.
+- Component mới `x-ui.bar-chart` (có trong `/_ui`): biểu đồ cột chồng dựng bằng HTML/CSS từ server, không thêm thư viện JS; hiện khi tắt JS; rê chuột hoặc Tab vào cột để xem số, mỗi cột có `aria-label` đọc đủ số liệu. Màu đã kiểm tra độ phân biệt cho người mù màu: xanh dương = gốc/tiền bỏ vào, xanh lá = lãi nhận, cam = lãi phải trả.
+- `RepaymentSchedule::byYear()` cộng lịch trả nợ theo năm. Icon mới `calendar`.
+- Test đã chạy: `vendor/bin/pest` (284 test xanh; mới: `tests/Feature/Planner/ToolsTest.php`), `vendor/bin/pint`, `npm run build`, `npm run test:ui` (thêm 4 trang công cụ), Playwright 360px và 1280px cả 5 công cụ: không tràn ngang, không lỗi JS; tắt JS: trả góp tính đúng 21,46%/năm, mở được lịch trả nợ từng tháng.
+- File quan trọng: `app/Modules/Planner/Tools/{DepositInterestTool,RecurringSavingsTool,LoanTool,InstallmentTool}.php`, `app/Modules/Planner/resources/views/tools/*`, `resources/views/components/ui/bar-chart.blade.php`.
+- Tiếp theo: task 15 (CMS bài viết, chuyên mục, tác giả, duyệt bài).
 
 ### 29/10/2026 — Task 13
 

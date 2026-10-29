@@ -4,6 +4,13 @@
     <x-ui.stat-card label="Tiền lãi" :value="Format::money($result->interest)" icon="arrow-trending-up" tone="income" />
 </div>
 
+<x-ui.bar-chart :labels="array_column($result->years, 'year')" x-title="Năm" label-prefix="Năm "
+    :caption="'Biểu đồ số dư cuối mỗi năm, gồm tiền bỏ vào và tiền lãi cộng dồn, trong '.$years.' năm. Số liệu chi tiết ở bảng bên dưới.'"
+    :series="[
+        ['label' => 'Tiền bỏ vào', 'tone' => 'primary', 'values' => array_column($result->years, 'contributed')],
+        ['label' => 'Tiền lãi cộng dồn', 'tone' => 'income', 'values' => array_column($result->years, 'totalInterest')],
+    ]" />
+
 <section aria-labelledby="theo-nam">
     <h2 id="theo-nam" class="text-lg font-semibold">Theo từng năm</h2>
     <x-ui.table class="mt-3">

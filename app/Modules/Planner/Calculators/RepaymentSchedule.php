@@ -28,4 +28,22 @@ final readonly class RepaymentSchedule
     {
         return max(array_column($this->months, 'payment'));
     }
+
+    /**
+     * Cộng theo năm vay (12 tháng một nhóm, nhóm cuối có thể ngắn hơn).
+     *
+     * @return list<array{year: int, payment: int, principal: int, interest: int, balance: int}>
+     */
+    public function byYear(): array
+    {
+        $chunks = array_chunk($this->months, 12);
+
+        return array_map(fn (array $rows, int $index) => [
+            'year' => $index + 1,
+            'payment' => array_sum(array_column($rows, 'payment')),
+            'principal' => array_sum(array_column($rows, 'principal')),
+            'interest' => array_sum(array_column($rows, 'interest')),
+            'balance' => end($rows)['balance'],
+        ], $chunks, array_keys($chunks));
+    }
 }
