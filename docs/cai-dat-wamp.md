@@ -1,0 +1,78 @@
+# Cài đặt EzFin trên Windows + WAMP
+
+## Yêu cầu
+
+- WampServer với Apache 2.4, **PHP 8.3**, MySQL 8 (hoặc MariaDB 10.11+).
+- Extension PHP bật trong WAMP: `mbstring`, `intl`, `pdo_mysql`, `openssl`, `fileinfo`, `zip`, `gd`, `curl`.
+- Module Apache: `rewrite_module`.
+- Composer 2 và Node.js 22 (chỉ cần để build CSS/JS).
+- PHP CLI trong PATH phải là bản 8.3 (`php -v`), trùng với bản Apache dùng.
+
+## 1. Lấy mã nguồn
+
+```bat
+cd C:\wamp64\www
+git clone https://github.com/tainguyen2810/ezfin.git
+cd ezfin
+composer install
+npm install
+copy .env.example .env
+php artisan key:generate
+```
+
+## 2. Database
+
+Tạo database `ezfin` (utf8mb4, `utf8mb4_unicode_ci`) trong phpMyAdmin, sửa `DB_*` trong `.env` nếu tài khoản MySQL khác `root` không mật khẩu, rồi chạy:
+
+```bat
+php artisan migrate
+```
+
+## 3. Tên miền local
+
+Thêm vào `C:\Windows\System32\drivers\etc\hosts` (mở Notepad bằng quyền Administrator):
+
+```
+127.0.0.1 ezfin.test
+127.0.0.1 app.ezfin.test
+```
+
+Thêm vào `C:\wamp64\bin\apache\apache2.4.x\conf\extra\httpd-vhosts.conf`:
+
+```apache
+<VirtualHost *:80>
+    ServerName ezfin.test
+    ServerAlias app.ezfin.test
+    DocumentRoot "C:/wamp64/www/ezfin/public"
+    <Directory "C:/wamp64/www/ezfin/public/">
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require local
+    </Directory>
+</VirtualHost>
+```
+
+Cả hai tên miền trỏ vào cùng thư mục `public/`; Laravel tự phân biệt theo tên miền. Khởi động lại WAMP.
+
+## 4. Build giao diện và kiểm tra
+
+```bat
+npm run build
+php artisan test
+```
+
+Mở http://ezfin.test. Khi sửa giao diện, chạy `npm run dev` để tự cập nhật.
+
+## Queue và scheduler khi phát triển
+
+- `.env` mặc định `QUEUE_CONNECTION=database`. Khi cần xử lý job (gửi email...), mở một cửa sổ và chạy `php artisan queue:work`.
+- Chạy tác vụ định kỳ thủ công: `php artisan schedule:work`.
+
+## Lỗi thường gặp
+
+| Lỗi | Cách xử lý |
+| --- | --- |
+| 404 cho mọi trang trừ `/` | Bật `rewrite_module`, kiểm tra `AllowOverride All` |
+| `could not find driver` | Bật `pdo_mysql` cho cả PHP Apache và PHP CLI |
+| Trang trắng, không có CSS | Chạy `npm run build` |
+| `php -v` ra bản khác 8.3 | Sửa PATH trỏ tới `C:\wamp64\bin\php\php8.3.x` |
