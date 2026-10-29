@@ -2,6 +2,7 @@
     $detail = $card->creditCard;
     $benefits = collect($detail->benefits ?? [])->map(fn ($benefit) => \App\Modules\Compare\Enums\CardBenefit::tryFrom($benefit)?->getLabel())->filter();
     $image = $card->imageUrl() ?? $card->institution->logoUrl();
+    $partnerLinks = app(\App\Modules\Partner\Actions\PartnerLinks::class)->forProducts($similar->pluck('id')->push($card->id));
 @endphp
 <x-layouts.public :title="$card->name.' – '.$card->institution->short_name"
     :description="$card->summary ?: 'Phí, lãi suất, hoàn tiền và điều kiện mở '.$card->name.' của '.$card->institution->short_name.'. Dữ liệu có nguồn và ngày xác minh.'"
@@ -29,14 +30,21 @@
                         @foreach ($benefits as $benefit)<x-ui.badge variant="primary">{{ $benefit }}</x-ui.badge>@endforeach
                     </div>
                 @endif
-                <label x-data class="mt-4 inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-navy-900 hover:bg-slate-50">
+                <div class="mt-4 flex flex-wrap items-center gap-3">
+                <label x-data class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-navy-900 hover:bg-slate-50">
                     <input type="checkbox" class="size-4 rounded border-slate-300 text-primary-600 focus:ring-primary-600"
                         x-bind:checked="$store.compare.has(@js($card->slug))"
                         x-on:change="$store.compare.toggle({ id: @js($card->slug), name: @js($card->name) }); $el.checked = $store.compare.has(@js($card->slug))">
                     Thêm vào so sánh
                 </label>
+                @if ($partnerLink = $partnerLinks->get($card->id))
+                    <x-ui.button :href="$partnerLink->url()" icon="arrow-top-right-on-square" rel="sponsored nofollow noopener" target="_blank">{{ $partnerLink->cta_label }}</x-ui.button>
+                @endif
+                </div>
             </div>
         </div>
+
+        @if ($partnerLinks->isNotEmpty())<x-ui.disclosure class="mt-4" />@endif
 
         @if ($card->summary)
             <p class="mt-6 max-w-3xl text-slate-700">{{ $card->summary }}</p>
@@ -96,6 +104,7 @@
                         @php $otherDetail = $other->creditCard; @endphp
                         <x-ui.product-card :id="$other->slug" :name="$other->name" :institution="$other->institution->short_name"
                             :logo="$other->institution->logoUrl()" :detail-url="route('compare.credit-cards.show', $other->slug)"
+                            :partner-url="$partnerLinks->get($other->id)?->url()" :partner-label="$partnerLinks->get($other->id)?->cta_label ?? ''"
                             :facts="[
                                 'Phí thường niên' => $otherDetail->annual_fee === null ? '—' : ((float) $otherDetail->annual_fee === 0.0 ? 'Miễn phí' : Format::money($otherDetail->annual_fee)),
                                 'Thu nhập tối thiểu' => $otherDetail->min_monthly_income === null ? '—' : Format::money($otherDetail->min_monthly_income).'/tháng',

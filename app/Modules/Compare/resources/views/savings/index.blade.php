@@ -1,6 +1,7 @@
 @php
     $paymentLabel = $filters->payment ? 'lĩnh lãi '.mb_strtolower($filters->payment->getLabel()) : 'mọi hình thức lĩnh lãi';
     $leader = $results->count() > 1 && $results[0]['interest'] > $results[1]['interest'];
+    $partnerLinks = app(\App\Modules\Partner\Actions\PartnerLinks::class)->forProducts($results->map(fn ($result) => $result['rate']->product_id));
 @endphp
 <x-layouts.public title="So sánh lãi suất tiết kiệm"
     description="So sánh lãi suất gửi tiết kiệm các ngân hàng theo số tiền và kỳ hạn, xếp theo tiền lãi nhận được. Dữ liệu có nguồn và ngày xác minh."
@@ -29,6 +30,8 @@
                 <strong class="text-navy-900">{{ $results->count() }}</strong> sản phẩm, xếp theo tiền lãi nhận được.
             </p>
 
+            @if ($partnerLinks->isNotEmpty())<x-ui.disclosure />@endif
+
             @forelse ($results as $index => $result)
                 @php
                     $rate = $result['rate'];
@@ -39,6 +42,7 @@
                 @endphp
                 <x-ui.product-card :id="$product->slug" :name="($index + 1).'. '.$product->name" :institution="$product->institution->short_name"
                     :logo="$product->institution->logoUrl()" :comparable="false"
+                    :partner-url="$partnerLinks->get($product->id)?->url()" :partner-label="$partnerLinks->get($product->id)?->cta_label ?? ''"
                     :highlights="$index === 0 && $leader ? ['Tiền lãi cao nhất'] : []"
                     :facts="[
                         'Tiền lãi' => Format::money($result['interest']),
