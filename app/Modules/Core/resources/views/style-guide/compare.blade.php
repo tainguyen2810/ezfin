@@ -28,6 +28,19 @@
                 <x-ui.data-freshness :verified-at="now()->subDays(2)" source="Website chính thức của từng ngân hàng" />
             </div>
         </div>
+
+        <h2 class="mt-10 text-xl font-bold">Bảng so sánh (x-ui.compare-table)</h2>
+        <x-ui.compare-table class="mt-4 max-w-4xl"
+            :products="[
+                ['name' => 'Thẻ mẫu A Hoàn tiền', 'institution' => 'Ngân hàng mẫu 1', 'removeUrl' => '#'],
+                ['name' => 'Thẻ mẫu B Du lịch', 'institution' => 'Ngân hàng mẫu 2', 'removeUrl' => '#'],
+                ['name' => 'Thẻ mẫu C Mua sắm', 'institution' => 'Ngân hàng mẫu 3', 'removeUrl' => '#'],
+            ]"
+            :rows="[
+                ['label' => 'Phí thường niên', 'values' => ['Miễn phí', '999.000 đ', '299.000 đ'], 'best' => [0], 'bestLabel' => 'Thấp nhất'],
+                ['label' => 'Hoàn tiền tối đa', 'values' => ['10%', '—', '5%'], 'best' => [0], 'bestLabel' => 'Cao nhất'],
+                ['label' => 'Ưu điểm', 'values' => ['Hoàn tiền cao'.PHP_EOL.'Miễn phí năm đầu', 'Phòng chờ sân bay', '—'], 'best' => []],
+            ]" />
     </div>
 
     <x-ui.compare-tray :compare-url="url('/_ui/so-sanh')" />

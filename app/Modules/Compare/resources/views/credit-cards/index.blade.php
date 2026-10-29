@@ -4,7 +4,7 @@
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         <x-ui.breadcrumb :items="['Trang chủ' => route('home'), 'Thẻ tín dụng' => null]" />
         <h1 class="mt-3 text-2xl font-bold sm:text-3xl">So sánh thẻ tín dụng</h1>
-        <p class="mt-1 max-w-3xl text-slate-600">Lọc theo ngân hàng, phí và nhu cầu chi tiêu. Thông tin chỉ để tham khảo; điều kiện cấp thẻ và hạn mức do ngân hàng quyết định.</p>
+        <p class="mt-1 max-w-3xl text-slate-600">Lọc theo ngân hàng, phí và nhu cầu chi tiêu, chọn tối đa 3 thẻ để so sánh chi tiết. Thông tin chỉ để tham khảo; điều kiện cấp thẻ và hạn mức do ngân hàng quyết định.</p>
 
         <div class="mt-6 grid gap-6 lg:grid-cols-[280px_1fr]">
             <x-ui.filter-panel :action="route('compare.credit-cards.index')" :active-count="$filters->activeCount()">
@@ -33,8 +33,8 @@
                             ->when($detail?->annual_fee_note, fn ($items) => $items->prepend($detail->annual_fee_note))
                             ->all();
                     @endphp
-                    <x-ui.product-card :id="$card->id" :name="$card->name" :institution="$card->institution->short_name"
-                        :logo="$card->institution->logoUrl()" :highlights="$highlights" :comparable="false"
+                    <x-ui.product-card :id="$card->slug" :name="$card->name" :institution="$card->institution->short_name"
+                        :logo="$card->institution->logoUrl()" :highlights="$highlights"
                         :facts="[
                             'Phí thường niên' => $fee,
                             'Thu nhập tối thiểu' => Format::money($detail?->min_monthly_income).($detail?->min_monthly_income !== null ? '/tháng' : ''),
@@ -68,4 +68,6 @@
             </div>
         </div>
     </div>
+
+    <x-ui.compare-tray :compare-url="route('compare.credit-cards.compare')" />
 </x-layouts.public>

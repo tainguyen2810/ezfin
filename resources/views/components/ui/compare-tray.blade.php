@@ -1,6 +1,8 @@
 {{-- Khay so sánh dính đáy màn hình; hiện khi đã chọn ít nhất 1 sản phẩm. --}}
 @props(['compareUrl'])
 <div x-data x-show="$store.compare.items.length > 0" x-cloak x-transition
+    {{-- Chừa chỗ cuối trang để khay không che phân trang và chân trang. --}}
+    x-effect="document.body.style.paddingBottom = $store.compare.items.length > 0 ? '6rem' : ''"
     class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-4px_12px_rgb(15_23_42/0.08)] backdrop-blur lg:bottom-4 lg:left-1/2 lg:right-auto lg:w-[720px] lg:-translate-x-1/2 lg:rounded-xl lg:border">
     <div class="flex items-center gap-3">
         <div class="min-w-0 flex-1">

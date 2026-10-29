@@ -2,10 +2,12 @@
 
 namespace App\Modules\Compare\Http\Controllers;
 
+use App\Modules\Compare\Actions\FindComparableCreditCards;
 use App\Modules\Compare\Actions\SearchCreditCards;
 use App\Modules\Compare\Enums\CardBenefit;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
+use App\Modules\Compare\Support\CreditCardComparison;
 use App\Modules\Compare\Support\CreditCardFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -38,6 +40,36 @@ class CreditCardController
                 ->pluck('short_name', 'slug'),
             'needs' => collect(CardBenefit::cases())->mapWithKeys(fn (CardBenefit $benefit) => [$benefit->slug() => $benefit->getLabel()]),
             'fees' => collect(CreditCardFilters::FEES)->map(fn (array $fee) => $fee['label']),
+        ]);
+    }
+
+    public function compare(Request $request, FindComparableCreditCards $find): View|RedirectResponse
+    {
+        $ids = $request->query('ids');
+        $requested = is_string($ids) ? array_map('trim', explode(',', $ids)) : [];
+        $cards = $find->handle($requested);
+
+        // Bỏ slug không hợp lệ, trùng, quá 3 hoặc thẻ đã ngừng xuất bản khỏi URL.
+        $canonical = $cards->pluck('slug')->implode(',');
+        if ($canonical !== ($ids ?? '')) {
+            return redirect()->route('compare.credit-cards.compare', [
+                ...Arr::except($request->query(), 'ids'),
+                ...($canonical !== '' ? ['ids' => $canonical] : []),
+            ]);
+        }
+
+        return view('compare::credit-cards.compare', [
+            'cards' => $cards,
+            'rows' => CreditCardComparison::rows($cards),
+            'products' => $cards->map(fn ($card) => [
+                'name' => $card->name,
+                'institution' => $card->institution->short_name,
+                'logo' => $card->institution->logoUrl(),
+                'removeUrl' => route('compare.credit-cards.compare', array_filter([
+                    'ids' => $cards->where('slug', '!=', $card->slug)->pluck('slug')->implode(','),
+                ])),
+            ])->all(),
+            'max' => FindComparableCreditCards::MAX,
         ]);
     }
 }
