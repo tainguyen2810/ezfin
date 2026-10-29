@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -129,6 +130,12 @@ class FinancialProduct extends Model
     public function creditCard(): HasOne
     {
         return $this->hasOne(CreditCardDetail::class, 'product_id');
+    }
+
+    public function savingsRates(): HasMany
+    {
+        return $this->hasMany(SavingsRate::class, 'product_id')
+            ->orderBy('term_months')->orderByDesc('channel')->orderBy('interest_payment')->orderBy('min_amount')->orderByDesc('effective_from');
     }
 
     public function scopePublished(Builder $query): void

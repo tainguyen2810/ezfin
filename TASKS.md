@@ -12,8 +12,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Xong |
 | 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Xong |
 | 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Xong |
-| 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Chờ duyệt |
-| 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Chưa làm |
+| 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Xong |
+| 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Chờ duyệt |
 | 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Chưa làm |
 | 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Chưa làm |
 | 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Chưa làm |
@@ -26,6 +26,15 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 10
+
+- Xong: loại sản phẩm mới "Tiết kiệm" (`ProductType::Savings`) và bảng `savings_rates`: kỳ hạn (tháng, 0 = không kỳ hạn), kênh (online/tại quầy), hình thức lĩnh lãi (cuối kỳ/hằng tháng/hằng quý/đầu kỳ), số tiền từ/đến, lãi suất %/năm DECIMAL(7,4), ngày hiệu lực. Khóa duy nhất (sản phẩm, kỳ hạn, kênh, lĩnh lãi, số tiền từ, ngày hiệu lực); giữ lịch sử theo ngày hiệu lực.
+- Quản trị `app.ezfin.vn/<admin>/tiet-kiem`: thông tin sản phẩm, nguồn và ngày xác minh (dùng chung với thẻ qua `ProductFormComponents`), bảng lãi suất nhập tay dạng bảng, chặn dòng trùng và lãi suất > 20%. Danh sách hiện số dòng lãi suất, ngày hiệu lực mới nhất, hạn kiểm tra lại.
+- Nhập CSV (`ImportSavingsRates`): nút "Nhập CSV" → "Nhập lãi suất từ CSV" / "Tải file mẫu". Cột `san_pham,ky_han,kenh,lai_suat,so_tien_tu,so_tien_den,linh_lai,hieu_luc_tu`. Nhận file Excel tiếng Việt (BOM, dấu chấm phẩy, số thập phân dấu phẩy, tiền có dấu chấm, ngày dd/mm/yyyy). Kiểm tra toàn bộ file trước, báo lỗi theo số dòng thật trong file (kể cả dòng trùng trong file), có lỗi thì không ghi dòng nào; ghi trong transaction; nhập lại cập nhật thay vì tạo trùng; báo số dòng thêm mới/cập nhật/không đổi. Chỉ Vận hành dữ liệu và Quản trị cao nhất thấy nút nhập.
+- Test đã chạy: `vendor/bin/pest` (162 test xanh; mới: `SavingsRateImportTest`, `SavingsProductAdminTest`), `vendor/bin/pint`, `npm run build`, Playwright trang quản trị: nhập file lỗi (4 lỗi, không ghi), nhập file đúng (6 dòng), sửa bảng lãi suất.
+- File quan trọng: `app/Modules/Compare/{Actions/ImportSavingsRates.php,Models/SavingsRate.php,Enums/{SavingsChannel,InterestPayment}.php,Filament/Resources/SavingsProducts/*,Filament/Resources/Shared/ProductFormComponents.php,database/migrations/2026_10_30_100003_create_savings_rates_table.php}`.
+- Tiếp theo: task 11 (trang so sánh lãi suất theo số tiền và kỳ hạn, xếp theo tiền lãi thực nhận).
 
 ### 29/10/2026 — Task 9
 
