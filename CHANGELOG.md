@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 10: Nhập lãi suất tiết kiệm
+
+- Quản trị sản phẩm tiết kiệm và bảng lãi suất theo kỳ hạn, kênh (online/tại quầy), hình thức lĩnh lãi, mức tiền, ngày hiệu lực.
+- Nhập lãi suất hàng loạt từ file CSV (lưu từ Excel được), có file mẫu. Báo lỗi theo từng dòng; file có lỗi thì không lưu gì; nhập lại không tạo trùng.
+
 ### Phase 1 — Task 9: Trang chi tiết thẻ tín dụng
 
 - Trang `ezfin.vn/the-tin-dung/<tên-thẻ>`: thông số đầy đủ, ưu điểm, hạn chế, nguồn, ngày cập nhật, thêm vào so sánh.

@@ -31,6 +31,15 @@ class FinancialProductFactory extends Factory
         ];
     }
 
+    public function savings(): static
+    {
+        return $this->state(function () {
+            $name = 'Tiết kiệm thử nghiệm '.Str::upper(Str::random(5));
+
+            return ['type' => ProductType::Savings, 'name' => $name, 'slug' => Str::slug($name)];
+        });
+    }
+
     public function verified(): static
     {
         return $this->state(fn () => [
