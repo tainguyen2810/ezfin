@@ -44,7 +44,7 @@
     @if ($comparable || $detailUrl || $partnerUrl)
     <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
         @if ($comparable)
-            <label class="flex items-center gap-2 text-sm text-slate-600 sm:mr-auto">
+            <label x-data class="flex items-center gap-2 text-sm text-slate-600 sm:mr-auto">
                 <input type="checkbox" class="size-4 rounded border-slate-300 text-primary-600 focus:ring-primary-600"
                     x-bind:checked="$store.compare.has(@js($id))"
                     x-on:change="$store.compare.toggle({ id: @js($id), name: @js($name) }); $el.checked = $store.compare.has(@js($id))">

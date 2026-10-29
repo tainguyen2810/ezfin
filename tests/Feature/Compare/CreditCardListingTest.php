@@ -154,12 +154,20 @@ it('shows an empty state with a reset link when nothing matches', function () {
         ->assertSee('Xóa bộ lọc');
 });
 
-it('is indexable without filters, shows no partner disclosure or compare box yet', function () {
+it('is indexable without filters and shows no partner disclosure or detail button yet', function () {
     $this->get(LISTING_URL)
         ->assertOk()
         ->assertDontSee('noindex', false)
         ->assertDontSee('liên kết đối tác')
         ->assertDontSee('Xem chi tiết');
+});
+
+it('lets visitors pick cards by slug and opens the compare page from the tray', function () {
+    $this->get(LISTING_URL)
+        ->assertOk()
+        ->assertSee('<label x-data', false)
+        ->assertSee('$store.compare.toggle({ id: \'the-hoan-tien\'', false)
+        ->assertSee('http:\/\/ezfin.test\/the-tin-dung\/so-sanh', false);
 });
 
 it('hides the page and menu item when the compare module is off', function () {

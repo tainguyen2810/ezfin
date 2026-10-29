@@ -10,8 +10,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Xong |
 | 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Xong |
 | 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Xong |
-| 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Chờ duyệt |
-| 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Chưa làm |
+| 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Xong |
+| 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Chờ duyệt |
 | 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Chưa làm |
 | 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Chưa làm |
 | 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Chưa làm |
@@ -26,6 +26,15 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 8
+
+- Xong: trang `ezfin.vn/the-tin-dung/so-sanh?ids=slug-a,slug-b` (noindex, tắt cùng module compare). Danh sách thẻ bật ô "So sánh" (lưu theo slug) và khay so sánh; lựa chọn giữ trong sessionStorage khi đổi bộ lọc/trang. Bảng so sánh giữ đúng thứ tự người dùng chọn, tối đa 3 thẻ; slug sai, trùng, thẻ nháp hoặc của tổ chức ngừng hoạt động bị bỏ và URL được làm gọn (giữ utm_*). Mỗi tiêu chí số có nhãn "Thấp nhất"/"Cao nhất"/"Dài nhất" chỉ khi ít nhất 2 thẻ có số liệu và không bằng nhau; ô chưa công bố là "—". Mỗi thẻ có link "Bỏ khỏi so sánh", nguồn và ngày xác minh. Mở link chia sẻ thì khay đồng bộ theo URL.
+- Component mới `x-ui.compare-table` (nhãn tiêu chí chiếm cả dòng, giá trị chia cột: đọc được ở 360px), đã thêm vào `/_ui/so-sanh`. Store `compare` có thêm `replace()`. Khay so sánh chừa khoảng trống cuối trang để không che phân trang.
+- Sửa phát hiện khi test: ô "So sánh" của `x-ui.product-card` không có `x-data` nên Alpine không gắn sự kiện ngoài trang mẫu → thêm `x-data`.
+- Test đã chạy: `vendor/bin/pest` (134 test xanh, 7 test mới trong `tests/Feature/Compare/CreditCardCompareTest.php`), `vendor/bin/pint`, `npm run build`, `npm run test:ui` (thêm `/the-tin-dung/so-sanh`), Playwright 360px và 1280px: chọn 2 thẻ, đổi bộ lọc vẫn còn 2/3, mở bảng so sánh, bỏ một thẻ.
+- File quan trọng: `app/Modules/Compare/{Actions/FindComparableCreditCards.php,Support/CreditCardComparison.php,Http/Controllers/CreditCardController.php,resources/views/credit-cards/compare.blade.php}`, `resources/views/components/ui/compare-table.blade.php`.
+- Tiếp theo: task 9 (trang chi tiết thẻ; route `/the-tin-dung/{slug}` đặt sau route so sánh).
 
 ### 29/10/2026 — Task 7
 

@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 8: So sánh thẻ tín dụng
+
+- Chọn tối đa 3 thẻ trên danh sách, lựa chọn giữ nguyên khi đổi bộ lọc hoặc trang.
+- Trang `ezfin.vn/the-tin-dung/so-sanh`: bảng so sánh phí, thu nhập, lãi suất, miễn lãi, hoàn tiền, phí ngoại tệ, lợi ích, ưu điểm, hạn chế; đánh dấu giá trị tốt nhất theo con số đã công bố, kèm nguồn và ngày xác minh từng thẻ.
+- Link so sánh chia sẻ được; trang không cho máy tìm kiếm lập chỉ mục.
+
 ### Phase 1 — Task 7: Danh sách thẻ tín dụng
 
 - Trang `ezfin.vn/the-tin-dung`: lọc theo ngân hàng, phí thường niên, nhu cầu, thu nhập; sắp xếp theo tiêu chí người dùng chọn, không theo đối tác.

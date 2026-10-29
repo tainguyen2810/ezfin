@@ -6,7 +6,7 @@ import { mkdirSync } from 'node:fs';
 
 const baseUrl = process.env.BASE_URL ?? 'http://ezfin.test';
 const outDir = process.argv[2] ?? 'storage/app/ui-screenshots';
-const pages = ['/', '/the-tin-dung', '/_ui', '/_ui/so-sanh', '/_ui/ung-dung'];
+const pages = ['/', '/the-tin-dung', '/the-tin-dung/so-sanh', '/_ui', '/_ui/so-sanh', '/_ui/ung-dung'];
 const widths = [360, 768, 1280];
 
 mkdirSync(outDir, { recursive: true });

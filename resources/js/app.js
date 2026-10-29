@@ -49,6 +49,11 @@ Alpine.store('compare', {
         }
         sessionStorageSafeSet('ezfin.compare', JSON.stringify(this.items));
     },
+    // Thay toàn bộ lựa chọn (trang so sánh đồng bộ theo URL đang mở).
+    replace(items) {
+        this.items = items.slice(0, this.max);
+        sessionStorageSafeSet('ezfin.compare', JSON.stringify(this.items));
+    },
     clear() {
         this.items = [];
         sessionStorageSafeSet('ezfin.compare', '[]');
