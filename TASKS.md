@@ -13,8 +13,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Xong |
 | 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Xong |
 | 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Xong |
-| 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Chờ duyệt |
-| 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Chưa làm |
+| 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Xong |
+| 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Chờ duyệt |
 | 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Chưa làm |
 | 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Chưa làm |
 | 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Chưa làm |
@@ -26,6 +26,16 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 11
+
+- Xong: trang `ezfin.vn/lai-suat-tiet-kiem` (menu "Lãi suất tiết kiệm", tắt cùng module compare). Nhập số tiền, chọn kỳ hạn (1–36 tháng), kênh, hình thức lĩnh lãi (mặc định 100.000.000 đ, 12 tháng, cuối kỳ, mọi kênh). Mỗi sản phẩm một dòng, xếp theo tiền lãi nhận được (bằng nhau thì lãi suất, rồi tên); hiện lãi suất, tiền lãi, tổng nhận, kênh, lĩnh lãi, mức tiền áp dụng, ngày hiệu lực, nguồn, ngày xác minh. Ghi rõ cách tính và giả định.
+- Quy tắc chọn lãi suất (`CompareSavingsRates`): chỉ sản phẩm đã xuất bản của tổ chức đang hoạt động; mỗi biểu (sản phẩm, kênh, lĩnh lãi) chỉ dùng lần công bố mới nhất đã có hiệu lực (bỏ ngày tương lai, bỏ bậc chỉ có ở biểu cũ); bậc số tiền: từ ≤ số tiền < đến, nhiều bậc khớp lấy bậc "từ" cao nhất.
+- Công thức (`SavingsInterest::simple`): số tiền × lãi suất × tháng / 12, tính bằng số nguyên, làm tròn nửa lên đến đồng; test với 7 bộ số liệu tính tay. Số tiền giới hạn 1.000.000 đ – 100 tỷ đ.
+- URL gọn (bỏ giá trị mặc định, giữ utm_*); trang mặc định có canonical và được lập chỉ mục, trang có điều kiện khác là noindex.
+- Test đã chạy: `vendor/bin/pest` (177 test xanh, 15 test mới trong `tests/Feature/Compare/SavingsCompareTest.php`), `vendor/bin/pint`, `npm run build`, `npm run test:ui` (thêm `/lai-suat-tiet-kiem`), Playwright 360px và 1280px: nhập 2.000.000.000 đ, không tràn ngang, không lỗi JS.
+- File quan trọng: `app/Modules/Compare/{Actions/CompareSavingsRates.php,Support/{SavingsFilters,SavingsInterest}.php,Http/Controllers/SavingsController.php,resources/views/savings/index.blade.php}`.
+- Tiếp theo: task 12 (tài khoản ngân hàng: danh sách, chi tiết).
 
 ### 29/10/2026 — Task 10
 
