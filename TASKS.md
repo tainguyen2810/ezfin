@@ -17,8 +17,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Xong |
 | 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Xong |
 | 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Xong |
-| 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Chờ duyệt |
-| 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Chưa làm |
+| 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Xong |
+| 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Chờ duyệt |
 | 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Chưa làm |
 | 17 | Trang chủ, footer, trang pháp lý, phương pháp đánh giá | Không nút giả, số liệu giả; mọi link hoạt động | Chưa làm |
 | 18 | Chuyển hướng `/di/` + nhật ký click | Mã click không đoán được; lọc bot; rate limit; `rel="sponsored nofollow"` | Chưa làm |
@@ -26,6 +26,22 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 15
+
+- Chủ dự án yêu cầu: PR xong và CI xanh thì tự merge, làm tiếp tới hết Phase 1; giao diện sẽ được kiểm tra sau.
+- Xong: module Content.
+  - Quản trị (nhóm "Nội dung"): Bài viết, Chuyên mục, Tác giả. Trình soạn thảo giới hạn định dạng (đậm, nghiêng, liên kết, H2/H3, danh sách, trích dẫn, bảng, ảnh); nguồn tham khảo; ảnh bìa.
+  - Quy trình: biên tập viên viết nháp → "Gửi duyệt" (cần tóm tắt và nội dung) → bài bị khóa sửa, có thể "Rút về nháp". Quản trị cao nhất "Duyệt và xuất bản" (ngay hoặc hẹn giờ), "Trả lại" kèm ghi chú, "Gỡ xuất bản", sửa trực tiếp bài đang hiển thị. Menu hiện số bài chờ duyệt. Quy tắc kiểm tra ở cả `ArticlePolicy`, `ArticleWorkflow` và model `Article` (gọi thẳng model cũng không qua được).
+  - Lịch sử sửa: mỗi lần đổi tiêu đề/tóm tắt/nội dung/nguồn lưu một bản (ai, lúc nào), xem lại và khôi phục; bản lưu không sửa được. Audit log ghi thay đổi nhưng không chép nội dung dài.
+  - Lọc XSS: `ArticleHtml` (symfony/html-sanitizer, đã có sẵn qua Filament) chỉ giữ thẻ định dạng; bỏ script, iframe, style, thuộc tính sự kiện, liên kết `javascript:`/`data:`; ảnh chỉ đường dẫn tương đối hoặc https. Chạy mỗi khi gán nội dung.
+  - Xóa bài là xóa mềm (khôi phục được); không xóa chuyên mục/tác giả còn bài.
+  - Trang công khai: `/kien-thuc` (lọc chuyên mục, phân trang), `/kien-thuc/{chuyen-muc}`, `/kien-thuc/{chuyen-muc}/{bai}` (bài đổi chuyên mục thì 301 về URL mới), `/tac-gia/{slug}`; chỉ hiện bài đã xuất bản và đến giờ; ghi rõ tác giả, ngày xuất bản, ngày cập nhật (khi nội dung đổi sau ngày xuất bản), nguồn tham khảo, lưu ý không phải khuyến nghị cá nhân; JSON-LD Article và ProfilePage. Menu "Kiến thức", tắt cùng flag `content`.
+  - Component mới `x-ui.article-card` (có trong `/_ui`).
+- Test đã chạy: `vendor/bin/pest` (330 test xanh; mới: `tests/Unit/Content/ArticleHtmlTest.php`, `tests/Feature/Content/{ArticleAdminTest,KnowledgePagesTest}.php`), `vendor/bin/pint`, `npm run build`, `npm run test:ui` (thêm `/kien-thuc`), Playwright 360px và 1280px danh sách, chuyên mục, bài viết, tác giả: không tràn ngang, không lỗi JS. Sửa thêm test `CreditCardAdminTest` phụ thuộc múi giờ (trong PR #14).
+- Chưa giải quyết: biên tập viên chưa sửa được bài đang hiển thị qua bản nháp chờ duyệt (hiện phải nhờ người duyệt sửa hoặc gỡ bài về nháp). Chưa có vai trò "tổng biên tập" riêng; quyền duyệt thuộc quản trị cao nhất. Nhúng bảng lãi suất/thẻ sản phẩm vào bài để Phase 2.
+- File quan trọng: `app/Modules/Content/{Models,Actions,Policies,Support,Filament,Http,resources/views}`, `resources/views/components/ui/article-card.blade.php`, `resources/css/app.css` (`.article-body`).
+- Tiếp theo: task 16 (SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301).
 
 ### 29/10/2026 — Task 14
 
