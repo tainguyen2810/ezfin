@@ -4,6 +4,15 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 4: Quản trị, phân quyền, 2FA, nhật ký
+
+- Trang quản trị Filament tại `app.ezfin.vn/<EZFIN_ADMIN_PATH>`, giao diện tiếng Việt, font Be Vietnam Pro, noindex.
+- Vai trò nội bộ: Quản trị cao nhất, Biên tập nội dung, Vận hành dữ liệu, Đối tác và tài chính. Tài khoản không có vai trò bị từ chối (403).
+- Bắt buộc xác thực 2 lớp bằng ứng dụng (Google Authenticator...), có mã khôi phục.
+- Khóa tạm sau 5 lần đăng nhập sai trong 1 phút.
+- Nhật ký hoạt động chỉ đọc: tạo/sửa/xóa, đăng nhập, đăng nhập sai, đăng xuất, bị khóa. Không ghi mật khẩu hay khóa 2FA.
+- Lệnh `php artisan ezfin:admin` tạo tài khoản quản trị đầu tiên.
+
 ### Phase 1 — Task 3: Hệ thống giao diện
 
 - Design token navy/xanh dương/xanh lá, font Be Vietnam Pro tự host, Alpine.js.

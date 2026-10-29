@@ -26,7 +26,10 @@ Tạo database `ezfin` (utf8mb4, `utf8mb4_unicode_ci`) trong phpMyAdmin, sửa `
 
 ```bat
 php artisan migrate
+php artisan ezfin:admin
 ```
+
+`ezfin:admin` tạo tài khoản quản trị. Trang quản trị: `http://app.ezfin.test/quan-tri` (đổi bằng `EZFIN_ADMIN_PATH`). Lần đăng nhập đầu cần quét mã QR bằng Google Authenticator hoặc ứng dụng tương tự, và lưu lại mã khôi phục.
 
 ## 3. Tên miền local
 

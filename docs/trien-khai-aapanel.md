@@ -26,6 +26,7 @@ cp .env.example .env    # sửa APP_ENV=production, APP_DEBUG=false, APP_URL=htt
 composer install --no-dev --optimize-autoloader
 php artisan key:generate
 php artisan migrate --force
+php artisan ezfin:admin   # tạo tài khoản quản trị đầu tiên; lần đăng nhập đầu sẽ thiết lập 2FA
 npm ci && npm run build   # hoặc build trên máy khác rồi upload thư mục public/build
 php artisan storage:link
 php artisan optimize
