@@ -8,8 +8,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 2 | Khung module, route theo tên miền (ezfin.vn / app.ezfin.vn), feature flag | Tắt flag thì menu ẩn và URL trả 404; có test | Xong |
 | 3 | Design token, font Be Vietnam Pro tự host, component dùng chung, trang `/_ui` | Đủ component và trạng thái; ảnh Playwright 360/768/1280px không tràn ngang | Xong |
 | 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Xong |
-| 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Chờ duyệt |
-| 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Chưa làm |
+| 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Xong |
+| 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Chờ duyệt |
 | 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Chưa làm |
 | 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Chưa làm |
 | 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Chưa làm |
@@ -26,6 +26,16 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 6
+
+- Xong: bảng `financial_products` (trường chung mọi loại sản phẩm: tổ chức, tên, slug, trạng thái nháp/xuất bản/ngừng phát hành, mô tả, ưu điểm, hạn chế, ảnh, nguồn, ngày xác minh, hẹn kiểm tra lại) và `credit_card_details` (tổ chức thẻ, phí thường niên, phí phát hành, thu nhập tối thiểu, lãi suất, ngày miễn lãi, hoàn tiền %, trần hoàn tiền, phí ngoại tệ, nhóm lợi ích). Màn hình quản trị "Thẻ tín dụng" có lọc theo ngân hàng, trạng thái, "đến hạn kiểm tra lại". Quy tắc xuất bản chặn ở cả form và model: thiếu nguồn, thiếu ngày xác minh hoặc ngày xác minh ở tương lai thì không xuất bản được. Hẹn kiểm tra lại mặc định 3 tháng. Tổ chức còn sản phẩm thì không xóa được (policy + khóa ngoại).
+- Sửa phát hiện khi test: ô nhập tiền dùng `numeric()` + `stripCharacters('.')` làm giá trị "1200000.00" từ DB thành 120.000.000 khi mở form sửa rồi lưu. Đổi sang định dạng/giải mã thủ công, có test giữ nguyên số tiền khi lưu lại.
+- Gom xóa file cũ vào trait `DeletesReplacedFiles` (dùng cho logo và ảnh thẻ).
+- Test đã chạy: `vendor/bin/pest` (102 test xanh, 20 test mới), `vendor/bin/pint --test`, Playwright: nhập thẻ qua giao diện (chọn ngân hàng, tiền có dấu chấm, ưu/nhược điểm, ảnh), thử xuất bản khi thiếu nguồn (bị chặn), danh sách và form sửa ở 390px và 1366px không tràn ngang, không lỗi JS. Chưa chạy được migrate trên MySQL ở máy này; CI chạy MySQL 8.
+- Chưa giải quyết: thông báo "Please fill out this field" là của trình duyệt (tiếng Anh) khi bỏ trống ô bắt buộc; thông báo của hệ thống vẫn tiếng Việt. Chưa nhập thẻ thật (cần nguồn chính thức).
+- File quan trọng: `app/Modules/Compare/{Models/FinancialProduct.php,Models/CreditCardDetail.php,Enums,Filament/Resources/CreditCards}`, `app/Modules/Core/Concerns/DeletesReplacedFiles.php`, `tests/Feature/Compare/CreditCardAdminTest.php`.
+- Tiếp theo: task 7 (danh sách và bộ lọc thẻ ở trang công khai).
 
 ### 29/10/2026 — Task 5
 

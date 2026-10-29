@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 6: Quản lý thẻ tín dụng
+
+- Bảng sản phẩm tài chính dùng chung và bảng thông số thẻ tín dụng (tiền DECIMAL(18,2), tỷ lệ DECIMAL(7,4)).
+- Màn hình quản trị thẻ tín dụng: phí, lãi suất, điều kiện thu nhập, hoàn tiền, nhóm lợi ích, ưu điểm, hạn chế, ảnh thẻ.
+- Không xuất bản được khi thiếu nguồn chính thức hoặc ngày xác minh; tự hẹn kiểm tra lại sau 3 tháng và đánh dấu thẻ đến hạn.
+- Không xóa được ngân hàng còn sản phẩm.
+
 ### Phase 1 — Task 5: Ngân hàng và tổ chức tài chính
 
 - Quản trị danh sách ngân hàng, công ty tài chính: tên ngắn, tên đầy đủ, slug duy nhất, logo, website chính thức, trạng thái hoạt động.

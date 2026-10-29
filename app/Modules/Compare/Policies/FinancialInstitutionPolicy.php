@@ -29,9 +29,10 @@ class FinancialInstitutionPolicy
         return $this->create($user);
     }
 
+    /** Tổ chức còn sản phẩm thì không xóa được (khóa ngoại cũng chặn). */
     public function delete(User $user, FinancialInstitution $institution): bool
     {
-        return $user->isSuperAdmin();
+        return $user->isSuperAdmin() && ! $institution->products()->exists();
     }
 
     public function deleteAny(User $user): bool

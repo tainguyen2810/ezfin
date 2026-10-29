@@ -4,11 +4,13 @@ namespace App\Modules\Compare\Models;
 
 use App\Modules\Compare\Enums\InstitutionType;
 use App\Modules\Core\Concerns\Auditable;
+use App\Modules\Core\Concerns\DeletesReplacedFiles;
 use Database\Factories\FinancialInstitutionFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -26,7 +28,7 @@ use Illuminate\Support\Facades\Storage;
 #[UseFactory(FinancialInstitutionFactory::class)]
 class FinancialInstitution extends Model
 {
-    use Auditable, HasFactory;
+    use Auditable, DeletesReplacedFiles, HasFactory;
 
     public const LOGO_DISK = 'public';
 
@@ -42,16 +44,14 @@ class FinancialInstitution extends Model
         ];
     }
 
-    protected static function booted(): void
+    public function fileAttributes(): array
     {
-        // Không để file logo mồ côi khi thay hoặc xóa logo.
-        static::updated(function (self $institution) {
-            if ($institution->wasChanged('logo_path')) {
-                self::deleteLogo($institution->getOriginal('logo_path'));
-            }
-        });
+        return ['logo_path'];
+    }
 
-        static::deleted(fn (self $institution) => self::deleteLogo($institution->logo_path));
+    public function products(): HasMany
+    {
+        return $this->hasMany(FinancialProduct::class, 'institution_id');
     }
 
     public static function auditSubjectLabel(): string
@@ -67,12 +67,5 @@ class FinancialInstitution extends Model
     public function logoUrl(): ?string
     {
         return $this->logo_path ? Storage::disk(self::LOGO_DISK)->url($this->logo_path) : null;
-    }
-
-    private static function deleteLogo(?string $path): void
-    {
-        if ($path) {
-            Storage::disk(self::LOGO_DISK)->delete($path);
-        }
     }
 }
