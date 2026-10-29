@@ -19,6 +19,7 @@ class CompareServiceProvider extends ModuleServiceProvider
         return [
             new NavItem('Lãi suất tiết kiệm', 'compare.savings.index', order: 10),
             new NavItem('Thẻ tín dụng', 'compare.credit-cards.index', order: 20),
+            new NavItem('Tài khoản ngân hàng', 'compare.bank-accounts.index', order: 30),
         ];
     }
 

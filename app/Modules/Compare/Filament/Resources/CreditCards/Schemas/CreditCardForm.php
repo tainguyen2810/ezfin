@@ -8,7 +8,6 @@ use App\Modules\Compare\Filament\Resources\Shared\ProductFormComponents;
 use App\Modules\Compare\Models\FinancialProduct;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -24,7 +23,7 @@ class CreditCardForm
             Grid::make(1)->columnSpan(['lg' => 2])->schema([
                 self::productSection(),
                 self::feesSection(),
-                self::benefitsSection(),
+                ProductFormComponents::prosConsSection(),
             ]),
             Grid::make(1)->columnSpan(['lg' => 1])->schema([
                 ProductFormComponents::publishingSection(),
@@ -76,17 +75,5 @@ class CreditCardForm
                 ProductFormComponents::money('cashback_monthly_cap', 'Hoàn tiền tối đa/tháng'),
                 ProductFormComponents::rate('foreign_transaction_fee', 'Phí giao dịch ngoại tệ', '%', 10),
             ]);
-    }
-
-    private static function benefitsSection(): Section
-    {
-        return Section::make('Ưu điểm, hạn chế')->schema([
-            Grid::make(2)->schema([
-                Repeater::make('pros')->label('Ưu điểm')->simple(TextInput::make('text')->required()->maxLength(200))
-                    ->addActionLabel('Thêm ưu điểm')->maxItems(8)->defaultItems(0),
-                Repeater::make('cons')->label('Hạn chế')->simple(TextInput::make('text')->required()->maxLength(200))
-                    ->addActionLabel('Thêm hạn chế')->maxItems(8)->defaultItems(0),
-            ]),
-        ]);
     }
 }

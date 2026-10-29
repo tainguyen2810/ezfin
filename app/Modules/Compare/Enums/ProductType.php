@@ -8,12 +8,14 @@ enum ProductType: string implements HasLabel
 {
     case CreditCard = 'credit_card';
     case Savings = 'savings';
+    case BankAccount = 'bank_account';
 
     public function getLabel(): string
     {
         return match ($this) {
             self::CreditCard => 'Thẻ tín dụng',
             self::Savings => 'Tiết kiệm',
+            self::BankAccount => 'Tài khoản thanh toán',
         };
     }
 }

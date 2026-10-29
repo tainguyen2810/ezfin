@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 12: Tài khoản ngân hàng
+
+- Quản trị tài khoản thanh toán: phí quản lý, số dư tối thiểu, phí chuyển khoản, phí rút ATM, tính năng, nguồn và ngày xác minh.
+- Trang `ezfin.vn/tai-khoan-ngan-hang`: lọc theo ngân hàng, phí, tính năng; sắp xếp theo phí và số dư tối thiểu.
+- Trang chi tiết từng tài khoản: biểu phí, ưu/nhược điểm, nguồn, tài khoản tương tự, dữ liệu schema.org.
+
 ### Phase 1 — Task 11: So sánh lãi suất tiết kiệm
 
 - Trang `ezfin.vn/lai-suat-tiet-kiem`: nhập số tiền, chọn kỳ hạn, kênh, hình thức lĩnh lãi; xếp các ngân hàng theo tiền lãi nhận được.

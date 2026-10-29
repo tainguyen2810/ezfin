@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Compare\Http\Controllers\BankAccountController;
 use App\Modules\Compare\Http\Controllers\CreditCardController;
 use App\Modules\Compare\Http\Controllers\SavingsController;
 use Illuminate\Support\Facades\Route;
@@ -10,3 +11,6 @@ Route::get('/the-tin-dung/so-sanh', [CreditCardController::class, 'compare'])->n
 Route::get('/the-tin-dung/{slug}', [CreditCardController::class, 'show'])->where('slug', '[a-z0-9-]{1,150}')->name('compare.credit-cards.show');
 
 Route::get('/lai-suat-tiet-kiem', [SavingsController::class, 'index'])->name('compare.savings.index');
+
+Route::get('/tai-khoan-ngan-hang', [BankAccountController::class, 'index'])->name('compare.bank-accounts.index');
+Route::get('/tai-khoan-ngan-hang/{slug}', [BankAccountController::class, 'show'])->where('slug', '[a-z0-9-]{1,150}')->name('compare.bank-accounts.show');
