@@ -1,7 +1,18 @@
 {{-- Khung website công khai (ezfin.vn). $navigation: ghi đè menu (chỉ dùng trong trang mẫu).
-     canonical: URL chuẩn của trang; slot head: thẻ thêm trong <head> (ví dụ JSON-LD). --}}
-@props(['title' => null, 'description' => null, 'navigation' => null, 'noindex' => false, 'canonical' => null])
+     canonical: URL chuẩn (mặc định URL hiện tại không kèm tham số); slot head: thẻ thêm trong <head> (ví dụ JSON-LD).
+     seo: SeoMeta do biên tập viên nhập, ghi đè tiêu đề, mô tả, ảnh chia sẻ, noindex.
+     image: ảnh chia sẻ của trang (ví dụ ảnh bìa bài viết); type: og:type (website, article). --}}
+@props(['title' => null, 'description' => null, 'navigation' => null, 'noindex' => false, 'canonical' => null,
+    'seo' => null, 'image' => null, 'type' => 'website'])
 @php
+    $siteName = 'EzFin';
+    $pageTitle = $seo?->title ?: ($title ? $title.' | '.$siteName : 'EzFin — Tài chính thông minh cho cuộc sống tốt hơn');
+    $metaDescription = $seo?->description ?: ($description ?: 'So sánh lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng và công cụ tính tài chính cá nhân cho người Việt. Dữ liệu có nguồn và ngày xác minh.');
+    // Ngoài production (staging, dev) mọi trang đều noindex.
+    $noindex = $noindex || ($seo?->noindex ?? false) || ! config('ezfin.indexable');
+    $canonical ??= url()->current();
+    $shareImage = url($seo?->ogImageUrl() ?? $image ?? asset('images/og-default.png'));
+
     $navItems = $navigation ?? app(\App\Support\Navigation\Navigation::class)->visible()
         ->map(fn ($item) => ['label' => $item->label, 'href' => route($item->route), 'active' => request()->routeIs($item->route.'*')])
         ->all();
@@ -19,10 +30,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ? $title.' | EzFin' : 'EzFin — Tài chính thông minh cho cuộc sống tốt hơn' }}</title>
-    @if ($description)<meta name="description" content="{{ $description }}">@endif
+    <title>{{ $pageTitle }}</title>
+    <meta name="description" content="{{ $metaDescription }}">
     @if ($noindex)<meta name="robots" content="noindex, nofollow">@endif
-    @if ($canonical)<link rel="canonical" href="{{ $canonical }}">@endif
+    <link rel="canonical" href="{{ $canonical }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:type" content="{{ $type }}">
+    <meta property="og:title" content="{{ $seo?->title ?: ($title ?? $pageTitle) }}">
+    <meta property="og:description" content="{{ $metaDescription }}">
+    <meta property="og:url" content="{{ $canonical }}">
+    <meta property="og:image" content="{{ $shareImage }}">
+    <meta name="twitter:card" content="summary_large_image">
     @isset($head){{ $head }}@endisset
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

@@ -18,14 +18,29 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Xong |
 | 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Xong |
 | 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Xong |
-| 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Chờ duyệt |
-| 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Chưa làm |
+| 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Xong |
+| 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Chờ duyệt |
 | 17 | Trang chủ, footer, trang pháp lý, phương pháp đánh giá | Không nút giả, số liệu giả; mọi link hoạt động | Chưa làm |
 | 18 | Chuyển hướng `/di/` + nhật ký click | Mã click không đoán được; lọc bot; rate limit; `rel="sponsored nofollow"` | Chưa làm |
 | 19 | Deploy staging trên aaPanel | HTTPS, cron, queue worker, backup hằng ngày; đã khôi phục thử thành công | Chưa làm |
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 16
+
+- Xong:
+  - Sitemap `ezfin.vn/sitemap.xml`: mỗi module khai báo URL của mình (`ModuleServiceProvider::sitemap()`), module tắt flag không góp URL. Gồm trang so sánh, thẻ/tài khoản đã xuất bản của tổ chức còn hoạt động, công cụ, kiến thức (chỉ khi có bài), chuyên mục và tác giả có bài, bài đã đến giờ đăng; bỏ trang đánh dấu noindex. Trang chủ đang là trang "đang xây dựng" (noindex) nên chưa vào sitemap, thêm ở task 17.
+  - `robots.txt` động (đã xóa file tĩnh `public/robots.txt`): production chặn `/di/`, `/_ui`, khai báo sitemap; app.ezfin.vn và mọi môi trường không phải production (`EZFIN_INDEXABLE=false`, mặc định) chặn toàn bộ, đồng thời mọi trang có meta noindex. Trang app và quản trị vẫn có header `X-Robots-Tag: noindex` như trước; `/di/` sẽ noindex ở task 18.
+  - Layout công khai: mô tả mặc định, canonical mặc định (URL hiện tại không tham số), Open Graph (site_name, locale, type, title, description, url, image), Twitter card; ảnh chia sẻ mặc định `public/images/og-default.png` (1200×630). Bài viết dùng ảnh bìa và `og:type=article`.
+  - `x-ui.breadcrumb` in kèm JSON-LD BreadcrumbList.
+  - Bảng `seo_meta` (đa hình, trait `HasSeoMeta`) và mục "SEO" trong form bài viết, thẻ tín dụng, tài khoản ngân hàng: tiêu đề, mô tả, ảnh chia sẻ, noindex. Chỉ tạo bản ghi khi có ô được điền.
+  - Bảng `redirects` và trang quản trị "Chuyển hướng URL" (biên tập viên, quản trị cao nhất): chỉ áp dụng khi URL cũ trả 404, đếm lượt; chỉ nhận đích là đường dẫn `/...` hoặc `https://`. Tự thêm 301 khi đổi slug/chuyên mục bài đã xuất bản, đổi slug chuyên mục, đổi slug thẻ/tài khoản đã xuất bản; gộp chuỗi chuyển hướng. URL có `/` ở cuối được 301 về URL không có `/`.
+- Test đã chạy: `vendor/bin/pest` (357 test xanh; mới: `tests/Feature/Seo/{SitemapRobotsTest,MetaTagsTest,RedirectsTest}.php`), `vendor/bin/pint`, `npm run build`, `npm run test:ui`.
+- Cấu hình production cần thêm: `EZFIN_INDEXABLE=true` (đã ghi trong `docs/trien-khai-aapanel.md`).
+- Chưa giải quyết: chưa có giao diện xem trước kết quả Google; ảnh chia sẻ mặc định dùng logo chữ tạm.
+- File quan trọng: `app/Support/Seo/*`, `app/Http/Middleware/PublicRedirects.php`, `app/Modules/Core/{Models/SeoMeta,Models/Redirect,Actions/RecordRedirect,Http/Controllers/SeoController,Filament/Schemas/SeoFields,Filament/Resources/Redirects}`, `resources/views/components/layouts/public.blade.php`, `resources/views/components/ui/breadcrumb.blade.php`.
+- Tiếp theo: task 17 (trang chủ, footer, trang pháp lý, phương pháp đánh giá).
 
 ### 29/10/2026 — Task 15
 

@@ -1,7 +1,7 @@
 @php $logo = $account->institution->logoUrl(); @endphp
 <x-layouts.public :title="$account->name.' – '.$account->institution->short_name"
     :description="$account->summary ?: 'Phí quản lý, số dư tối thiểu, phí chuyển khoản và tính năng của '.$account->name.' tại '.$account->institution->short_name.'. Dữ liệu có nguồn và ngày xác minh.'"
-    :canonical="route('compare.bank-accounts.show', $account->slug)">
+    :canonical="route('compare.bank-accounts.show', $account->slug)" :seo="$account->seoMeta">
     <x-slot:head>
         <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     </x-slot:head>

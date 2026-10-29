@@ -2,12 +2,15 @@
 
 namespace App\Modules\Compare;
 
+use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
 use App\Modules\Compare\Policies\FinancialInstitutionPolicy;
 use App\Modules\Compare\Policies\FinancialProductPolicy;
 use App\Support\Modules\ModuleServiceProvider;
 use App\Support\Navigation\NavItem;
+use App\Support\Seo\SitemapUrl;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Gate;
 
 class CompareServiceProvider extends ModuleServiceProvider
@@ -21,6 +24,29 @@ class CompareServiceProvider extends ModuleServiceProvider
             new NavItem('Thẻ tín dụng', 'compare.credit-cards.index', order: 20),
             new NavItem('Tài khoản ngân hàng', 'compare.bank-accounts.index', order: 30),
         ];
+    }
+
+    protected function sitemap(): iterable
+    {
+        yield new SitemapUrl(route('compare.savings.index'));
+        yield new SitemapUrl(route('compare.credit-cards.index'));
+        yield new SitemapUrl(route('compare.bank-accounts.index'));
+
+        // Cùng điều kiện với trang chi tiết: đã xuất bản, tổ chức còn hoạt động, có thông số.
+        foreach ([
+            [ProductType::CreditCard, 'creditCard', 'compare.credit-cards.show'],
+            [ProductType::BankAccount, 'bankAccount', 'compare.bank-accounts.show'],
+        ] as [$type, $details, $route]) {
+            $products = FinancialProduct::query()->ofType($type)->published()->indexable()
+                ->whereHas('institution', fn (Builder $query) => $query->active())
+                ->has($details)
+                ->orderBy('slug')
+                ->get(['id', 'slug', 'updated_at']);
+
+            foreach ($products as $product) {
+                yield new SitemapUrl(route($route, $product->slug), $product->updated_at);
+            }
+        }
     }
 
     public function boot(): void

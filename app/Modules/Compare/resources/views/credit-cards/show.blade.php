@@ -5,7 +5,7 @@
 @endphp
 <x-layouts.public :title="$card->name.' – '.$card->institution->short_name"
     :description="$card->summary ?: 'Phí, lãi suất, hoàn tiền và điều kiện mở '.$card->name.' của '.$card->institution->short_name.'. Dữ liệu có nguồn và ngày xác minh.'"
-    :canonical="route('compare.credit-cards.show', $card->slug)">
+    :canonical="route('compare.credit-cards.show', $card->slug)" :seo="$card->seoMeta">
     <x-slot:head>
         <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     </x-slot:head>

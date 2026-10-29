@@ -4,8 +4,10 @@ namespace App\Modules\Compare\Models;
 
 use App\Modules\Compare\Enums\ProductStatus;
 use App\Modules\Compare\Enums\ProductType;
+use App\Modules\Core\Actions\RecordRedirect;
 use App\Modules\Core\Concerns\Auditable;
 use App\Modules\Core\Concerns\DeletesReplacedFiles;
+use App\Modules\Core\Concerns\HasSeoMeta;
 use Database\Factories\FinancialProductFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -39,7 +41,7 @@ use Illuminate\Validation\ValidationException;
 #[UseFactory(FinancialProductFactory::class)]
 class FinancialProduct extends Model
 {
-    use Auditable, DeletesReplacedFiles, HasFactory;
+    use Auditable, DeletesReplacedFiles, HasFactory, HasSeoMeta;
 
     /** Mặc định hẹn kiểm tra lại sau 3 tháng kể từ ngày xác minh. */
     public const REVIEW_INTERVAL_MONTHS = 3;
@@ -83,6 +85,22 @@ class FinancialProduct extends Model
                 $product->published_at ??= now();
             }
         });
+
+        static::updated(fn (self $product) => $product->redirectOldUrl());
+    }
+
+    /** Sản phẩm đang hiển thị đổi slug: URL cũ chuyển hướng 301 sang URL mới. */
+    private function redirectOldUrl(): void
+    {
+        $route = match ($this->type) {
+            ProductType::CreditCard => 'compare.credit-cards.show',
+            ProductType::BankAccount => 'compare.bank-accounts.show',
+            default => null,
+        };
+
+        if ($route && $this->getOriginal('status') === ProductStatus::Published && $this->wasChanged('slug')) {
+            app(RecordRedirect::class)->handle(route($route, $this->getOriginal('slug'), false), route($route, $this->slug, false));
+        }
     }
 
     /**

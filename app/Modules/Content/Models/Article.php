@@ -5,7 +5,9 @@ namespace App\Modules\Content\Models;
 use App\Models\User;
 use App\Modules\Content\Enums\ArticleStatus;
 use App\Modules\Content\Support\ArticleHtml;
+use App\Modules\Core\Actions\RecordRedirect;
 use App\Modules\Core\Concerns\Auditable;
+use App\Modules\Core\Concerns\HasSeoMeta;
 use Database\Factories\ArticleFactory;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -48,7 +50,7 @@ use Illuminate\Validation\ValidationException;
 #[UseFactory(ArticleFactory::class)]
 class Article extends Model
 {
-    use Auditable, HasFactory, SoftDeletes;
+    use Auditable, HasFactory, HasSeoMeta, SoftDeletes;
 
     public const COVER_DIRECTORY = 'articles';
 
@@ -124,6 +126,8 @@ class Article extends Model
                 $article->recordRevision();
             }
 
+            $article->redirectOldUrl();
+
             if ($article->wasChanged('cover_path') && ($old = $article->getOriginal('cover_path'))) {
                 Storage::disk('public')->delete($old);
             }
@@ -134,6 +138,25 @@ class Article extends Model
                 Storage::disk('public')->delete($article->cover_path);
             }
         });
+    }
+
+    /** Bài đang hiển thị đổi slug hoặc chuyên mục: URL cũ chuyển hướng 301 sang URL mới. */
+    private function redirectOldUrl(): void
+    {
+        if ($this->getOriginal('status') !== ArticleStatus::Published || ! $this->wasChanged(['slug', 'category_id'])) {
+            return;
+        }
+
+        $oldCategory = $this->wasChanged('category_id')
+            ? ArticleCategory::find($this->getOriginal('category_id'))?->slug
+            : $this->category->slug;
+
+        if ($oldCategory) {
+            app(RecordRedirect::class)->handle(
+                route('content.articles.show', [$oldCategory, $this->getOriginal('slug')], false),
+                route('content.articles.show', [$this->category()->value('slug'), $this->slug], false),
+            );
+        }
     }
 
     private function recordRevision(): void
@@ -196,6 +219,12 @@ class Article extends Model
         return $this->published_at && $this->content_updated_at?->gt($this->published_at->copy()->endOfDay())
             ? $this->content_updated_at
             : null;
+    }
+
+    /** Ngày sửa cuối có ý nghĩa với người đọc (sitemap, dateModified). */
+    public function lastModified(): ?Carbon
+    {
+        return $this->updatedAfterPublishing() ?? $this->published_at;
     }
 
     public function readingMinutes(): int

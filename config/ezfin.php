@@ -20,6 +20,12 @@ return [
     'admin_path' => env('EZFIN_ADMIN_PATH', 'quan-tri'),
 
     /*
+    | Cho phép công cụ tìm kiếm lập chỉ mục website công khai. Chỉ bật trên production;
+    | staging và máy dev luôn noindex (robots.txt chặn toàn bộ, mọi trang có meta noindex).
+    */
+    'indexable' => (bool) env('EZFIN_INDEXABLE', false),
+
+    /*
     | Module đang cài. Thứ tự là thứ tự đăng ký; Core luôn đứng đầu.
     */
     'modules' => [

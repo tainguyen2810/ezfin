@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Modules\Core\Listeners\RecordAuthenticationEvents;
 use App\Support\Format;
 use App\Support\Navigation\Navigation;
+use App\Support\Seo\Sitemap;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -16,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Navigation::class);
+        $this->app->singleton(Sitemap::class);
 
         // Dùng trong Blade: {{ Format::money($amount) }}
         AliasLoader::getInstance()->alias('Format', Format::class);

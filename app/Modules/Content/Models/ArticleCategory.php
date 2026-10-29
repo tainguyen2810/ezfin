@@ -2,6 +2,8 @@
 
 namespace App\Modules\Content\Models;
 
+use App\Modules\Content\Enums\ArticleStatus;
+use App\Modules\Core\Actions\RecordRedirect;
 use App\Modules\Core\Concerns\Auditable;
 use Database\Factories\ArticleCategoryFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -24,6 +26,28 @@ class ArticleCategory extends Model
     use Auditable, HasFactory;
 
     protected $fillable = ['name', 'slug', 'description', 'sort_order'];
+
+    protected static function booted(): void
+    {
+        // Đổi slug chuyên mục đổi URL của chuyên mục và mọi bài trong đó: giữ URL cũ bằng 301.
+        static::updated(function (self $category) {
+            if (! $category->wasChanged('slug')) {
+                return;
+            }
+
+            $redirects = app(RecordRedirect::class);
+            $old = $category->getOriginal('slug');
+
+            $redirects->handle(route('content.categories.show', $old, false), route('content.categories.show', $category->slug, false));
+
+            $category->articles()->where('status', ArticleStatus::Published)->pluck('slug')->each(
+                fn (string $slug) => $redirects->handle(
+                    route('content.articles.show', [$old, $slug], false),
+                    route('content.articles.show', [$category->slug, $slug], false),
+                ),
+            );
+        });
+    }
 
     public static function auditSubjectLabel(): string
     {

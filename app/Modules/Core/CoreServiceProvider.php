@@ -5,7 +5,9 @@ namespace App\Modules\Core;
 use App\Models\User;
 use App\Modules\Core\Console\CreateAdminCommand;
 use App\Modules\Core\Models\AuditLog;
+use App\Modules\Core\Models\Redirect;
 use App\Modules\Core\Policies\AuditLogPolicy;
+use App\Modules\Core\Policies\RedirectPolicy;
 use App\Modules\Core\Policies\UserPolicy;
 use App\Support\Modules\ModuleServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -18,6 +20,7 @@ class CoreServiceProvider extends ModuleServiceProvider
 
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(AuditLog::class, AuditLogPolicy::class);
+        Gate::policy(Redirect::class, RedirectPolicy::class);
 
         if ($this->app->runningInConsole()) {
             $this->commands([CreateAdminCommand::class]);
