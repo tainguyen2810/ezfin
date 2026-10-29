@@ -71,6 +71,7 @@
                     <x-ui.input name="ngay" label="Ngày giao dịch" type="date" value="2026-10-29" />
                     <x-ui.input name="email" label="Email (trạng thái lỗi)" value="ten@" />
                     <x-ui.input name="khoa" label="Ô bị khóa" value="Không sửa được" disabled />
+                    <x-ui.share-link class="md:col-span-2" url="https://ezfin.vn/cong-cu/lai-kep?so_tien=50000000&so_nam=5" label="Liên kết chia sẻ (nút Sao chép chỉ hiện khi bật JS)" />
                     <div class="md:col-span-2"><x-ui.toggle name="nhan_tin" label="Nhận email ưu đãi" description="Bạn có thể tắt bất cứ lúc nào trong Cài đặt." /></div>
                 </div>
             </x-ui.card>

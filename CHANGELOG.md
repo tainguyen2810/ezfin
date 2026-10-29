@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 13: Bộ máy tính toán và trang công cụ
+
+- Công thức tính lãi kép, lãi tiền gửi, tiết kiệm định kỳ, lịch trả nợ (dư nợ giảm dần, trả đều, lãi phẳng) bằng số nguyên đồng, kiểm tra bằng số liệu tính tay.
+- Trang `ezfin.vn/cong-cu` và công cụ đầu tiên `ezfin.vn/cong-cu/lai-kep`: dùng được khi tắt JavaScript, liên kết chia sẻ giữ nguyên số liệu và kết quả, nêu rõ cách tính và giả định.
+- Sửa ô nhập số tiền: khi tắt JavaScript, số tiền vừa nhập được gửi đúng.
+
 ### Phase 1 — Task 12: Tài khoản ngân hàng
 
 - Quản trị tài khoản thanh toán: phí quản lý, số dư tối thiểu, phí chuyển khoản, phí rút ATM, tính năng, nguồn và ngày xác minh.
