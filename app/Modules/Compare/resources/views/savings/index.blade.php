@@ -23,6 +23,7 @@
         </x-ui.card>
 
         <div class="mt-6 space-y-4">
+            <h2 class="sr-only">Kết quả so sánh</h2>
             <p class="text-sm text-slate-500" role="status">
                 Gửi <strong class="text-navy-900">{{ Format::money($filters->amount) }}</strong>,
                 kỳ hạn <strong class="text-navy-900">{{ \App\Modules\Compare\Models\SavingsRate::termLabel($filters->term) }}</strong>,

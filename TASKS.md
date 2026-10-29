@@ -21,11 +21,28 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Xong |
 | 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Xong |
 | 17 | Trang chủ, footer, trang pháp lý, phương pháp đánh giá | Không nút giả, số liệu giả; mọi link hoạt động | Xong |
-| 18 | Chuyển hướng `/di/` + nhật ký click | Mã click không đoán được; lọc bot; rate limit; `rel="sponsored nofollow"` | Chờ duyệt |
-| 19 | Deploy staging trên aaPanel | HTTPS, cron, queue worker, backup hằng ngày; đã khôi phục thử thành công | Chưa làm |
-| 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
+| 18 | Chuyển hướng `/di/` + nhật ký click | Mã click không đoán được; lọc bot; rate limit; `rel="sponsored nofollow"` | Xong |
+| 19 | Deploy staging trên aaPanel | HTTPS, cron, queue worker, backup hằng ngày; đã khôi phục thử thành công | Đang làm |
+| 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Đang làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Chuẩn bị task 19 và 20
+
+- Đã xong:
+  - Lệnh `php artisan ezfin:check` kiểm tra máy chủ sau khi cài hoặc deploy: cấu hình, database, migration, quyền ghi, asset, cron, queue, email.
+  - Heartbeat để biết cron và queue worker còn chạy.
+  - Hướng dẫn staging và khôi phục thử bản sao lưu trong `docs/trien-khai-aapanel.md`.
+  - Checklist nghiệm thu `docs/nghiem-thu-phase-1.md`.
+  - Sửa lỗi Lighthouse:
+    - màu tiền lãi đủ tương phản (`--color-income` chuyển sang green-700),
+    - ảnh logo và ảnh bìa có kích thước,
+    - cột biểu đồ có `role="img"`,
+    - thứ tự tiêu đề trên trang danh sách.
+  - Lighthouse mobile trên máy dev (có gzip): hiệu năng 97 đến 100, trợ năng 100 ở các trang chính.
+- Test đã chạy: `vendor/bin/pest` (401 test xanh), `npm run build`, Lighthouse 12 trên 7 trang.
+- Chưa giải quyết: chủ dự án chọn để staging lại sau. Task 19 cần chủ dự án tự triển khai theo hướng dẫn, hoặc cho Claude chạy qua máy tính của anh. Task 20 còn đo Lighthouse trên staging và chủ dự án duyệt.
+- Bước tiếp theo: deploy staging (task 19), rồi nghiệm thu theo `docs/nghiem-thu-phase-1.md`.
 
 ### 29/10/2026 — Task 18
 

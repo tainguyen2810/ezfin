@@ -15,6 +15,7 @@
             </x-ui.filter-panel>
 
             <div class="space-y-4">
+                <h2 class="sr-only">Kết quả so sánh</h2>
                 @php $partnerLinks = app(\App\Modules\Partner\Actions\PartnerLinks::class)->forProducts($accounts->pluck('id')) @endphp
                 <p class="text-sm text-slate-500" role="status">
                     @if ($accounts->total() > 0)

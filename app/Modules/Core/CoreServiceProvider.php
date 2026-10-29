@@ -3,6 +3,7 @@
 namespace App\Modules\Core;
 
 use App\Models\User;
+use App\Modules\Core\Console\CheckDeploymentCommand;
 use App\Modules\Core\Console\CreateAdminCommand;
 use App\Modules\Core\Models\AuditLog;
 use App\Modules\Core\Models\Redirect;
@@ -34,7 +35,7 @@ class CoreServiceProvider extends ModuleServiceProvider
         Gate::policy(Redirect::class, RedirectPolicy::class);
 
         if ($this->app->runningInConsole()) {
-            $this->commands([CreateAdminCommand::class]);
+            $this->commands([CreateAdminCommand::class, CheckDeploymentCommand::class]);
         }
     }
 

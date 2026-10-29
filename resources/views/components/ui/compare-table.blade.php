@@ -11,7 +11,7 @@
             <div class="flex min-w-0 flex-col gap-2 p-3 sm:p-4">
                 <div class="flex h-10 w-16 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
                     @if ($product['logo'] ?? null)
-                        <img src="{{ $product['logo'] }}" alt="{{ $product['institution'] }}" class="max-h-7 max-w-12 object-contain" loading="lazy">
+                        <img src="{{ $product['logo'] }}" alt="{{ $product['institution'] }}" width="48" height="28" class="max-h-7 max-w-12 object-contain" loading="lazy">
                     @else
                         <span class="text-[10px] font-semibold text-slate-500">{{ Str::limit($product['institution'], 8, '') }}</span>
                     @endif

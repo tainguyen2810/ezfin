@@ -58,7 +58,7 @@
                     $topSeries = end($nonZero);
                     $readout = $labelPrefix.$label.': '.collect($series)->map(fn ($s) => $s['label'].' '.Format::money($s['values'][$i]))->implode(', ');
                 @endphp
-                <div class="group flex h-full min-w-0 flex-1 items-end justify-center outline-none" tabindex="0" aria-label="{{ $readout }}">
+                <div class="group flex h-full min-w-0 flex-1 items-end justify-center outline-none" tabindex="0" role="img" aria-label="{{ $readout }}">
                     <div class="flex w-full max-w-6 flex-col-reverse gap-0.5 transition group-hover:opacity-80 group-focus-visible:opacity-80" style="height: {{ $totals[$i] / $top * 100 }}%">
                         @foreach ($series as $index => $item)
                             @if ($item['values'][$i] > 0)

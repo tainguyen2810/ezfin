@@ -37,7 +37,7 @@
     --color-primary-700: var(--color-blue-700);
 
     /* Ý nghĩa tài chính: thu/tăng, chi/giảm/vượt ngưỡng, cảnh báo. */
-    --color-income: var(--color-green-600);
+    --color-income: var(--color-green-700);
     --color-income-soft: var(--color-green-50);
     --color-expense: var(--color-red-600);
     --color-expense-soft: var(--color-red-50);

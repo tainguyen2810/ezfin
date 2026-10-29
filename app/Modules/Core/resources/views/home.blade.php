@@ -75,7 +75,7 @@
                         <li class="flex items-center gap-3 px-4 py-3 sm:gap-4 sm:px-5">
                             <span class="num w-5 shrink-0 text-sm font-semibold text-slate-400">{{ $loop->iteration }}</span>
                             <span class="flex h-10 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white">
-                                @if ($logo)<img src="{{ $logo }}" alt="" class="max-h-7 max-w-12 object-contain">@else<span class="text-xs font-semibold text-slate-500">{{ $product->institution->short_name }}</span>@endif
+                                @if ($logo)<img src="{{ $logo }}" alt="" width="48" height="28" class="max-h-7 max-w-12 object-contain">@else<span class="text-xs font-semibold text-slate-500">{{ $product->institution->short_name }}</span>@endif
                             </span>
                             <span class="min-w-0 flex-1">
                                 <span class="block truncate font-semibold text-navy-900">{{ $product->institution->short_name }}</span>

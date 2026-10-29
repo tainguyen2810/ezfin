@@ -55,7 +55,7 @@ vendor/bin/pest      # test
 vendor/bin/pint      # format code
 ```
 
-Cài trên WAMP: `docs/cai-dat-wamp.md`. Triển khai, backup, nâng cấp trên aaPanel: `docs/trien-khai-aapanel.md`.
+Cài trên WAMP: `docs/cai-dat-wamp.md`. Triển khai, staging, backup, nâng cấp trên aaPanel: `docs/trien-khai-aapanel.md`. Sau mỗi lần cài hoặc deploy: `php artisan ezfin:check`.
 
 ## Quy trình làm việc
 
