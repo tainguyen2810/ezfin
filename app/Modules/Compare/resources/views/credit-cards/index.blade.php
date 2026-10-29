@@ -17,12 +17,14 @@
             </x-ui.filter-panel>
 
             <div class="space-y-4">
+                @php $partnerLinks = app(\App\Modules\Partner\Actions\PartnerLinks::class)->forProducts($cards->pluck('id')) @endphp
                 <p class="text-sm text-slate-500" role="status">
                     @if ($cards->total() > 0)
                         <strong class="text-navy-900">{{ $cards->total() }}</strong> thẻ phù hợp · Sắp xếp theo: {{ mb_strtolower(\App\Modules\Compare\Support\CreditCardFilters::SORTS[$filters->sort]) }}
                     @endif
                 </p>
 
+                @if ($partnerLinks->isNotEmpty())<x-ui.disclosure />@endif
                 @forelse ($cards as $card)
                     @php
                         $detail = $card->creditCard;
@@ -35,7 +37,7 @@
                     @endphp
                     <x-ui.product-card :id="$card->slug" :name="$card->name" :institution="$card->institution->short_name"
                         :logo="$card->institution->logoUrl()" :highlights="$highlights"
-                        :detail-url="route('compare.credit-cards.show', $card->slug)"
+                        :detail-url="route('compare.credit-cards.show', $card->slug)" :partner-url="$partnerLinks->get($card->id)?->url()" :partner-label="$partnerLinks->get($card->id)?->cta_label ?? ''"
                         :facts="[
                             'Phí thường niên' => $fee,
                             'Thu nhập tối thiểu' => Format::money($detail?->min_monthly_income).($detail?->min_monthly_income !== null ? '/tháng' : ''),

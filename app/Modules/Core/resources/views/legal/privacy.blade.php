@@ -8,6 +8,7 @@
         <li><strong>Cookie cần thiết:</strong> cookie phiên làm việc và cookie chống giả mạo yêu cầu (XSRF). Không dùng cho quảng cáo.</li>
         <li><strong>Danh sách so sánh:</strong> sản phẩm bạn chọn để so sánh được lưu trong bộ nhớ phiên của trình duyệt (sessionStorage), không gửi về máy chủ và tự xóa khi đóng tab.</li>
         <li><strong>Số liệu bạn nhập vào công cụ tính và bộ lọc:</strong> nằm trên địa chỉ trang (URL) để bạn chia sẻ được kết quả. EzFin không lưu riêng các số liệu này ngoài nhật ký máy chủ.</li>
+        <li><strong>Lượt bấm sang đối tác:</strong> khi bạn bấm nút đến ngân hàng hoặc đối tác (đường dẫn bắt đầu bằng <code>/di/</code>), EzFin ghi thời điểm, liên kết được bấm, trang EzFin bạn đang xem, loại trình duyệt và một mã băm một chiều của địa chỉ IP (không lưu IP gốc). Mỗi lượt bấm có một mã ngẫu nhiên được gửi kèm sang đối tác để đối soát hoa hồng; mã này không chứa thông tin cá nhân. Dữ liệu dùng để thống kê, chống gian lận và đối soát, tự xóa sau {{ \App\Modules\Partner\Models\OutboundClick::RETENTION_MONTHS }} tháng.</li>
         <li><strong>Thông tin bạn chủ động gửi:</strong> khi bạn liên hệ qua email, chúng tôi lưu nội dung thư để trả lời.</li>
     </ul>
     <p>Hiện EzFin <strong>chưa</strong> dùng công cụ phân tích truy cập hay cookie quảng cáo của bên thứ ba, và chưa có tài khoản cho người dùng.</p>
@@ -19,7 +20,7 @@
     <p>Dữ liệu chỉ được chia sẻ với nhà cung cấp hạ tầng (máy chủ, gửi email) trong phạm vi cần thiết để vận hành, hoặc khi pháp luật yêu cầu. Khi bạn bấm sang website của ngân hàng hay đối tác, chính sách quyền riêng tư của bên đó được áp dụng.</p>
 
     <h2>4. Thời gian lưu trữ</h2>
-    <p>Nhật ký máy chủ được lưu trong thời gian cần cho vận hành và bảo mật rồi xóa định kỳ. Thư liên hệ được lưu đến khi xử lý xong và không quá thời hạn pháp luật cho phép.</p>
+    <p>Nhật ký máy chủ được lưu trong thời gian cần cho vận hành và bảo mật rồi xóa định kỳ. Nhật ký lượt bấm sang đối tác tự xóa sau {{ \App\Modules\Partner\Models\OutboundClick::RETENTION_MONTHS }} tháng. Thư liên hệ được lưu đến khi xử lý xong và không quá thời hạn pháp luật cho phép.</p>
 
     <h2>5. Quyền của bạn</h2>
     <p>Theo Nghị định 13/2023/NĐ-CP, bạn có quyền được biết, đồng ý, truy cập, chỉnh sửa, xóa, hạn chế xử lý, phản đối xử lý dữ liệu cá nhân của mình và khiếu nại. Bạn có thể xóa cookie và bộ nhớ phiên bất kỳ lúc nào trong cài đặt trình duyệt. Để thực hiện các quyền khác, vui lòng gửi yêu cầu qua trang <a href="{{ route('legal.contact') }}">Liên hệ</a>.</p>

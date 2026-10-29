@@ -15,12 +15,14 @@
             </x-ui.filter-panel>
 
             <div class="space-y-4">
+                @php $partnerLinks = app(\App\Modules\Partner\Actions\PartnerLinks::class)->forProducts($accounts->pluck('id')) @endphp
                 <p class="text-sm text-slate-500" role="status">
                     @if ($accounts->total() > 0)
                         <strong class="text-navy-900">{{ $accounts->total() }}</strong> tài khoản phù hợp · Sắp xếp theo: {{ mb_strtolower(\App\Modules\Compare\Support\BankAccountFilters::SORTS[$filters->sort]) }}
                     @endif
                 </p>
 
+                @if ($partnerLinks->isNotEmpty())<x-ui.disclosure />@endif
                 @forelse ($accounts as $account)
                     @php
                         $highlights = collect(\App\Modules\Compare\Support\BankAccountFacts::features($account))->take(3)
@@ -29,7 +31,7 @@
                     @endphp
                     <x-ui.product-card :id="$account->slug" :name="$account->name" :institution="$account->institution->short_name"
                         :logo="$account->institution->logoUrl()" :highlights="$highlights"
-                        :detail-url="route('compare.bank-accounts.show', $account->slug)" :comparable="false"
+                        :detail-url="route('compare.bank-accounts.show', $account->slug)" :partner-url="$partnerLinks->get($account->id)?->url()" :partner-label="$partnerLinks->get($account->id)?->cta_label ?? ''" :comparable="false"
                         :facts="\App\Modules\Compare\Support\BankAccountFacts::for($account)">
                         <x-slot:footer>
                             <x-ui.data-freshness :verified-at="$account->verified_at" source="Biểu phí chính thức của ngân hàng"

@@ -1,4 +1,7 @@
-@php $logo = $account->institution->logoUrl(); @endphp
+@php
+    $logo = $account->institution->logoUrl();
+    $partnerLinks = app(\App\Modules\Partner\Actions\PartnerLinks::class)->forProducts($similar->pluck('id')->push($account->id));
+@endphp
 <x-layouts.public :title="$account->name.' – '.$account->institution->short_name"
     :description="$account->summary ?: 'Phí quản lý, số dư tối thiểu, phí chuyển khoản và tính năng của '.$account->name.' tại '.$account->institution->short_name.'. Dữ liệu có nguồn và ngày xác minh.'"
     :canonical="route('compare.bank-accounts.show', $account->slug)" :seo="$account->seoMeta">
@@ -25,8 +28,15 @@
                         @foreach ($features as $feature)<x-ui.badge variant="primary">{{ $feature }}</x-ui.badge>@endforeach
                     </div>
                 @endif
+                @if ($partnerLink = $partnerLinks->get($account->id))
+                    <div class="mt-4">
+                        <x-ui.button :href="$partnerLink->url()" icon="arrow-top-right-on-square" rel="sponsored nofollow noopener" target="_blank">{{ $partnerLink->cta_label }}</x-ui.button>
+                    </div>
+                @endif
             </div>
         </div>
+
+        @if ($partnerLinks->isNotEmpty())<x-ui.disclosure class="mt-4" />@endif
 
         @if ($account->summary)
             <p class="mt-6 max-w-3xl text-slate-700">{{ $account->summary }}</p>
@@ -88,6 +98,7 @@
                     @foreach ($similar as $other)
                         <x-ui.product-card :id="$other->slug" :name="$other->name" :institution="$other->institution->short_name"
                             :logo="$other->institution->logoUrl()" :detail-url="route('compare.bank-accounts.show', $other->slug)" :comparable="false"
+                            :partner-url="$partnerLinks->get($other->id)?->url()" :partner-label="$partnerLinks->get($other->id)?->cta_label ?? ''"
                             :facts="array_slice(\App\Modules\Compare\Support\BankAccountFacts::for($other), 0, 3)" />
                     @endforeach
                 </div>

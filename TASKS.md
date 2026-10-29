@@ -20,12 +20,20 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Xong |
 | 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Xong |
 | 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Xong |
-| 17 | Trang chủ, footer, trang pháp lý, phương pháp đánh giá | Không nút giả, số liệu giả; mọi link hoạt động | Chờ duyệt |
-| 18 | Chuyển hướng `/di/` + nhật ký click | Mã click không đoán được; lọc bot; rate limit; `rel="sponsored nofollow"` | Chưa làm |
+| 17 | Trang chủ, footer, trang pháp lý, phương pháp đánh giá | Không nút giả, số liệu giả; mọi link hoạt động | Xong |
+| 18 | Chuyển hướng `/di/` + nhật ký click | Mã click không đoán được; lọc bot; rate limit; `rel="sponsored nofollow"` | Chờ duyệt |
 | 19 | Deploy staging trên aaPanel | HTTPS, cron, queue worker, backup hằng ngày; đã khôi phục thử thành công | Chưa làm |
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 18
+
+- Đã xong: module Partner có bảng `outbound_links` (mã 12 ký tự ngẫu nhiên, không đổi sau khi tạo; URL đích bắt buộc https, chèn `{click_id}` để đối soát) và `outbound_clicks` (mã click 24 ký tự ngẫu nhiên, IP chỉ lưu dạng HMAC, user agent, đường dẫn trang EzFin dẫn tới; tự xóa sau 12 tháng bằng `model:prune` chạy hằng ngày). `ezfin.vn/di/{mã}` trả 302 kèm `X-Robots-Tag: noindex`, `no-store`; bot, trình xem trước link, công cụ dòng lệnh không được ghi; cùng IP bấm cùng link quá 5 lần/phút không ghi thêm; quá 30 lần/phút/IP trả 429. Nút đối tác (`rel="sponsored nofollow noopener"`) và công bố liên kết hiện trên danh sách và trang chi tiết thẻ, tài khoản, lãi suất tiết kiệm khi sản phẩm có link đang bật. Admin: "Đối tác → Liên kết đối tác" (quản trị cao nhất, vai trò đối tác/tài chính), có số click 30 ngày và tổng; link đã có click không xóa được. Trang Quyền riêng tư mô tả nhật ký click.
+- Test đã chạy: `vendor/bin/pest` (397 test xanh), `npm run build`, `tests/browser/ui-smoke.mjs` 360/768/1280px, thử bấm `/di/` thật trên máy chủ local (302 sang đối tác kèm mã click, ghi 1 click).
+- File quan trọng: `app/Modules/Partner/**`, `database/factories/OutboundLinkFactory.php`, `routes/console.php`, các view `compare::credit-cards.*`, `bank-accounts.*`, `savings.index`.
+- Chưa giải quyết: trang so sánh 3 thẻ chưa có nút đối tác (chỉ danh sách và trang chi tiết). Chưa có link đối tác thật; cần nhập trong admin khi có hợp đồng.
+- Bước tiếp theo: task 19 (deploy staging trên aaPanel), cần quyền truy cập máy chủ.
 
 ### 29/10/2026 — Task 17
 

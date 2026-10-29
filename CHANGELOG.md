@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 18: Chuyển hướng đối tác `/di/` và nhật ký click
+
+- Quản lý liên kết đối tác trong admin, gắn với sản phẩm; nút đối tác trên trang so sánh và trang chi tiết, luôn kèm công bố liên kết, `rel="sponsored nofollow"`.
+- `ezfin.vn/di/{mã}` ghi click (lọc bot, giới hạn tần suất, IP chỉ lưu dạng băm, tự xóa sau 12 tháng) rồi chuyển sang đối tác kèm mã click để đối soát; không được lập chỉ mục.
+
 ### Phase 1 — Task 17: Trang chủ, footer, trang pháp lý
 
 - Trang chủ dùng dữ liệu thật: tìm lãi suất nhanh, ngân hàng lãi cao nhất kỳ hạn 12 tháng, công cụ tính, bài viết mới; mục chưa có dữ liệu hoặc đang tắt thì ẩn.
