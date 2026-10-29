@@ -19,13 +19,21 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Xong |
 | 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Xong |
 | 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Xong |
-| 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Chờ duyệt |
-| 17 | Trang chủ, footer, trang pháp lý, phương pháp đánh giá | Không nút giả, số liệu giả; mọi link hoạt động | Chưa làm |
+| 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Xong |
+| 17 | Trang chủ, footer, trang pháp lý, phương pháp đánh giá | Không nút giả, số liệu giả; mọi link hoạt động | Chờ duyệt |
 | 18 | Chuyển hướng `/di/` + nhật ký click | Mã click không đoán được; lọc bot; rate limit; `rel="sponsored nofollow"` | Chưa làm |
 | 19 | Deploy staging trên aaPanel | HTTPS, cron, queue worker, backup hằng ngày; đã khôi phục thử thành công | Chưa làm |
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 17
+
+- Đã xong: trang chủ thật (`HomeController`) thay trang "sắp ra mắt": form tìm lãi suất nhanh, 5 ngân hàng lãi cao nhất kỳ hạn 12 tháng (100.000.000 đ), công cụ tính, bài mới; mục nào chưa có dữ liệu hoặc module tắt thì ẩn. Sáu trang thông tin: giới thiệu, phương pháp đánh giá, công bố liên kết, điều khoản, quyền riêng tư (theo Nghị định 13/2023, mô tả đúng dữ liệu đang thu thập), liên hệ. Footer có cột "Khám phá" theo menu, cột "Về EzFin", thông tin công ty khi cấu hình. Trang chủ và trang pháp lý vào sitemap.
+- Test đã chạy: `vendor/bin/pest` (373 test xanh, trong đó test duyệt mọi link nội bộ trên trang chủ và trang pháp lý đều trả 200), `npm run build`, `tests/browser/ui-smoke.mjs` (thêm 6 trang pháp lý) ở 360/768/1280px.
+- File quan trọng: `app/Modules/Core/Http/Controllers/HomeController.php`, `app/Modules/Core/resources/views/{home,legal/*,components/legal-page}.blade.php`, `app/Modules/Content/Actions/LatestArticles.php`, `resources/views/components/layouts/public.blade.php`, `config/ezfin.php` (`company`).
+- Chưa giải quyết: thông tin công ty, email, số điện thoại liên hệ chưa có; chủ dự án điền vào `.env` (`EZFIN_COMPANY_*`, `EZFIN_CONTACT_*`). Nội dung pháp lý nên được luật sư xem lại trước khi chạy thật.
+- Bước tiếp theo: task 18 (`/di/` và nhật ký click).
 
 ### 29/10/2026 — Task 16
 

@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 17: Trang chủ, footer, trang pháp lý
+
+- Trang chủ dùng dữ liệu thật: tìm lãi suất nhanh, ngân hàng lãi cao nhất kỳ hạn 12 tháng, công cụ tính, bài viết mới; mục chưa có dữ liệu hoặc đang tắt thì ẩn.
+- Trang Giới thiệu, Phương pháp đánh giá, Công bố liên kết, Điều khoản sử dụng, Quyền riêng tư, Liên hệ; có trong sitemap.
+- Footer mới: menu khám phá, liên kết thông tin, thông tin công ty (cấu hình qua `EZFIN_COMPANY_*`, `EZFIN_CONTACT_*`).
+
 ### Phase 1 — Task 16: SEO nền
 
 - `sitemap.xml` tự sinh từ các module đang bật, chỉ gồm trang đã xuất bản và cho phép lập chỉ mục; `robots.txt` theo tên miền (app.ezfin.vn chặn toàn bộ) và theo môi trường (`EZFIN_INDEXABLE`, ngoài production chặn toàn bộ và mọi trang noindex).
