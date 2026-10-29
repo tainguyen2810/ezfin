@@ -15,8 +15,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Xong |
 | 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Xong |
 | 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Xong |
-| 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Chờ duyệt |
-| 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Chưa làm |
+| 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Xong |
+| 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Chờ duyệt |
 | 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Chưa làm |
 | 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Chưa làm |
 | 16 | SEO nền: meta, canonical, sitemap, robots, breadcrumb, OG, 301 | Sitemap chỉ gồm trang đã xuất bản; app và `/di/` là noindex | Chưa làm |
@@ -26,6 +26,21 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 13
+
+- Xong: bộ máy tính toán trong `app/Modules/Planner/Calculators` (PHP thuần, tiền là số nguyên đồng, lãi suất quy về phần vạn của 1%, cộng phần lẻ rồi mới làm tròn nửa lên đến đồng):
+  - `CompoundInterest`: lãi kép ghép hằng tháng/quý/năm, góp thêm cuối mỗi tháng, bảng theo năm.
+  - `DepositInterest`: lãi tiền gửi có kỳ hạn, lĩnh cuối kỳ hoặc hằng tháng.
+  - `RecurringSavings`: tiết kiệm định kỳ, gửi đầu mỗi tháng, lãi đơn đến cuối kỳ.
+  - `Repayment`: lịch trả nợ dư nợ giảm dần (gốc đều), trả đều hằng tháng (niên kim), lãi phẳng kèm lãi suất dư nợ giảm dần tương đương.
+  - Kết quả vượt 1 triệu tỷ đồng thì báo lỗi thay vì tràn số. Chỉ phép lũy thừa tìm số tiền trả đều và lãi suất tương đương dùng số thực; lịch trả nợ tính lại bằng số nguyên.
+- Khung trang công cụ: `ezfin.vn/cong-cu` (danh sách) và `ezfin.vn/cong-cu/{slug}`; menu "Công cụ tính", tắt cùng module `planner`. Mỗi công cụ là một class kế thừa `Tools\Tool` (ô nhập, mặc định, kiểm tra, giả định, view form/kết quả), đăng ký trong `PlannerServiceProvider`. Form GET chạy được khi tắt JS; URL gọn (bỏ dấu chấm trong số tiền, đổi dấu phẩy lãi suất, bỏ giá trị mặc định, giữ utm_*) là liên kết chia sẻ giữ nguyên kết quả; trang có số liệu riêng là noindex, canonical về trang gốc. Lỗi nhập hiện ngay dưới từng ô.
+- Công cụ đầu tiên: Tính lãi kép (`/cong-cu/lai-kep`). Biểu đồ và 4 công cụ còn lại thuộc task 14.
+- Component mới `x-ui.share-link` (có trong `/_ui`). Sửa `x-ui.money-input`: khi tắt JS, ô hiển thị gửi giá trị lên server (trước đây ô ẩn gửi giá trị cũ, nên sửa số tiền trên trang so sánh lãi suất không có tác dụng khi tắt JS).
+- Test đã chạy: `vendor/bin/pest` (258 test xanh; mới: `tests/Unit/Planner/CalculatorsTest.php` với số liệu tính tay và hàm PMT, `tests/Feature/Planner/ToolPageTest.php`), `vendor/bin/pint`, `npm run build`, `npm run test:ui` (thêm `/cong-cu`, `/cong-cu/lai-kep`), Playwright: tắt JS nhập 50.000.000 đ / 7,5% / 5 năm ra 71.781.466 đ đúng URL; có JS ở 360px và 1280px nhập, gửi, sao chép liên kết, không tràn ngang, không lỗi JS.
+- File quan trọng: `app/Modules/Planner/{Calculators/*,Enums/*,Tools/*,Http/Controllers/ToolController.php,PlannerServiceProvider.php,resources/views/tools/*}`, `resources/views/components/ui/{money-input,share-link}.blade.php`.
+- Tiếp theo: task 14 (5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp; bảng và biểu đồ).
 
 ### 29/10/2026 — Task 12
 
