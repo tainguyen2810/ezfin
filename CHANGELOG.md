@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 2: Module, tên miền, feature flag
+
+- Modular monolith: module trong `app/Modules/<Tên>`, đăng ký qua `config/ezfin.php`.
+- Route theo tên miền: `routes/public.php` → `ezfin.vn`, `routes/app.php` → `app.ezfin.vn` (noindex).
+- Laravel Pennant làm công tắc module toàn hệ thống; module tắt → 404 và ẩn khỏi menu. Lệnh `php artisan ezfin:feature`.
+- Markets, chứng khoán, quỹ, Personal, Pro mặc định tắt.
+
 ### Phase 1 — Task 1: Khởi tạo dự án
 
 - Khởi tạo Laravel 13 trên PHP 8.3, khóa platform PHP 8.3 trong composer.
