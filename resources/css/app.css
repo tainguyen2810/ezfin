@@ -1,9 +1,71 @@
 @import 'tailwindcss';
 
+/* Be Vietnam Pro tự host (đủ bộ ký tự tiếng Việt), không tải font từ dịch vụ bên ngoài. */
+@import '@fontsource/be-vietnam-pro/400.css';
+@import '@fontsource/be-vietnam-pro/500.css';
+@import '@fontsource/be-vietnam-pro/600.css';
+@import '@fontsource/be-vietnam-pro/700.css';
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../../app/**/*.php';
 
+/*
+ * Design token EzFin. Mọi màu là biến CSS nên có thể thêm dark mode sau
+ * bằng cách khai báo lại các biến này.
+ */
 @theme {
-    --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+
+    --color-navy-50: #f2f5fa;
+    --color-navy-100: #e1e8f2;
+    --color-navy-200: #c3d0e3;
+    --color-navy-300: #94a8c8;
+    --color-navy-400: #5f78a3;
+    --color-navy-500: #3d5683;
+    --color-navy-600: #2b4169;
+    --color-navy-700: #1d3154;
+    --color-navy-800: #13264a;
+    --color-navy-900: #0b1f3a;
+    --color-navy-950: #061227;
+
+    --color-primary-50: var(--color-blue-50);
+    --color-primary-100: var(--color-blue-100);
+    --color-primary-200: var(--color-blue-200);
+    --color-primary-500: var(--color-blue-500);
+    --color-primary-600: var(--color-blue-600);
+    --color-primary-700: var(--color-blue-700);
+
+    /* Ý nghĩa tài chính: thu/tăng, chi/giảm/vượt ngưỡng, cảnh báo. */
+    --color-income: var(--color-green-600);
+    --color-income-soft: var(--color-green-50);
+    --color-expense: var(--color-red-600);
+    --color-expense-soft: var(--color-red-50);
+    --color-warning: var(--color-amber-500);
+    --color-warning-soft: var(--color-amber-50);
+
+    --radius-card: 0.75rem;
+    --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06);
+}
+
+@layer base {
+    body {
+        @apply bg-slate-50 text-slate-700 antialiased;
+    }
+
+    h1, h2, h3, h4 {
+        @apply text-navy-900;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-primary-600;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@utility num {
+    font-variant-numeric: tabular-nums;
 }

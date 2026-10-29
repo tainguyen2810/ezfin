@@ -6,7 +6,7 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | --- | --- | --- | --- |
 | 1 | Khởi tạo repo, Laravel, Tailwind/Vite, Pest, CLAUDE.md, TASKS.md, CHANGELOG.md, .env.example | Chạy được trên WAMP theo hướng dẫn; CI test xanh | Xong |
 | 2 | Khung module, route theo tên miền (ezfin.vn / app.ezfin.vn), feature flag | Tắt flag thì menu ẩn và URL trả 404; có test | Chờ duyệt |
-| 3 | Design token, font Be Vietnam Pro tự host, component dùng chung, trang `/_ui` | Đủ component và trạng thái; ảnh Playwright 360/768/1280px không tràn ngang | Chưa làm |
+| 3 | Design token, font Be Vietnam Pro tự host, component dùng chung, trang `/_ui` | Đủ component và trạng thái; ảnh Playwright 360/768/1280px không tràn ngang | Chờ duyệt |
 | 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Chưa làm |
 | 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Chưa làm |
 | 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Chưa làm |
@@ -26,6 +26,14 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 3
+
+- Xong: design token (Tailwind 4, biến CSS), font Be Vietnam Pro tự host, Alpine.js, 27 component Blade trong `resources/views/components/ui`, layout website (`x-layouts.public`) và ứng dụng (`x-layouts.app`, sidebar + thanh dưới có nút +), `Format` (tiền, %, ngày kiểu Việt Nam), icon Heroicons nhúng, trang mẫu `/_ui`, `/_ui/so-sanh`, `/_ui/ung-dung` (chỉ ngoài production), phân trang tiếng Việt.
+- Test đã chạy: `vendor/bin/pest` (34 test xanh), `npm run test:ui` (4 trang × 360/768/1280px: không tràn ngang, không lỗi JS), thử tay ngăn kéo bộ lọc, menu mobile, modal.
+- Chưa giải quyết: biểu đồ (Chart.js) để task 13; chuỗi validation tiếng Việt thêm khi làm form thật.
+- File quan trọng: `resources/css/app.css`, `resources/js/app.js`, `resources/views/components/**`, `app/Support/Format.php`, `tests/browser/ui-smoke.mjs`.
+- Tiếp theo: task 4 (đăng nhập admin Filament, role, 2FA, audit log).
 
 ### 29/10/2026 — Task 2
 
