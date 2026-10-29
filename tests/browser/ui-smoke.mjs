@@ -6,7 +6,7 @@ import { mkdirSync } from 'node:fs';
 
 const baseUrl = process.env.BASE_URL ?? 'http://ezfin.test';
 const outDir = process.argv[2] ?? 'storage/app/ui-screenshots';
-const pages = ['/', '/the-tin-dung', '/the-tin-dung/so-sanh', '/lai-suat-tiet-kiem', '/tai-khoan-ngan-hang', '/cong-cu', '/cong-cu/lai-kep', '/cong-cu/lai-tien-gui', '/cong-cu/tiet-kiem-dinh-ky', '/cong-cu/khoan-vay', '/cong-cu/tra-gop', '/kien-thuc', '/_ui', '/_ui/so-sanh', '/_ui/ung-dung'];
+const pages = ['/', '/the-tin-dung', '/the-tin-dung/so-sanh', '/lai-suat-tiet-kiem', '/tai-khoan-ngan-hang', '/cong-cu', '/cong-cu/lai-kep', '/cong-cu/lai-tien-gui', '/cong-cu/tiet-kiem-dinh-ky', '/cong-cu/khoan-vay', '/cong-cu/tra-gop', '/kien-thuc', '/gioi-thieu', '/phuong-phap-danh-gia', '/cong-bo-lien-ket', '/dieu-khoan', '/quyen-rieng-tu', '/lien-he', '/_ui', '/_ui/so-sanh', '/_ui/ung-dung'];
 const widths = [360, 768, 1280];
 
 mkdirSync(outDir, { recursive: true });

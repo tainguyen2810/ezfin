@@ -26,6 +26,18 @@ return [
     'indexable' => (bool) env('EZFIN_INDEXABLE', false),
 
     /*
+    | Thông tin chủ sở hữu website, hiện ở chân trang và trang Liên hệ. Ô nào để trống thì không hiện
+    | (không dùng thông tin mẫu).
+    */
+    'company' => [
+        'name' => env('EZFIN_COMPANY_NAME'),
+        'registration' => env('EZFIN_COMPANY_REGISTRATION'),
+        'address' => env('EZFIN_COMPANY_ADDRESS'),
+        'email' => env('EZFIN_CONTACT_EMAIL'),
+        'phone' => env('EZFIN_CONTACT_PHONE'),
+    ],
+
+    /*
     | Module đang cài. Thứ tự là thứ tự đăng ký; Core luôn đứng đầu.
     */
     'modules' => [
