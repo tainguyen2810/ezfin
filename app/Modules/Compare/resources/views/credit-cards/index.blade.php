@@ -35,6 +35,7 @@
                     @endphp
                     <x-ui.product-card :id="$card->slug" :name="$card->name" :institution="$card->institution->short_name"
                         :logo="$card->institution->logoUrl()" :highlights="$highlights"
+                        :detail-url="route('compare.credit-cards.show', $card->slug)"
                         :facts="[
                             'Phí thường niên' => $fee,
                             'Thu nhập tối thiểu' => Format::money($detail?->min_monthly_income).($detail?->min_monthly_income !== null ? '/tháng' : ''),

@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 9: Trang chi tiết thẻ tín dụng
+
+- Trang `ezfin.vn/the-tin-dung/<tên-thẻ>`: thông số đầy đủ, ưu điểm, hạn chế, nguồn, ngày cập nhật, thêm vào so sánh.
+- Gợi ý tối đa 3 thẻ tương tự theo nhóm lợi ích và mức phí, không theo đối tác.
+- Dữ liệu có cấu trúc schema.org (CreditCard, BreadcrumbList) và URL chuẩn (canonical) cho máy tìm kiếm; không có đánh giá sao.
+- Danh sách và bảng so sánh có link tới trang chi tiết.
+
 ### Phase 1 — Task 8: So sánh thẻ tín dụng
 
 - Chọn tối đa 3 thẻ trên danh sách, lựa chọn giữ nguyên khi đổi bộ lọc hoặc trang.

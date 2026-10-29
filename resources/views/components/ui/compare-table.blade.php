@@ -1,5 +1,5 @@
 {{-- Bảng so sánh 2–3 sản phẩm. Mỗi tiêu chí: nhãn chiếm cả dòng, giá trị chia cột bên dưới (đọc được ở 360px).
-     products: [['name', 'institution', 'logo' => ?, 'removeUrl' => ?]]
+     products: [['name', 'institution', 'logo' => ?, 'url' => ?, 'removeUrl' => ?]]
      rows: [['label', 'values' => [...], 'best' => [chỉ số cột], 'bestLabel' => 'Thấp nhất']] --}}
 @props(['products', 'rows'])
 @php
@@ -17,7 +17,9 @@
                     @endif
                 </div>
                 <div class="min-w-0">
-                    <p class="text-sm font-semibold leading-snug break-words text-navy-900">{{ $product['name'] }}</p>
+                    <p class="text-sm font-semibold leading-snug break-words text-navy-900">
+                        @if ($product['url'] ?? null)<a href="{{ $product['url'] }}" class="hover:text-primary-700">{{ $product['name'] }}</a>@else{{ $product['name'] }}@endif
+                    </p>
                     <p class="text-xs text-slate-500">{{ $product['institution'] }}</p>
                 </div>
                 @if ($product['removeUrl'] ?? null)

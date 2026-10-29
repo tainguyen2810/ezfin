@@ -1,5 +1,6 @@
-{{-- Khung website công khai (ezfin.vn). $navigation: ghi đè menu (chỉ dùng trong trang mẫu). --}}
-@props(['title' => null, 'description' => null, 'navigation' => null, 'noindex' => false])
+{{-- Khung website công khai (ezfin.vn). $navigation: ghi đè menu (chỉ dùng trong trang mẫu).
+     canonical: URL chuẩn của trang; slot head: thẻ thêm trong <head> (ví dụ JSON-LD). --}}
+@props(['title' => null, 'description' => null, 'navigation' => null, 'noindex' => false, 'canonical' => null])
 @php
     $navItems = $navigation ?? app(\App\Support\Navigation\Navigation::class)->visible()
         ->map(fn ($item) => ['label' => $item->label, 'href' => route($item->route), 'active' => request()->routeIs($item->route.'*')])
@@ -21,6 +22,8 @@
     <title>{{ $title ? $title.' | EzFin' : 'EzFin — Tài chính thông minh cho cuộc sống tốt hơn' }}</title>
     @if ($description)<meta name="description" content="{{ $description }}">@endif
     @if ($noindex)<meta name="robots" content="noindex, nofollow">@endif
+    @if ($canonical)<link rel="canonical" href="{{ $canonical }}">@endif
+    @isset($head){{ $head }}@endisset
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="flex min-h-screen flex-col">
