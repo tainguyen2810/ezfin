@@ -6,6 +6,7 @@ use App\Modules\Compare\Enums\CardBenefit;
 use App\Modules\Compare\Enums\CardNetwork;
 use App\Modules\Compare\Filament\Resources\Shared\ProductFormComponents;
 use App\Modules\Compare\Models\FinancialProduct;
+use App\Modules\Core\Filament\Schemas\SeoFields;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -37,6 +38,7 @@ class CreditCardForm
                         ->visibility('public')
                         ->helperText('Ảnh mặt trước thẻ từ trang chính thức. PNG, JPG hoặc WebP, tối đa 1 MB.'),
                 ]),
+                SeoFields::section(),
             ]),
         ]);
     }

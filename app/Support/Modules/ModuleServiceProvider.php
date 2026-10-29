@@ -4,6 +4,8 @@ namespace App\Support\Modules;
 
 use App\Support\Navigation\Navigation;
 use App\Support\Navigation\NavItem;
+use App\Support\Seo\Sitemap;
+use App\Support\Seo\SitemapUrl;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -16,7 +18,7 @@ use ReflectionClass;
  * Tự nạp (nếu có): routes/public.php (tên miền công khai), routes/app.php
  * (tên miền ứng dụng, noindex), resources/views (namespace = tên module dạng kebab),
  * database/migrations. Khi module có feature flag và flag tắt, mọi route của
- * module trả 404 và mục menu bị ẩn.
+ * module trả 404, mục menu bị ẩn và URL của module không vào sitemap.
  */
 abstract class ModuleServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,16 @@ abstract class ModuleServiceProvider extends ServiceProvider
      * @return list<NavItem>
      */
     protected function publicNavigation(): array
+    {
+        return [];
+    }
+
+    /**
+     * Trang công khai đã xuất bản của module cho /sitemap.xml. Chỉ trang được phép lập chỉ mục.
+     *
+     * @return iterable<SitemapUrl>
+     */
+    protected function sitemap(): iterable
     {
         return [];
     }
@@ -46,6 +58,8 @@ abstract class ModuleServiceProvider extends ServiceProvider
         }
 
         $this->bootRoutes($path);
+
+        $this->app->make(Sitemap::class)->add($this->feature, fn () => $this->sitemap());
 
         $navigation = $this->app->make(Navigation::class);
 

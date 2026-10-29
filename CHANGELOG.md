@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 16: SEO nền
+
+- `sitemap.xml` tự sinh từ các module đang bật, chỉ gồm trang đã xuất bản và cho phép lập chỉ mục; `robots.txt` theo tên miền (app.ezfin.vn chặn toàn bộ) và theo môi trường (`EZFIN_INDEXABLE`, ngoài production chặn toàn bộ và mọi trang noindex).
+- Mọi trang công khai có mô tả, canonical, thẻ Open Graph/Twitter, ảnh chia sẻ mặc định; breadcrumb kèm dữ liệu BreadcrumbList.
+- Mục "SEO" trong form bài viết, thẻ tín dụng, tài khoản ngân hàng: tiêu đề, mô tả, ảnh chia sẻ, noindex.
+- Quản lý chuyển hướng 301/302 trong admin; tự thêm 301 khi đổi slug/chuyên mục bài viết hoặc slug sản phẩm đã xuất bản; bỏ dấu `/` cuối URL bằng 301.
+
 ### Phase 1 — Task 15: CMS bài viết
 
 - Quản trị bài viết, chuyên mục, tác giả. Quy trình nháp → chờ duyệt → xuất bản (có hẹn giờ); biên tập viên chỉ gửi duyệt, quản trị cao nhất duyệt, trả lại kèm ghi chú, gỡ bài.

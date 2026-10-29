@@ -10,6 +10,7 @@ use App\Modules\Planner\Tools\RecurringSavingsTool;
 use App\Modules\Planner\Tools\ToolRegistry;
 use App\Support\Modules\ModuleServiceProvider;
 use App\Support\Navigation\NavItem;
+use App\Support\Seo\SitemapUrl;
 
 class PlannerServiceProvider extends ModuleServiceProvider
 {
@@ -27,6 +28,15 @@ class PlannerServiceProvider extends ModuleServiceProvider
 
             return $tools;
         });
+    }
+
+    protected function sitemap(): iterable
+    {
+        yield new SitemapUrl(route('planner.tools.index'));
+
+        foreach ($this->app->make(ToolRegistry::class)->all() as $tool) {
+            yield new SitemapUrl(route('planner.tools.show', $tool->slug()));
+        }
     }
 
     protected function publicNavigation(): array

@@ -23,6 +23,7 @@ cd /www/wwwroot/ezfin
 cp .env.example .env    # sửa APP_ENV=production, APP_DEBUG=false, APP_URL=https://ezfin.vn, DB_*, MAIL_*
                         # EZFIN_PUBLIC_DOMAIN=ezfin.vn, EZFIN_APP_DOMAIN=app.ezfin.vn,
                         # EZFIN_ADMIN_PATH=<chuỗi khó đoán>, SESSION_DOMAIN=.ezfin.vn, SESSION_SECURE_COOKIE=true
+                        # EZFIN_INDEXABLE=true (chỉ production; staging để false)
 composer install --no-dev --optimize-autoloader
 php artisan key:generate
 php artisan migrate --force

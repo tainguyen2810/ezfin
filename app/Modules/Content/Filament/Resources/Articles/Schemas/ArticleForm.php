@@ -4,6 +4,7 @@ namespace App\Modules\Content\Filament\Resources\Articles\Schemas;
 
 use App\Modules\Content\Models\Article;
 use App\Modules\Content\Models\Author;
+use App\Modules\Core\Filament\Schemas\SeoFields;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
@@ -95,6 +96,7 @@ class ArticleForm
                     ->visibility('public')
                     ->helperText('Tỉ lệ 16:9, PNG, JPG hoặc WebP, tối đa 2 MB.'),
             ]),
+            SeoFields::section()->columnSpan(['lg' => 2]),
         ]);
     }
 }

@@ -6,13 +6,14 @@
         'headline' => $article->title,
         'description' => $article->excerpt,
         'datePublished' => $article->published_at->toAtomString(),
-        'dateModified' => ($updated ?? $article->published_at)->toAtomString(),
+        'dateModified' => $article->lastModified()->toAtomString(),
         'mainEntityOfPage' => $article->url(),
         'author' => ['@type' => 'Person', 'name' => $article->author->name, 'url' => route('content.authors.show', $article->author->slug)],
         'publisher' => ['@type' => 'Organization', 'name' => 'EzFin', 'url' => url('/')],
     ] + ($article->coverUrl() ? ['image' => url($article->coverUrl())] : []);
 @endphp
-<x-layouts.public :title="$article->title" :description="$article->excerpt" :canonical="$article->url()">
+<x-layouts.public :title="$article->title" :description="$article->excerpt" :canonical="$article->url()"
+    :seo="$article->seoMeta" :image="$article->coverUrl()" type="article">
     <x-slot:head>
         <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     </x-slot:head>

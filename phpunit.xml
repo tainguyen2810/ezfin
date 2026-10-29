@@ -22,6 +22,7 @@
         <env name="APP_URL" value="http://ezfin.test"/>
         <env name="EZFIN_PUBLIC_DOMAIN" value="ezfin.test"/>
         <env name="EZFIN_APP_DOMAIN" value="app.ezfin.test"/>
+        <env name="EZFIN_INDEXABLE" value="true"/>
         <env name="PENNANT_STORE" value="array"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>

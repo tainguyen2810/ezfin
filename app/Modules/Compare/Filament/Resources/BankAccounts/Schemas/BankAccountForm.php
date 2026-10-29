@@ -4,6 +4,7 @@ namespace App\Modules\Compare\Filament\Resources\BankAccounts\Schemas;
 
 use App\Modules\Compare\Enums\BankAccountFeature;
 use App\Modules\Compare\Filament\Resources\Shared\ProductFormComponents;
+use App\Modules\Core\Filament\Schemas\SeoFields;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -45,6 +46,7 @@ class BankAccountForm
             ]),
             Grid::make(1)->columnSpan(['lg' => 1])->schema([
                 ProductFormComponents::publishingSection(),
+                SeoFields::section(),
             ]),
         ]);
     }
