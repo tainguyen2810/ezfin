@@ -154,12 +154,12 @@ it('shows an empty state with a reset link when nothing matches', function () {
         ->assertSee('Xóa bộ lọc');
 });
 
-it('is indexable without filters and shows no partner disclosure or detail button yet', function () {
+it('is indexable without filters, links to card details and shows no partner disclosure yet', function () {
     $this->get(LISTING_URL)
         ->assertOk()
         ->assertDontSee('noindex', false)
         ->assertDontSee('liên kết đối tác')
-        ->assertDontSee('Xem chi tiết');
+        ->assertSee('href="'.LISTING_URL.'/the-hoan-tien"', false);
 });
 
 it('lets visitors pick cards by slug and opens the compare page from the tray', function () {

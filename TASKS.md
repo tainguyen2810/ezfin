@@ -11,8 +11,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Xong |
 | 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Xong |
 | 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Xong |
-| 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Chờ duyệt |
-| 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Chưa làm |
+| 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Xong |
+| 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Chờ duyệt |
 | 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Chưa làm |
 | 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Chưa làm |
 | 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Chưa làm |
@@ -26,6 +26,16 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 9
+
+- Xong: trang `ezfin.vn/the-tin-dung/{slug}` (chỉ thẻ đã xuất bản của tổ chức đang hoạt động, còn lại 404; tắt cùng module compare). Có ảnh thẻ hoặc logo, tên đầy đủ ngân hàng, nhóm lợi ích, mô tả, bảng thông số ("—" là chưa công bố), ưu điểm, hạn chế, nguồn + ghi chú nguồn + ngày cập nhật + cảnh báo quá hạn kiểm tra, nút "Thêm vào so sánh" và khay so sánh. Canonical và JSON-LD schema.org (`WebPage` + `CreditCard` + `BreadcrumbList`, chỉ dữ liệu đã công bố, không có đánh giá sao; mã hóa `<` để không chèn được script).
+- Thẻ tương tự (`FindSimilarCreditCards`): nhiều nhóm lợi ích chung trước, rồi phí thường niên gần nhất; tối đa 3 thẻ; không xét đối tác.
+- Danh sách thẻ có nút "Xem chi tiết", tên thẻ trong bảng so sánh link tới trang chi tiết. Layout public có thêm `canonical` và slot `head`. Icon mới `minus-circle`.
+- Công bố liên kết: chưa có link đối tác (task 18) nên chưa hiện nút đăng ký và đoạn công bố; khi thêm link đối tác thì trang chi tiết phải hiện `x-ui.disclosure` (đã có test khẳng định hiện tại không có).
+- Test đã chạy: `vendor/bin/pest` (141 test xanh, 7 test mới trong `tests/Feature/Compare/CreditCardDetailTest.php`), `vendor/bin/pint`, `npm run build`, `npm run test:ui`, Playwright trang chi tiết 360px và 1280px (không tràn ngang, không lỗi JS, thêm vào so sánh hoạt động).
+- File quan trọng: `app/Modules/Compare/{Actions/FindSimilarCreditCards.php,Support/CreditCardSchema.php,Http/Controllers/CreditCardController.php,resources/views/credit-cards/show.blade.php}`.
+- Tiếp theo: task 10 (nhập lãi suất tiết kiệm: form + import CSV).
 
 ### 29/10/2026 — Task 8
 

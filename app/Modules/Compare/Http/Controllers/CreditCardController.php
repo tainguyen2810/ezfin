@@ -3,12 +3,15 @@
 namespace App\Modules\Compare\Http\Controllers;
 
 use App\Modules\Compare\Actions\FindComparableCreditCards;
+use App\Modules\Compare\Actions\FindSimilarCreditCards;
 use App\Modules\Compare\Actions\SearchCreditCards;
 use App\Modules\Compare\Enums\CardBenefit;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
+use App\Modules\Compare\Models\FinancialProduct;
 use App\Modules\Compare\Support\CreditCardComparison;
 use App\Modules\Compare\Support\CreditCardFilters;
+use App\Modules\Compare\Support\CreditCardSchema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -65,11 +68,33 @@ class CreditCardController
                 'name' => $card->name,
                 'institution' => $card->institution->short_name,
                 'logo' => $card->institution->logoUrl(),
+                'url' => route('compare.credit-cards.show', $card->slug),
                 'removeUrl' => route('compare.credit-cards.compare', array_filter([
                     'ids' => $cards->where('slug', '!=', $card->slug)->pluck('slug')->implode(','),
                 ])),
             ])->all(),
             'max' => FindComparableCreditCards::MAX,
+        ]);
+    }
+
+    public function show(string $slug, FindSimilarCreditCards $similar): View
+    {
+        $card = FinancialProduct::query()
+            ->ofType(ProductType::CreditCard)
+            ->published()
+            ->where('slug', $slug)
+            ->whereHas('institution', fn (Builder $query) => $query->active())
+            ->has('creditCard')
+            ->with(['institution', 'creditCard'])
+            ->firstOrFail();
+
+        $rows = collect(CreditCardComparison::rows(collect([$card])));
+
+        return view('compare::credit-cards.show', [
+            'card' => $card,
+            'facts' => $rows->whereNotIn('label', ['Nhóm lợi ích', 'Ưu điểm', 'Hạn chế'])->mapWithKeys(fn (array $row) => [$row['label'] => $row['values'][0]]),
+            'similar' => $similar->handle($card),
+            'schema' => CreditCardSchema::for($card),
         ]);
     }
 }
