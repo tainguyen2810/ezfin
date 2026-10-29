@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 14: 5 công cụ tính
+
+- Thêm công cụ tính lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp; lãi kép có thêm biểu đồ.
+- Mỗi công cụ có biểu đồ (hiện cả khi tắt JavaScript), bảng chi tiết, cách tính và giả định.
+- Trả góp chỉ rõ chênh lệch giữa lãi phẳng và dư nợ giảm dần, kèm lãi suất tương đương; khoản vay so sánh hai cách trả.
+
 ### Phase 1 — Task 13: Bộ máy tính toán và trang công cụ
 
 - Công thức tính lãi kép, lãi tiền gửi, tiết kiệm định kỳ, lịch trả nợ (dư nợ giảm dần, trả đều, lãi phẳng) bằng số nguyên đồng, kiểm tra bằng số liệu tính tay.

@@ -3,6 +3,10 @@
 namespace App\Modules\Planner;
 
 use App\Modules\Planner\Tools\CompoundInterestTool;
+use App\Modules\Planner\Tools\DepositInterestTool;
+use App\Modules\Planner\Tools\InstallmentTool;
+use App\Modules\Planner\Tools\LoanTool;
+use App\Modules\Planner\Tools\RecurringSavingsTool;
 use App\Modules\Planner\Tools\ToolRegistry;
 use App\Support\Modules\ModuleServiceProvider;
 use App\Support\Navigation\NavItem;
@@ -16,6 +20,10 @@ class PlannerServiceProvider extends ModuleServiceProvider
         $this->app->singleton(ToolRegistry::class, function () {
             $tools = new ToolRegistry;
             $tools->register(new CompoundInterestTool);
+            $tools->register(new DepositInterestTool);
+            $tools->register(new RecurringSavingsTool);
+            $tools->register(new LoanTool);
+            $tools->register(new InstallmentTool);
 
             return $tools;
         });

@@ -86,7 +86,9 @@ it('saves a draft card with exact money and rate values', function () {
         ->and($product->creditCard->benefits)->toBe(['cashback', 'shopping']);
 });
 
-it('refuses to publish without a source or verification date', function (array $overrides, array $errors) {
+it('refuses to publish without a source or verification date', function (array|Closure $overrides, array $errors) {
+    $overrides = value($overrides);
+
     $this->actingAs(User::factory()->admin()->create());
 
     Livewire::test(CreateCreditCard::class)
@@ -103,7 +105,8 @@ it('refuses to publish without a source or verification date', function (array $
 })->with([
     'no source' => [['source_url' => null], ['source_url' => 'required']],
     'no verification date' => [['verified_at' => null], ['verified_at' => 'required']],
-    'verification date in the future' => [['verified_at' => today()->addDay()->toDateString()], ['verified_at']],
+    // Tính trong closure để dùng múi giờ của ứng dụng; dataset được dựng trước khi app khởi động (UTC).
+    'verification date in the future' => [fn () => ['verified_at' => today()->addDay()->toDateString()], ['verified_at']],
     'source not a url' => [['source_url' => 'bieu phi'], ['source_url' => 'url']],
 ]);
 

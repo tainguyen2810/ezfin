@@ -178,5 +178,22 @@
                 </tbody>
             </x-ui.table>
         </section>
+
+        <section class="{{ $section }}">
+            <h2 class="{{ $h2 }}">Biểu đồ cột</h2>
+            <p class="text-sm text-slate-500">Dựng sẵn từ server, hiện cả khi tắt JS; rê chuột hoặc Tab vào cột để xem số. Luôn đặt kèm bảng số liệu. Màu: primary = tiền gốc/tiền bỏ vào, income = lãi nhận được, cost = lãi phải trả.</p>
+            <div class="grid gap-4 lg:grid-cols-2">
+                <x-ui.bar-chart :labels="[1, 2, 3, 4, 5]" x-title="Năm" label-prefix="Năm " caption="Ví dụ số dư theo năm."
+                    :series="[
+                        ['label' => 'Tiền bỏ vào', 'tone' => 'primary', 'values' => [24000000, 48000000, 72000000, 96000000, 120000000]],
+                        ['label' => 'Tiền lãi cộng dồn', 'tone' => 'income', 'values' => [700000, 2900000, 6600000, 11900000, 18800000]],
+                    ]" />
+                <x-ui.bar-chart :labels="[1, 2, 3, 4, 5, 6]" x-title="Tháng" label-prefix="Tháng " caption="Ví dụ lịch trả nợ."
+                    :series="[
+                        ['label' => 'Tiền gốc', 'tone' => 'primary', 'values' => [2000000, 2000000, 2000000, 2000000, 2000000, 2000000]],
+                        ['label' => 'Tiền lãi', 'tone' => 'cost', 'values' => [120000, 100000, 80000, 60000, 40000, 20000]],
+                    ]" />
+            </div>
+        </section>
     </div>
 </x-layouts.public>
