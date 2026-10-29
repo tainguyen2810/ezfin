@@ -7,8 +7,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 1 | Khởi tạo repo, Laravel, Tailwind/Vite, Pest, CLAUDE.md, TASKS.md, CHANGELOG.md, .env.example | Chạy được trên WAMP theo hướng dẫn; CI test xanh | Xong |
 | 2 | Khung module, route theo tên miền (ezfin.vn / app.ezfin.vn), feature flag | Tắt flag thì menu ẩn và URL trả 404; có test | Xong |
 | 3 | Design token, font Be Vietnam Pro tự host, component dùng chung, trang `/_ui` | Đủ component và trạng thái; ảnh Playwright 360/768/1280px không tràn ngang | Xong |
-| 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Chờ duyệt |
-| 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Chưa làm |
+| 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Xong |
+| 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Chờ duyệt |
 | 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Chưa làm |
 | 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Chưa làm |
 | 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Chưa làm |
@@ -26,6 +26,15 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 5
+
+- Xong: bảng `financial_institutions` (module Compare: loại, tên ngắn, tên đầy đủ, slug duy nhất, logo, website, đang hoạt động), màn hình quản trị "Ngân hàng và tổ chức tài chính" (thêm, sửa, xóa, tìm kiếm, lọc theo loại/trạng thái), tự gợi ý slug không dấu khi tạo, upload logo PNG/JPG/WebP ≤ 1 MB (chặn SVG vì có thể chứa script), tự xóa file logo cũ khi thay hoặc xóa, ghi nhật ký. Quyền: Quản trị cao nhất và Vận hành dữ liệu nhập liệu, Biên tập chỉ xem, chỉ Quản trị cao nhất được xóa.
+- Sửa: URL ổ `public` đổi sang đường dẫn tương đối `/storage` (đặt lại bằng `FILESYSTEM_PUBLIC_URL`). Trước đó ảnh lưu ở `ezfin.vn/storage/...` nên trang quản trị trên `app.ezfin.vn` không tải lại được logo khi sửa (lỗi CORS).
+- Test đã chạy: `vendor/bin/pest` (82 test xanh, 20 test mới), `vendor/bin/pint --test`, Playwright: tạo 3 tổ chức có logo qua giao diện, thử lỗi slug trùng và website http, trang danh sách/sửa ở 390px và 1366px không tràn ngang, không lỗi JS.
+- Chưa giải quyết: chặn xóa tổ chức đang có sản phẩm sẽ thêm ở task 6 (khóa ngoại `restrictOnDelete`). Chưa nhập dữ liệu ngân hàng thật: cần nguồn chính thức và ngày xác minh.
+- File quan trọng: `app/Modules/Compare/{Models/FinancialInstitution.php,Enums/InstitutionType.php,Policies,Filament/Resources/FinancialInstitutions}`, `config/filesystems.php`, `tests/Feature/Compare/FinancialInstitutionAdminTest.php`.
+- Tiếp theo: task 6 (quản lý sản phẩm thẻ tín dụng).
 
 ### 29/10/2026 — Task 4
 

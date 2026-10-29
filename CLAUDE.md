@@ -21,6 +21,7 @@ Tiến độ và tiêu chí nghiệm thu: `TASKS.md`. Thay đổi quan trọng: 
 - Module chỉ gọi nhau qua Action/Service công khai, không đọc thẳng bảng của module khác.
 - Một codebase cho `ezfin.vn` (public, SEO) và `app.ezfin.vn` (ứng dụng, noindex). Admin ở đường dẫn bí mật trên `app` + 2FA.
 - Admin (Filament 5): resource/widget đặt trong `app/Modules/<Tên>/Filament/{Resources,Widgets}`, tự được nạp. Mỗi resource có Policy theo vai trò `App\Modules\Core\Enums\Role`; đặt `$hasTitleCaseModelLabel = false`. Model nghiệp vụ dùng trait `Auditable` để ghi nhật ký. Tạo tài khoản: `php artisan ezfin:admin`.
+- File tải lên: ổ `public`, URL tương đối `/storage/...` (chạy được trên cả hai tên miền); cần URL tuyệt đối thì bọc `url()`. Không nhận SVG do người dùng tải lên.
 - Chỉ tạo schema cho phase hiện tại. Tiền `DECIMAL(18,2)`, lãi suất `DECIMAL(7,4)`; không dùng float cho tiền.
 
 ## Giao diện
