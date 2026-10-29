@@ -40,6 +40,15 @@ class FinancialProductFactory extends Factory
         });
     }
 
+    public function bankAccount(): static
+    {
+        return $this->state(function () {
+            $name = 'Tài khoản thử nghiệm '.Str::upper(Str::random(5));
+
+            return ['type' => ProductType::BankAccount, 'name' => $name, 'slug' => Str::slug($name)];
+        });
+    }
+
     public function verified(): static
     {
         return $this->state(fn () => [

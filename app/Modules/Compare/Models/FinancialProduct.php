@@ -132,6 +132,11 @@ class FinancialProduct extends Model
         return $this->hasOne(CreditCardDetail::class, 'product_id');
     }
 
+    public function bankAccount(): HasOne
+    {
+        return $this->hasOne(BankAccountDetail::class, 'product_id');
+    }
+
     public function savingsRates(): HasMany
     {
         return $this->hasMany(SavingsRate::class, 'product_id')

@@ -14,8 +14,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Xong |
 | 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Xong |
 | 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Xong |
-| 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Chờ duyệt |
-| 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Chưa làm |
+| 11 | So sánh lãi suất theo số tiền và kỳ hạn | Xếp theo tiền lãi thực nhận; khớp bộ số liệu kiểm thử | Xong |
+| 12 | Tài khoản ngân hàng: danh sách, chi tiết | Như task 7 và 9 | Chờ duyệt |
 | 13 | Bộ máy tính toán (PHP) + khung trang công cụ | Công thức có test số liệu tính tay; chạy được khi tắt JS; URL chia sẻ giữ kết quả | Chưa làm |
 | 14 | 5 công cụ: lãi kép, lãi tiền gửi, tiết kiệm định kỳ, khoản vay, trả góp | Nêu giả định, kiểm tra đầu vào, bảng + biểu đồ; trả góp phân biệt lãi phẳng/dư nợ giảm dần | Chưa làm |
 | 15 | CMS bài viết, chuyên mục, tác giả, duyệt bài | Biên tập viên không tự xuất bản; lưu lịch sử sửa; lọc XSS | Chưa làm |
@@ -26,6 +26,18 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 12
+
+- Xong: loại sản phẩm "Tài khoản thanh toán" (`ProductType::BankAccount`) và bảng `bank_account_details`: phí quản lý/tháng, ghi chú phí, số dư tối thiểu, phí chuyển khoản, phí rút ATM (DECIMAL(18,2), để trống = chưa công bố, khác 0), tính năng (mở online eKYC, miễn phí chuyển khoản, thẻ ghi nợ quốc tế, số đẹp, sinh lời tự động, ngoại tệ).
+- Quản trị `app.ezfin.vn/<admin>/tai-khoan-ngan-hang`: cùng quyền, nguồn, ngày xác minh, ưu/nhược điểm như thẻ (phần ưu/nhược điểm chuyển vào `ProductFormComponents`).
+- Trang `ezfin.vn/tai-khoan-ngan-hang` (menu "Tài khoản ngân hàng"): lọc ngân hàng, phí quản lý (miễn phí / đến 10.000 đ), tính năng; sắp xếp phí quản lý, số dư tối thiểu, phí chuyển khoản, mới xác minh (chưa công bố xếp cuối). URL gọn, giữ utm_*, có lọc thì noindex.
+- Trang `ezfin.vn/tai-khoan-ngan-hang/{slug}`: biểu phí, tính năng, ưu/nhược điểm, nguồn, ngày cập nhật, tài khoản tương tự (tính năng chung rồi phí gần nhất), canonical, JSON-LD `WebPage` + `BankAccount` + `BreadcrumbList` (không đánh giá sao).
+- Không có khay so sánh cho tài khoản (task không yêu cầu), nên thẻ sản phẩm ẩn ô "So sánh" để không có nút giả. `x-ui.product-card` dùng 4 cột khi có đúng 4 thông số.
+- Công bố affiliate: chưa có link đối tác, sẽ thêm ở task 18.
+- Test đã chạy: `vendor/bin/pest` (215 test xanh; mới: `BankAccountAdminTest`, `BankAccountListingTest`, `BankAccountDetailTest`), `vendor/bin/pint`, `npm run build`, `npm run test:ui` (thêm `/tai-khoan-ngan-hang`), Playwright 360px và 1280px danh sách, có lọc, chi tiết: không tràn ngang, không lỗi JS.
+- File quan trọng: `app/Modules/Compare/{Actions/{SearchBankAccounts,FindSimilarBankAccounts}.php,Support/{BankAccountFilters,BankAccountFacts,BankAccountSchema}.php,Http/Controllers/BankAccountController.php,Models/BankAccountDetail.php,Enums/BankAccountFeature.php,Filament/Resources/BankAccounts/*,resources/views/bank-accounts/*}`.
+- Tiếp theo: task 13 (bộ máy tính toán + khung trang công cụ).
 
 ### 29/10/2026 — Task 11
 

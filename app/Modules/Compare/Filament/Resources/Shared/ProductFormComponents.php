@@ -5,8 +5,10 @@ namespace App\Modules\Compare\Filament\Resources\Shared;
 use App\Modules\Compare\Enums\ProductStatus;
 use App\Modules\Compare\Models\FinancialProduct;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -38,6 +40,18 @@ class ProductFormComponents
                     'unique' => 'Slug này đã được dùng cho sản phẩm khác.',
                 ]),
         ];
+    }
+
+    public static function prosConsSection(): Section
+    {
+        return Section::make('Ưu điểm, hạn chế')->schema([
+            Grid::make(2)->schema([
+                Repeater::make('pros')->label('Ưu điểm')->simple(TextInput::make('text')->required()->maxLength(200))
+                    ->addActionLabel('Thêm ưu điểm')->maxItems(8)->defaultItems(0),
+                Repeater::make('cons')->label('Hạn chế')->simple(TextInput::make('text')->required()->maxLength(200))
+                    ->addActionLabel('Thêm hạn chế')->maxItems(8)->defaultItems(0),
+            ]),
+        ]);
     }
 
     public static function publishingSection(): Section

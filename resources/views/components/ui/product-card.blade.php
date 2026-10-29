@@ -29,7 +29,8 @@
         </div>
     </div>
     @if ($facts)
-        <dl class="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-4 sm:grid-cols-3">
+        {{-- 4 thông số: 4 cột để không lẻ một ô ở dòng dưới. --}}
+        <dl @class(['mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-4', count($facts) === 4 ? 'sm:grid-cols-4' : 'sm:grid-cols-3'])>
             @foreach ($facts as $label => $value)
                 <div>
                     <dt class="text-xs text-slate-500">{{ $label }}</dt>
