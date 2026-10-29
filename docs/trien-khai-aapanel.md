@@ -34,6 +34,8 @@ php artisan optimize
 chown -R www:www storage bootstrap/cache
 ```
 
+Sau khi thêm cron và Supervisor (mục 4), đợi 5 phút rồi chạy `php artisan ezfin:check`. Lệnh kiểm tra APP_KEY, APP_DEBUG, HTTPS, tên miền, database, migration, tài khoản quản trị, cache, quyền ghi thư mục, `public/storage`, asset đã build, cron, queue worker và email. Mục ✗ phải sửa trước khi mở site; mục ! là cảnh báo.
+
 Email qua Brevo: `MAIL_MAILER=smtp`, `MAIL_HOST=smtp-relay.brevo.com`, `MAIL_PORT=587`, tài khoản SMTP lấy trong Brevo. Không commit `.env`.
 
 ## 4. Cron và queue
@@ -55,18 +57,36 @@ php artisan migrate --force
 php artisan optimize
 php artisan queue:restart
 php artisan up
+php artisan ezfin:check
 ```
 
 Luôn sao lưu database trước bước `migrate`. Gắn tag git cho mỗi lần phát hành (`v1.0.0`...) để có điểm quay lại.
 
-## 6. Sao lưu và khôi phục
+## 6. Staging
+
+Staging là bản sao production để thử trước mỗi lần phát hành và để chủ dự án duyệt. Dùng site, database và thư mục riêng, không dùng chung với production.
+
+- Tên miền: `staging.ezfin.vn` và `app.staging.ezfin.vn` (bản ghi DNS A trỏ về máy chủ), SSL Let's Encrypt cho cả hai.
+- Thư mục `/www/wwwroot/ezfin-staging`, database `ezfin_staging`, làm như mục 2 và 3 với `.env`:
+  `APP_ENV=staging`, `APP_DEBUG=false`, `APP_URL=https://staging.ezfin.vn`, `EZFIN_PUBLIC_DOMAIN=staging.ezfin.vn`, `EZFIN_APP_DOMAIN=app.staging.ezfin.vn`, `SESSION_DOMAIN=.staging.ezfin.vn`, `SESSION_SECURE_COOKIE=true`, `EZFIN_INDEXABLE=false`, `EZFIN_ADMIN_PATH` khác production.
+- Cron và Supervisor riêng, trỏ tới thư mục staging (mục 4).
+- `EZFIN_INDEXABLE=false` làm `robots.txt` chặn toàn bộ và mọi trang có `noindex`. Muốn chặn người lạ xem, bật thêm Basic Auth trong aaPanel (Site → Directory protection) cho staging.
+- Email trên staging: dùng tài khoản SMTP thử hoặc `MAIL_MAILER=log` để không gửi nhầm cho người thật (`ezfin:check` sẽ cảnh báo, chấp nhận được trên staging).
+- Kiểm tra xong: `php artisan ezfin:check` không còn mục ✗.
+
+## 7. Sao lưu và khôi phục
 
 - Cron → Backup Database: hằng ngày 02:00, giữ 14 bản. Cron → Backup Site hoặc script nén `storage/app` hằng ngày.
 - Nên đẩy bản sao lưu ra ngoài máy chủ (aaPanel hỗ trợ lưu trữ ngoài).
 - Khôi phục: `php artisan down` → import file `.sql` vào database (phpMyAdmin hoặc `mysql ezfin < backup.sql`) → giải nén `storage/app` → `php artisan optimize` → `php artisan up`.
-- Ít nhất mỗi quý khôi phục thử vào database staging để chắc bản sao lưu dùng được.
+- Ít nhất mỗi quý khôi phục thử vào database staging để chắc bản sao lưu dùng được:
+  1. Lấy bản sao lưu mới nhất của production (Database → Backup → Download).
+  2. Trên staging: `php artisan down`, xóa sạch rồi import: `mysql -u <user> -p ezfin_staging < backup.sql`.
+  3. `php artisan migrate --force` (chỉ chạy migration mới hơn bản sao lưu), `php artisan optimize`, `php artisan up`.
+  4. `php artisan ezfin:check`, mở trang chủ, trang lãi suất, một bài viết và đăng nhập admin để xác nhận dữ liệu.
+  5. Ghi ngày và kết quả khôi phục thử vào `TASKS.md` (mục Nhật ký).
 
-## 7. Nâng cấp
+## 8. Nâng cấp
 
 Nguyên tắc: nâng cấp trên nhánh riêng → CI xanh → staging → sao lưu → production. Không sửa file trong `vendor/`.
 
