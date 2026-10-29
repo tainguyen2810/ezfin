@@ -9,8 +9,8 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 3 | Design token, font Be Vietnam Pro tự host, component dùng chung, trang `/_ui` | Đủ component và trạng thái; ảnh Playwright 360/768/1280px không tràn ngang | Xong |
 | 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Xong |
 | 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Xong |
-| 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Chờ duyệt |
-| 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Chưa làm |
+| 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Xong |
+| 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Chờ duyệt |
 | 8 | So sánh tối đa 3 thẻ | Khay so sánh giữ lựa chọn khi chuyển trang; đọc được trên 360px | Chưa làm |
 | 9 | Trang chi tiết thẻ | Ngày cập nhật, nguồn, công bố liên kết, sản phẩm tương tự, schema hợp lệ | Chưa làm |
 | 10 | Nhập lãi suất tiết kiệm: form + import CSV | Báo đúng dòng lỗi, không ghi dở dang; import lại không tạo trùng | Chưa làm |
@@ -26,6 +26,16 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 7
+
+- Xong: trang công khai `ezfin.vn/the-tin-dung` (menu "Thẻ tín dụng", tắt module compare → 404 và ẩn menu). Lọc theo ngân hàng, phí thường niên (miễn phí / đến 500.000 đ / đến 1.000.000 đ), nhu cầu (hoàn tiền, tích dặm, mua sắm, du lịch, ăn uống, trả góp 0%), thu nhập hằng tháng; sắp xếp theo phí, hoàn tiền, thu nhập yêu cầu, mới xác minh; thông số chưa công bố xếp cuối. Bộ lọc nằm trên URL với tên tiếng Việt không dấu, form gửi xong chuyển về một URL gọn (bỏ ô trống, giá trị mặc định, giữ utm_*). Trang có bộ lọc là noindex. Mỗi thẻ hiện ngày cập nhật, link nguồn, cảnh báo "Cần xác minh lại" khi quá hạn kiểm tra. Chỉ hiện thẻ đã xuất bản của tổ chức đang hoạt động.
+- Chưa có nút "Xem chi tiết", "So sánh", "Đăng ký" vì trang chi tiết (task 9), trang so sánh (task 8) và link đối tác (task 18) chưa có: không đặt nút giả. Vì chưa có link đối tác nên chưa hiện công bố liên kết.
+- Component: `x-ui.product-card` cho phép bỏ `detailUrl` và có slot `footer`; `x-ui.data-freshness` nhận `stale` truyền sẵn.
+- Sửa phát hiện khi test: `?phi[]=...` làm lỗi 500 (đọc mảng như chuỗi) → chỉ nhận chuỗi. Phân trang truyền trang và đường dẫn tường minh, không phụ thuộc resolver tĩnh (Livewire của trang quản trị ghi đè resolver trong cùng tiến trình test).
+- Test đã chạy: `vendor/bin/pest` (126 test xanh, 24 test mới trong `tests/Feature/Compare/CreditCardListingTest.php`), `vendor/bin/pint --test`, `npm run build`, `npm run test:ui` (thêm `/the-tin-dung`, 5 trang × 3 kích thước), Playwright thử mở ngăn kéo bộ lọc trên 360px, lọc, trạng thái rỗng.
+- File quan trọng: `app/Modules/Compare/{Actions/SearchCreditCards.php,Support/CreditCardFilters.php,Http/Controllers/CreditCardController.php,routes/public.php,resources/views/credit-cards/index.blade.php}`.
+- Tiếp theo: task 8 (so sánh tối đa 3 thẻ, bật ô "So sánh" trên danh sách).
 
 ### 29/10/2026 — Task 6
 

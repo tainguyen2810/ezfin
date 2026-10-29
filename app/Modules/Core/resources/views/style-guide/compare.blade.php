@@ -19,7 +19,11 @@
                 @foreach ($cards as $card)
                     <x-ui.product-card :id="$card['id']" :name="$card['name']" :institution="$card['institution']"
                         :highlights="$card['highlights']" :facts="$card['facts']" :sponsored="$card['sponsored']"
-                        detail-url="#" partner-url="#" />
+                        detail-url="#" partner-url="#">
+                        <x-slot:footer>
+                            <x-ui.data-freshness :verified-at="now()->subDays(2)" source="Biểu phí chính thức" source-url="#" />
+                        </x-slot:footer>
+                    </x-ui.product-card>
                 @endforeach
                 <x-ui.data-freshness :verified-at="now()->subDays(2)" source="Website chính thức của từng ngân hàng" />
             </div>
