@@ -16,7 +16,10 @@ class CompareServiceProvider extends ModuleServiceProvider
 
     protected function publicNavigation(): array
     {
-        return [new NavItem('Thẻ tín dụng', 'compare.credit-cards.index', order: 20)];
+        return [
+            new NavItem('Lãi suất tiết kiệm', 'compare.savings.index', order: 10),
+            new NavItem('Thẻ tín dụng', 'compare.credit-cards.index', order: 20),
+        ];
     }
 
     public function boot(): void

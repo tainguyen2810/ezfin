@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 11: So sánh lãi suất tiết kiệm
+
+- Trang `ezfin.vn/lai-suat-tiet-kiem`: nhập số tiền, chọn kỳ hạn, kênh, hình thức lĩnh lãi; xếp các ngân hàng theo tiền lãi nhận được.
+- Dùng biểu lãi suất mới nhất đã có hiệu lực và đúng bậc số tiền; mỗi kết quả có nguồn, ngày xác minh, ngày hiệu lực và cách tính.
+
 ### Phase 1 — Task 10: Nhập lãi suất tiết kiệm
 
 - Quản trị sản phẩm tiết kiệm và bảng lãi suất theo kỳ hạn, kênh (online/tại quầy), hình thức lĩnh lãi, mức tiền, ngày hiệu lực.
