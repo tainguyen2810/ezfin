@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 1 — Task 3: Hệ thống giao diện
+
+- Design token navy/xanh dương/xanh lá, font Be Vietnam Pro tự host, Alpine.js.
+- Component dùng chung: nút, ô nhập, ô nhập tiền, select, toggle, badge, card, thẻ số liệu, thanh tiến độ, trạng thái tải/trống/lỗi, alert, modal, toast, tab, breadcrumb, bảng sắp xếp, nguồn dữ liệu, công bố liên kết, thẻ sản phẩm, khay so sánh, bộ lọc.
+- Layout website công khai và ứng dụng khách hàng; trang mẫu `/_ui` (không có trên production).
+- CI thêm kiểm tra giao diện Playwright ở 360/768/1280px.
+
 ### Phase 1 — Task 2: Module, tên miền, feature flag
 
 - Modular monolith: module trong `app/Modules/<Tên>`, đăng ký qua `config/ezfin.php`.

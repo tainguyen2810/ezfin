@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Support\Format;
 use App\Support\Navigation\Navigation;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Pennant\Feature;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
@@ -12,6 +14,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Navigation::class);
+
+        // Dùng trong Blade: {{ Format::money($amount) }}
+        AliasLoader::getInstance()->alias('Format', Format::class);
 
         foreach (config('ezfin.modules', []) as $module) {
             $this->app->register($module);

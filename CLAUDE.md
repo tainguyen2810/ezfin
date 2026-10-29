@@ -22,6 +22,13 @@ Tiến độ và tiêu chí nghiệm thu: `TASKS.md`. Thay đổi quan trọng: 
 - Một codebase cho `ezfin.vn` (public, SEO) và `app.ezfin.vn` (ứng dụng, noindex). Admin ở đường dẫn bí mật trên `app` + 2FA.
 - Chỉ tạo schema cho phase hiện tại. Tiền `DECIMAL(18,2)`, lãi suất `DECIMAL(7,4)`; không dùng float cho tiền.
 
+## Giao diện
+
+- Dựng màn hình từ component `x-ui.*` (`resources/views/components/ui`) và layout `x-layouts.public` / `x-layouts.app`. Thiếu component thì thêm vào đó và vào trang mẫu `/_ui`, không viết lại markup rời rạc.
+- Định dạng hiển thị luôn qua `Format::money()`, `Format::rate()`, `Format::date()`.
+- Icon: `<x-ui.icon name="..." />`, file SVG trong `resources/svg/icons` (Heroicons outline).
+- Trước khi mở PR có giao diện: `npm run build` rồi `npm run test:ui` (cần site chạy ở `ezfin.test`).
+
 ## Nguyên tắc sản phẩm (bắt buộc)
 
 - Không nút giả, dữ liệu giả, đánh giá sao không có thật, dữ liệu "realtime" giả lập.

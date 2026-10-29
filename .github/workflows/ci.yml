@@ -72,3 +72,50 @@ jobs:
 
       - name: Tests
         run: vendor/bin/pest
+
+  ui:
+    runs-on: ubuntu-latest
+    name: Giao diện mobile/desktop (Playwright)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, pdo_sqlite, zip
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-interaction --no-progress
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Build and serve
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ${{ github.workspace }}/database/ui.sqlite
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          touch database/ui.sqlite
+          php artisan migrate --force
+          npm run build
+          php artisan serve --host=127.0.0.1 --port=8000 > storage/logs/serve.log 2>&1 &
+          sleep 3
+
+      - name: Kiểm tra tràn ngang và lỗi JS (360/768/1280px)
+        env:
+          HOST_RESOLVER_RULES: MAP ezfin.test 127.0.0.1:8000
+        run: npm run test:ui -- storage/app/ui-screenshots
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-screenshots
+          path: storage/app/ui-screenshots
