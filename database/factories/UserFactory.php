@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Modules\Core\Enums\Role;
+use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -41,5 +43,13 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /** Tài khoản nội bộ với vai trò cho trước, đã bật xác thực 2 lớp. */
+    public function admin(Role $role = Role::SuperAdmin): static
+    {
+        return $this->state(fn () => [
+            'app_authentication_secret' => AppAuthentication::make()->generateSecret(),
+        ])->afterCreating(fn (User $user) => $user->assignRole($role->value));
     }
 }

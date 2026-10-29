@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Modules\Core\Listeners\RecordAuthenticationEvents;
 use App\Support\Format;
 use App\Support\Navigation\Navigation;
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Pennant\Feature;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
@@ -33,5 +35,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         EnsureFeaturesAreActive::whenInactive(fn () => abort(404));
+
+        Event::subscribe(RecordAuthenticationEvents::class);
     }
 }

@@ -5,9 +5,9 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | # | Việc | Tiêu chí nghiệm thu | Trạng thái |
 | --- | --- | --- | --- |
 | 1 | Khởi tạo repo, Laravel, Tailwind/Vite, Pest, CLAUDE.md, TASKS.md, CHANGELOG.md, .env.example | Chạy được trên WAMP theo hướng dẫn; CI test xanh | Xong |
-| 2 | Khung module, route theo tên miền (ezfin.vn / app.ezfin.vn), feature flag | Tắt flag thì menu ẩn và URL trả 404; có test | Chờ duyệt |
-| 3 | Design token, font Be Vietnam Pro tự host, component dùng chung, trang `/_ui` | Đủ component và trạng thái; ảnh Playwright 360/768/1280px không tràn ngang | Chờ duyệt |
-| 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Chưa làm |
+| 2 | Khung module, route theo tên miền (ezfin.vn / app.ezfin.vn), feature flag | Tắt flag thì menu ẩn và URL trả 404; có test | Xong |
+| 3 | Design token, font Be Vietnam Pro tự host, component dùng chung, trang `/_ui` | Đủ component và trạng thái; ảnh Playwright 360/768/1280px không tràn ngang | Xong |
+| 4 | Đăng nhập admin (Filament), role, 2FA, audit log | Không đủ quyền nhận 403; sửa/xóa ghi audit; giới hạn đăng nhập sai | Chờ duyệt |
 | 5 | Quản lý ngân hàng/tổ chức tài chính | CRUD, upload logo, slug duy nhất; test validation | Chưa làm |
 | 6 | Quản lý sản phẩm thẻ tín dụng | Không xuất bản khi thiếu nguồn hoặc ngày xác minh; có test | Chưa làm |
 | 7 | Danh sách và bộ lọc thẻ (public) | Lọc theo ngân hàng, phí, nhu cầu, thu nhập; trạng thái lọc trên URL; test bộ lọc | Chưa làm |
@@ -26,6 +26,14 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Chưa làm |
 
 ## Nhật ký phiên
+
+### 29/10/2026 — Task 4
+
+- Xong: Filament 5 tại `app.ezfin.vn/<EZFIN_ADMIN_PATH>` (noindex), 4 vai trò nội bộ (Quản trị cao nhất, Biên tập nội dung, Vận hành dữ liệu, Đối tác và tài chính) bằng spatie/laravel-permission, 2FA bằng ứng dụng xác thực bắt buộc + mã khôi phục, khóa tạm sau 5 lần đăng nhập sai/phút, audit log (tạo/sửa/xóa, đăng nhập, đăng nhập sai, đăng xuất, bị khóa; không bao giờ ghi mật khẩu, khóa 2FA), màn hình quản lý người dùng và xem nhật ký (chỉ Quản trị cao nhất), lệnh `php artisan ezfin:admin`, ảnh đại diện chữ cái tạo tại chỗ (không gọi ui-avatars.com).
+- Test đã chạy: `vendor/bin/pest` (62 test xanh, 28 test mới cho quản trị), `vendor/bin/pint --test`, `npm run build`, chụp Playwright màn hình đăng nhập, 2FA, người dùng, nhật ký ở 390px và 1366px (không tràn ngang, không lỗi JS).
+- Chưa giải quyết: quyền chi tiết của từng vai trò (biên tập, vận hành dữ liệu, tài chính) sẽ gắn vào policy khi có module tương ứng (task 5, 6, 10, 15); hiện các vai trò này chỉ vào được bảng điều khiển. Email đặt lại mật khẩu admin chưa bật, cần SMTP Brevo (task 19).
+- File quan trọng: `app/Providers/Filament/AdminPanelProvider.php`, `app/Modules/Core/{Enums/Role.php,Models/AuditLog.php,Concerns/Auditable.php,Policies,Filament,Console/CreateAdminCommand.php}`, `app/Models/User.php`, `tests/Feature/Admin/*`.
+- Tiếp theo: task 5 (quản lý ngân hàng/tổ chức tài chính).
 
 ### 29/10/2026 — Task 3
 
