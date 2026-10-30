@@ -44,6 +44,12 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 30/10/2026 — Giao diện mới "Bạc hà"
+
+- Đã xong: Tai chọn hướng A "Bạc hà" (artifact so sánh 3 hướng: https://claude.ai/artifact/TF7HnPKMdLB1YBJPMhtVMr). Đổi token màu trong `resources/css/app.css` (navy = mực xanh đậm, slate ngả xanh, primary xanh bạc hà, `highlight` xanh chanh, `--radius-card` 1.25rem, `--radius-control`), font Plus Jakarta Sans, component nút/ô nhập/tab/nhãn/thẻ số liệu, logo, menu app và web, chân trang tối.
+- Test: Pest toàn bộ xanh; xem ảnh 390/1280px trang chủ, thẻ tín dụng, công cụ, tổng quan, ngân sách.
+- Bước tiếp theo: Tai xem và góp ý từng trang; tinh chỉnh tiếp theo góp ý.
+
 ### 30/10/2026 — Dữ liệu mẫu cho app
 
 - Đã xong: lệnh `ezfin:demo-data` (Personal\Console\DemoDataCommand) tạo dữ liệu mẫu cho tài khoản có sẵn hoặc demo@ezfin.test; `--fresh` xóa và tạo lại; chặn production và tài khoản quản trị.

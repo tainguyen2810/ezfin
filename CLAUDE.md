@@ -34,6 +34,7 @@ Tiến độ và tiêu chí nghiệm thu: `TASKS.md`. Thay đổi quan trọng: 
 
 - Dựng màn hình từ component `x-ui.*` (`resources/views/components/ui`) và layout `x-layouts.public` / `x-layouts.app`. Thiếu component thì thêm vào đó và vào trang mẫu `/_ui`, không viết lại markup rời rạc.
 - Định dạng hiển thị luôn qua `Format::money()`, `Format::rate()`, `Format::date()`.
+- Màu và bo góc lấy từ token trong `resources/css/app.css` (hướng "Bạc hà": `navy-*` là mực xanh đậm, `primary-*` xanh bạc hà, `highlight` xanh chanh); không viết mã màu rời trong view.
 - Icon: `<x-ui.icon name="..." />`, file SVG trong `resources/svg/icons` (Heroicons outline).
 - Trước khi mở PR có giao diện: `npm run build` rồi `npm run test:ui` (cần site chạy ở `ezfin.test`).
 

@@ -14,7 +14,7 @@
             x-on:input="update($event)"
             @if ($error) aria-invalid="true" aria-describedby="{{ $id }}-error" @elseif ($hint) aria-describedby="{{ $id }}-hint" @endif
             @required($required)
-            {{ $attributes->merge(['class' => 'num block h-11 w-full rounded-lg border bg-white pl-3 pr-10 text-right text-navy-900 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-100 '.($error ? 'border-red-500' : 'border-slate-300')]) }}>
+            {{ $attributes->merge(['class' => 'num block h-11 w-full rounded-control border bg-white pl-3 pr-10 text-right text-navy-900 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-100 '.($error ? 'border-red-500' : 'border-slate-300')]) }}>
         <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-slate-500">{{ $currency }}</span>
         <input type="hidden" x-bind:name="@js($name)" x-bind:value="raw">
     </div>

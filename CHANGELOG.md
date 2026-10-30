@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Giao diện mới "Bạc hà"
+
+- Bộ màu mới: mực xanh đậm, xanh bạc hà, điểm xanh chanh; xám ngả xanh cho nền và viền. Font Plus Jakarta Sans (có tiếng Việt), thay Be Vietnam Pro.
+- Nút, ô nhập, tab, nhãn bo tròn hơn; nút chính màu mực đậm; menu đang chọn nổi bật.
+- Logo, chân trang nền tối, tiêu đề trang chủ có nét tô xanh chanh; thẻ số liệu chính của Tổng quan dạng nền tối (`<x-ui.stat-card dark>`).
+- Trang quản trị dùng màu Emerald và font mới.
+
 ### Phase 3 — Dữ liệu mẫu cho ứng dụng quản lý tiền
 
 - Lệnh `php artisan ezfin:demo-data [email] [--fresh]` tạo 6 tháng giao dịch, 4 ví, ngân sách, mục tiêu, tài sản & nợ để xem giao diện. Không chạy trên production, không chạy cho tài khoản quản trị.

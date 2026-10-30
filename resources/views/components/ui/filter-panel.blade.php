@@ -1,7 +1,7 @@
 {{-- Bộ lọc: cột trái trên desktop, ngăn kéo từ dưới lên trên mobile. Form GET để giữ trạng thái lọc trên URL. --}}
 @props(['action', 'activeCount' => 0])
 <div x-data="{ open: false }">
-    <button type="button" class="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-navy-900 lg:hidden" x-on:click="open = true">
+    <button type="button" class="inline-flex h-10 items-center gap-2 rounded-control border border-slate-300 bg-white px-4 text-sm font-semibold text-navy-900 lg:hidden" x-on:click="open = true">
         <x-ui.icon name="adjustments-horizontal" class="size-4" /> Bộ lọc
         @if ($activeCount)<span class="rounded-full bg-primary-600 px-1.5 text-xs text-white">{{ $activeCount }}</span>@endif
     </button>

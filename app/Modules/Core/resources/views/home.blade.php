@@ -19,11 +19,11 @@
 @endphp
 <x-layouts.public :canonical="route('home')"
     description="So sánh lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng và dùng công cụ tính lãi, khoản vay miễn phí. Dữ liệu có nguồn và ngày xác minh, xếp hạng không theo hoa hồng.">
-    <section class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-white via-white to-primary-50">
-        <div aria-hidden="true" class="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-primary-100/60 blur-3xl"></div>
+    <section class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-white via-slate-50 to-primary-50">
+        <div aria-hidden="true" class="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-highlight/50 blur-3xl"></div>
         <div class="relative mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-center lg:py-14">
             <div>
-                <h1 class="text-3xl font-bold leading-tight sm:text-5xl">Tài chính thông minh<br class="hidden sm:inline"> cho <span class="text-primary-600">cuộc sống tốt hơn</span></h1>
+                <h1 class="isolate text-3xl font-bold leading-tight tracking-tight sm:text-5xl">Tài chính thông minh<br class="hidden sm:inline"> cho <span class="relative whitespace-nowrap"><span aria-hidden="true" class="absolute inset-x-0 bottom-1 -z-10 h-[40%] -rotate-1 rounded-lg bg-highlight"></span>cuộc sống tốt hơn</span></h1>
                 <p class="mt-4 max-w-xl text-lg text-slate-600">So sánh sản phẩm tài chính, lập kế hoạch và tính toán trước khi quyết định. Dữ liệu lấy từ nguồn chính thức, ghi rõ ngày xác minh.</p>
                 <ul class="mt-5 grid max-w-xl gap-2 text-sm text-slate-700 sm:grid-cols-2">
                     @foreach (['Có nguồn và ngày xác minh', 'Xếp hạng không theo hoa hồng', 'Công cụ tính miễn phí', 'Không cần đăng ký'] as $point)

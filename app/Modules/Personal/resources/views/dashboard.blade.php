@@ -37,7 +37,7 @@
             </x-ui.card>
         @else
             <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-                <x-ui.stat-card label="Tổng tài sản" :value="Format::money($netWorth->assetTotal)" :compact-value="Format::compactMoney($netWorth->assetTotal)" icon="wallet" tone="income" />
+                <x-ui.stat-card label="Tổng tài sản" :value="Format::money($netWorth->assetTotal)" :compact-value="Format::compactMoney($netWorth->assetTotal)" icon="wallet" tone="income" dark />
                 <x-ui.stat-card label="Tổng nợ" :value="Format::money($netWorth->debtTotal)" :compact-value="Format::compactMoney($netWorth->debtTotal)" icon="credit-card" tone="expense"
                     :change="$netWorth->debtTotal > 0 ? 'Tài sản ròng '.Format::compactMoney($netWorth->total) : null" />
                 <x-ui.stat-card :label="'Thu nhập '.$monthLabel" :value="Format::money($current['income'])" :compact-value="Format::compactMoney($current['income'])" icon="arrow-down-tray" tone="primary"

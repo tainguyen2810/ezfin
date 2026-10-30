@@ -12,7 +12,7 @@
     <label for="{{ $id }}" class="block text-sm font-medium text-navy-900">{{ $label }}</label>
     <div class="flex gap-2">
         <input id="{{ $id }}" type="text" readonly value="{{ $url }}" x-ref="url" x-on:focus="$el.select()"
-            class="block h-11 min-w-0 flex-1 rounded-lg border border-slate-300 bg-slate-50 px-3 text-sm text-slate-700 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-100">
+            class="block h-11 min-w-0 flex-1 rounded-control border border-slate-300 bg-slate-50 px-3 text-sm text-slate-700 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-100">
         <x-ui.button type="button" variant="outline" x-cloak x-on:click="copy()">Sao chép</x-ui.button>
     </div>
 </div>

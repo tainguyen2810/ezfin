@@ -1,10 +1,10 @@
 @import 'tailwindcss';
 
 /* Be Vietnam Pro tự host (đủ bộ ký tự tiếng Việt), không tải font từ dịch vụ bên ngoài. */
-@import '@fontsource/be-vietnam-pro/400.css';
-@import '@fontsource/be-vietnam-pro/500.css';
-@import '@fontsource/be-vietnam-pro/600.css';
-@import '@fontsource/be-vietnam-pro/700.css';
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -15,26 +15,46 @@
  * bằng cách khai báo lại các biến này.
  */
 @theme {
-    --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+    /* Hướng giao diện "Bạc hà": nền mực xanh đậm, nhấn xanh bạc hà, điểm xanh chanh. */
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 
-    --color-navy-50: #f2f5fa;
-    --color-navy-100: #e1e8f2;
-    --color-navy-200: #c3d0e3;
-    --color-navy-300: #94a8c8;
-    --color-navy-400: #5f78a3;
-    --color-navy-500: #3d5683;
-    --color-navy-600: #2b4169;
-    --color-navy-700: #1d3154;
-    --color-navy-800: #13264a;
-    --color-navy-900: #0b1f3a;
-    --color-navy-950: #061227;
+    /* "navy" giữ tên cũ để không phải sửa view: nay là mực xanh đậm cho chữ tiêu đề và khối tối. */
+    --color-navy-50: #f1f6f4;
+    --color-navy-100: #dfeae6;
+    --color-navy-200: #bfd4cc;
+    --color-navy-300: #93b3a8;
+    --color-navy-400: #5f897b;
+    --color-navy-500: #3f6a5d;
+    --color-navy-600: #2b5246;
+    --color-navy-700: #1c3f35;
+    --color-navy-800: #13332b;
+    --color-navy-900: #0d2b24;
+    --color-navy-950: #061a15;
 
-    --color-primary-50: var(--color-blue-50);
-    --color-primary-100: var(--color-blue-100);
-    --color-primary-200: var(--color-blue-200);
-    --color-primary-500: var(--color-blue-500);
-    --color-primary-600: var(--color-blue-600);
-    --color-primary-700: var(--color-blue-700);
+    /* Xám ngả xanh thay cho slate mặc định, để mọi nền, viền, chữ phụ cùng tông. */
+    --color-slate-50: #f4f8f6;
+    --color-slate-100: #e9f0ed;
+    --color-slate-200: #dbe5e0;
+    --color-slate-300: #c3d1cb;
+    --color-slate-400: #8fa39b;
+    --color-slate-500: #5c7068;
+    --color-slate-600: #4b5e56;
+    --color-slate-700: #364842;
+    --color-slate-800: #22312c;
+    --color-slate-900: #15211d;
+
+    --color-primary-50: #ecfbf4;
+    --color-primary-100: #d2f5e4;
+    --color-primary-200: #a7eacb;
+    --color-primary-300: #6fd8ab;
+    --color-primary-400: #34c08a;
+    --color-primary-500: #0e9f6e;
+    --color-primary-600: #087a59;
+    --color-primary-700: #06654a;
+
+    /* Điểm nhấn xanh chanh: nhãn nổi bật, chữ được tô trên tiêu đề. Chữ trên nền này dùng navy-900. */
+    --color-highlight: #d6f5a3;
+    --color-highlight-strong: #b9ec6a;
 
     /* Ý nghĩa tài chính: thu/tăng, chi/giảm/vượt ngưỡng, cảnh báo. */
     --color-income: var(--color-green-700);
@@ -44,8 +64,9 @@
     --color-warning: var(--color-amber-500);
     --color-warning-soft: var(--color-amber-50);
 
-    --radius-card: 0.75rem;
-    --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06);
+    --radius-card: 1.25rem;
+    --radius-control: 0.875rem;
+    --shadow-card: 0 1px 2px 0 rgb(13 43 36 / 0.04), 0 8px 24px -12px rgb(13 43 36 / 0.12);
 }
 
 @layer base {
