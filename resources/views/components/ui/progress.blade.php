@@ -4,7 +4,7 @@
 @php
     $percent = $max > 0 ? round($value / $max * 100) : 0;
     $color = $mode === 'goal'
-        ? 'bg-primary-600'
+        ? 'bg-primary-500'
         : ($percent > 100 ? 'bg-expense' : ($percent >= 80 ? 'bg-warning' : 'bg-income'));
     $textColor = $mode === 'budget' && $percent > 100 ? 'text-expense' : 'text-navy-900';
 @endphp

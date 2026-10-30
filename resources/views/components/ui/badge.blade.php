@@ -9,7 +9,7 @@
         'sponsored' => 'bg-amber-100 text-amber-800',
     ];
 @endphp
-<span {{ $attributes->merge(['class' => 'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium '.$variants[$variant]]) }}>
+<span {{ $attributes->merge(['class' => 'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium '.$variants[$variant]]) }}>
     @if ($icon)<x-ui.icon :name="$icon" class="size-3.5" />@endif
     {{ $slot }}
 </span>

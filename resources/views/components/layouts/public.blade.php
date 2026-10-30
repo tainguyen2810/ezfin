@@ -51,8 +51,8 @@
                 <nav class="hidden flex-1 items-center gap-1 lg:flex" aria-label="Menu chính">
                     @foreach ($navItems as $item)
                         <a href="{{ $item['href'] }}" @class([
-                            'rounded-lg px-3 py-2 text-sm font-medium transition',
-                            'text-primary-700 bg-primary-50' => $item['active'] ?? false,
+                            'rounded-full px-3.5 py-2 text-sm font-medium transition',
+                            'bg-highlight text-navy-900' => $item['active'] ?? false,
                             'text-navy-900 hover:bg-slate-100' => ! ($item['active'] ?? false),
                         ]) @if ($item['active'] ?? false) aria-current="page" @endif>{{ $item['label'] }}</a>
                     @endforeach
@@ -92,44 +92,44 @@
         {{ $slot }}
     </main>
 
-    <footer class="mt-16 border-t border-slate-200 bg-white">
+    <footer class="mt-16 bg-navy-900 text-white/70">
         <div class="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 py-10 sm:px-6 md:grid-cols-[2fr_1fr_1fr]">
             <div class="col-span-2 md:col-span-1">
-                <x-ui.logo />
-                <p class="mt-3 max-w-sm text-sm text-slate-500">Tài chính thông minh cho cuộc sống tốt hơn. So sánh sản phẩm tài chính, công cụ tính toán và quản lý tiền cho người Việt.</p>
+                <x-ui.logo inverse />
+                <p class="mt-3 max-w-sm text-sm text-white/60">Tài chính thông minh cho cuộc sống tốt hơn. So sánh sản phẩm tài chính, công cụ tính toán và quản lý tiền cho người Việt.</p>
                 @if ($company)
-                    <address class="mt-4 space-y-1 text-sm not-italic text-slate-500">
-                        @isset($company['name'])<p class="font-medium text-navy-900">{{ $company['name'] }}</p>@endisset
+                    <address class="mt-4 space-y-1 text-sm not-italic text-white/60">
+                        @isset($company['name'])<p class="font-medium text-white">{{ $company['name'] }}</p>@endisset
                         @isset($company['registration'])<p>{{ $company['registration'] }}</p>@endisset
                         @isset($company['address'])<p>{{ $company['address'] }}</p>@endisset
-                        @isset($company['email'])<p><a href="mailto:{{ $company['email'] }}" class="hover:text-primary-700">{{ $company['email'] }}</a></p>@endisset
-                        @isset($company['phone'])<p><a href="tel:{{ preg_replace('/[^\d+]/', '', $company['phone']) }}" class="hover:text-primary-700">{{ $company['phone'] }}</a></p>@endisset
+                        @isset($company['email'])<p><a href="mailto:{{ $company['email'] }}" class="hover:text-highlight">{{ $company['email'] }}</a></p>@endisset
+                        @isset($company['phone'])<p><a href="tel:{{ preg_replace('/[^\d+]/', '', $company['phone']) }}" class="hover:text-highlight">{{ $company['phone'] }}</a></p>@endisset
                     </address>
                 @endif
             </div>
             @if ($navItems)
                 <nav aria-label="Khám phá">
-                    <h2 class="text-sm font-semibold text-navy-900">Khám phá</h2>
+                    <h2 class="text-sm font-semibold text-white">Khám phá</h2>
                     <ul class="mt-3 space-y-2 text-sm">
                         @foreach ($navItems as $item)
-                            <li><a href="{{ $item['href'] }}" class="text-slate-600 hover:text-primary-700">{{ $item['label'] }}</a></li>
+                            <li><a href="{{ $item['href'] }}" class="text-white/70 hover:text-highlight">{{ $item['label'] }}</a></li>
                         @endforeach
                     </ul>
                 </nav>
             @endif
             @if ($footerLinks->isNotEmpty())
                 <nav aria-label="Thông tin">
-                    <h2 class="text-sm font-semibold text-navy-900">Về EzFin</h2>
+                    <h2 class="text-sm font-semibold text-white">Về EzFin</h2>
                     <ul class="mt-3 space-y-2 text-sm">
                         @foreach ($footerLinks as $route => $label)
-                            <li><a href="{{ route($route) }}" class="text-slate-600 hover:text-primary-700">{{ $label }}</a></li>
+                            <li><a href="{{ route($route) }}" class="text-white/70 hover:text-highlight">{{ $label }}</a></li>
                         @endforeach
                     </ul>
                 </nav>
             @endif
         </div>
-        <div class="border-t border-slate-100">
-            <p class="mx-auto max-w-7xl px-4 py-4 text-xs text-slate-500 sm:px-6">
+        <div class="border-t border-white/10">
+            <p class="mx-auto max-w-7xl px-4 py-4 text-xs text-white/60 sm:px-6">
                 © {{ now()->year }} EzFin. Thông tin trên EzFin chỉ mang tính tham khảo, không phải lời khuyên đầu tư hay cam kết của tổ chức tài chính. Lãi suất, phí và điều kiện có thể thay đổi; vui lòng xác nhận với tổ chức phát hành trước khi quyết định.
             </p>
         </div>

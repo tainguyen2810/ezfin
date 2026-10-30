@@ -3,14 +3,14 @@
 @switch($name)
     @case('card')
         <svg viewBox="0 0 120 90" fill="none" aria-hidden="true" {{ $attributes }}>
-            <rect x="30" y="14" width="78" height="50" rx="7" transform="rotate(-12 30 14)" fill="#93c5fd" />
+            <rect x="30" y="14" width="78" height="50" rx="7" transform="rotate(-12 30 14)" fill="#a7eacb" />
             <rect x="14" y="30" width="82" height="52" rx="7" fill="#1d4ed8" />
             <rect x="14" y="30" width="82" height="52" rx="7" fill="url(#ill-card)" />
             <rect x="24" y="44" width="14" height="11" rx="2" fill="#fde68a" />
             <rect x="24" y="66" width="40" height="4" rx="2" fill="#bfdbfe" />
             <circle cx="78" cy="68" r="6" fill="#f87171" fill-opacity=".9" />
             <circle cx="86" cy="68" r="6" fill="#fbbf24" fill-opacity=".9" />
-            <defs><linearGradient id="ill-card" x1="14" y1="30" x2="96" y2="82"><stop stop-color="#0b1f3a" stop-opacity=".6" /><stop offset="1" stop-color="#2563eb" stop-opacity="0" /></linearGradient></defs>
+            <defs><linearGradient id="ill-card" x1="14" y1="30" x2="96" y2="82"><stop stop-color="#0d2b24" stop-opacity=".6" /><stop offset="1" stop-color="#0e9f6e" stop-opacity="0" /></linearGradient></defs>
         </svg>
         @break
     @case('piggy')
@@ -31,8 +31,8 @@
             <circle cx="98" cy="62" r="13" fill="#86efac" /><rect x="96" y="68" width="4" height="18" rx="2" fill="#15803d" />
             <path d="M18 44L56 14l38 30v42H18z" fill="#fef3c7" />
             <path d="M12 46L56 10l44 36" stroke="#b45309" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
-            <rect x="48" y="58" width="16" height="28" rx="2" fill="#2563eb" />
-            <rect x="26" y="52" width="14" height="12" rx="2" fill="#93c5fd" /><rect x="72" y="52" width="14" height="12" rx="2" fill="#93c5fd" />
+            <rect x="48" y="58" width="16" height="28" rx="2" fill="#0e9f6e" />
+            <rect x="26" y="52" width="14" height="12" rx="2" fill="#a7eacb" /><rect x="72" y="52" width="14" height="12" rx="2" fill="#a7eacb" />
             <rect x="8" y="84" width="104" height="4" rx="2" fill="#4ade80" />
         </svg>
         @break
@@ -47,24 +47,24 @@
         @break
     @case('phone')
         <svg viewBox="0 0 160 300" fill="none" aria-hidden="true" {{ $attributes }}>
-            <rect x="4" y="4" width="152" height="292" rx="26" fill="#0b1f3a" />
+            <rect x="4" y="4" width="152" height="292" rx="26" fill="#0d2b24" />
             <rect x="12" y="12" width="136" height="276" rx="20" fill="#fff" />
-            <rect x="58" y="18" width="44" height="8" rx="4" fill="#0b1f3a" />
-            <rect x="24" y="40" width="40" height="8" rx="4" fill="#2563eb" />
-            <rect x="24" y="58" width="112" height="56" rx="10" fill="#eff6ff" />
-            <rect x="34" y="68" width="48" height="6" rx="3" fill="#94a8c8" />
-            <rect x="34" y="82" width="72" height="10" rx="5" fill="#0b1f3a" />
+            <rect x="58" y="18" width="44" height="8" rx="4" fill="#0d2b24" />
+            <rect x="24" y="40" width="40" height="8" rx="4" fill="#0e9f6e" />
+            <rect x="24" y="58" width="112" height="56" rx="10" fill="#ecfbf4" />
+            <rect x="34" y="68" width="48" height="6" rx="3" fill="#93b3a8" />
+            <rect x="34" y="82" width="72" height="10" rx="5" fill="#0d2b24" />
             <path d="M34 106c14-6 22 0 34-4s20-10 30-6 18-4 28-8" stroke="#22c55e" stroke-width="3" stroke-linecap="round" />
-            @foreach ([[30, '#dbeafe', '#2563eb'], [70, '#dcfce7', '#16a34a'], [110, '#fee2e2', '#dc2626']] as [$x, $soft, $strong])
+            @foreach ([[30, '#d2f5e4', '#0e9f6e'], [70, '#dcfce7', '#16a34a'], [110, '#fee2e2', '#dc2626']] as [$x, $soft, $strong])
                 <rect x="{{ $x - 4 }}" y="126" width="28" height="28" rx="8" fill="{{ $soft }}" /><rect x="{{ $x + 4 }}" y="134" width="12" height="12" rx="3" fill="{{ $strong }}" />
             @endforeach
             @foreach ([168, 200, 232] as $y)
-                <rect x="24" y="{{ $y }}" width="24" height="24" rx="7" fill="#f1f5f9" />
-                <rect x="56" y="{{ $y + 4 }}" width="44" height="6" rx="3" fill="#0b1f3a" fill-opacity=".8" />
-                <rect x="56" y="{{ $y + 14 }}" width="30" height="5" rx="2.5" fill="#94a8c8" />
+                <rect x="24" y="{{ $y }}" width="24" height="24" rx="7" fill="#e9f0ed" />
+                <rect x="56" y="{{ $y + 4 }}" width="44" height="6" rx="3" fill="#0d2b24" fill-opacity=".8" />
+                <rect x="56" y="{{ $y + 14 }}" width="30" height="5" rx="2.5" fill="#93b3a8" />
                 <rect x="108" y="{{ $y + 8 }}" width="28" height="6" rx="3" fill="{{ $loop->first ? '#16a34a' : '#dc2626' }}" fill-opacity=".8" />
             @endforeach
-            <rect x="24" y="268" width="112" height="4" rx="2" fill="#e2e8f0" />
+            <rect x="24" y="268" width="112" height="4" rx="2" fill="#dbe5e0" />
         </svg>
         @break
 @endswitch

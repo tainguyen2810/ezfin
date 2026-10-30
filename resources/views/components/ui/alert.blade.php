@@ -8,7 +8,7 @@
     ];
     [$box, $icon, $iconColor] = $variants[$variant];
 @endphp
-<div {{ $attributes->merge(['class' => "flex gap-3 rounded-lg border p-3 text-sm $box"]) }} role="{{ in_array($variant, ['warning', 'danger']) ? 'alert' : 'status' }}">
+<div {{ $attributes->merge(['class' => "flex gap-3 rounded-2xl border p-3 text-sm $box"]) }} role="{{ in_array($variant, ['warning', 'danger']) ? 'alert' : 'status' }}">
     <x-ui.icon :name="$icon" class="size-5 shrink-0 {{ $iconColor }}" />
     <div>
         @if ($title)<p class="font-semibold">{{ $title }}</p>@endif

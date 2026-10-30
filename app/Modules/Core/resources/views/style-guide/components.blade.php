@@ -36,7 +36,7 @@
             </div>
             <x-ui.card>
                 <p class="text-3xl font-bold text-navy-900">Tài chính thông minh cho cuộc sống tốt hơn</p>
-                <p class="mt-2 text-xl font-semibold text-navy-900">Tiêu đề mục · Be Vietnam Pro 600</p>
+                <p class="mt-2 text-xl font-semibold text-navy-900">Tiêu đề mục · Plus Jakarta Sans 600</p>
                 <p class="mt-2 text-slate-600">Đoạn văn thường: Lãi suất tiết kiệm kỳ hạn 12 tháng, lĩnh lãi cuối kỳ. Ạ ặ ẩ ễ ố ộ ữ ỹ đ Đ.</p>
                 <p class="num mt-2 text-2xl font-bold text-navy-900">{{ Format::money(520000000) }} · {{ Format::rate(5.5) }} · {{ Format::date('2026-10-29') }}</p>
             </x-ui.card>
@@ -95,7 +95,7 @@
         <section class="{{ $section }}">
             <h2 class="{{ $h2 }}">Thẻ số liệu và tiến độ</h2>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <x-ui.stat-card label="Tổng tài sản" :value="Format::money(520000000)" :compact-value="Format::compactMoney(520000000)" change="5% so với tháng trước" trend="up" icon="wallet" />
+                <x-ui.stat-card label="Tổng tài sản" :value="Format::money(520000000)" :compact-value="Format::compactMoney(520000000)" change="5% so với tháng trước" trend="up" icon="wallet" dark />
                 <x-ui.stat-card label="Tổng nợ" :value="Format::money(251500000)" :compact-value="Format::compactMoney(251500000)" change="2% so với tháng trước" trend="down" icon="credit-card" tone="expense" />
                 <x-ui.stat-card label="Thu nhập" :value="Format::money(28500000)" :compact-value="Format::compactMoney(28500000)" change="12%" trend="up" icon="banknotes" tone="income" />
                 <x-ui.stat-card label="Chi tiêu" :value="Format::money(18200000)" :compact-value="Format::compactMoney(18200000)" icon="shopping-bag" tone="neutral" />

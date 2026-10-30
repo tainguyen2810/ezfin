@@ -8,7 +8,7 @@
     <div class="relative">
         <select id="{{ $id }}" name="{{ $name }}" @required($required)
             @if ($error) aria-invalid="true" aria-describedby="{{ $id }}-error" @endif
-            {{ $attributes->merge(['class' => 'block h-11 w-full appearance-none rounded-lg border bg-white pl-3 pr-10 text-navy-900 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-100 '.($error ? 'border-red-500' : 'border-slate-300')]) }}>
+            {{ $attributes->merge(['class' => 'block h-11 w-full appearance-none rounded-control border bg-white pl-3 pr-10 text-navy-900 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-100 '.($error ? 'border-red-500' : 'border-slate-300')]) }}>
             @if ($placeholder)
                 <option value="">{{ $placeholder }}</option>
             @endif

@@ -9,5 +9,5 @@
         @if ($describedBy) aria-describedby="{{ $describedBy }}" @endif
         @if ($error) aria-invalid="true" @endif
         @required($required)
-        {{ $attributes->merge(['class' => 'block h-11 w-full rounded-lg border bg-white px-3 text-navy-900 placeholder:text-slate-400 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-100 disabled:bg-slate-100 disabled:text-slate-500 '.($error ? 'border-red-500' : 'border-slate-300')]) }}>
+        {{ $attributes->merge(['class' => 'block h-11 w-full rounded-control border bg-white px-3 text-navy-900 placeholder:text-slate-400 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-100 disabled:bg-slate-100 disabled:text-slate-500 '.($error ? 'border-red-500' : 'border-slate-300')]) }}>
 </x-ui.field>
