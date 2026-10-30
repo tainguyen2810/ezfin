@@ -38,11 +38,17 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | A3 | Ngân sách tháng theo danh mục | Tiến độ xanh/cam/đỏ theo ngưỡng; cảnh báo vượt ngân sách; xem theo tháng | Xong |
 | A4 | Mục tiêu tài chính | Số tiền mục tiêu, hạn, đã góp; % và số tháng còn lại; đang thực hiện / hoàn thành | Chưa làm |
 | A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Xong |
-| A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Chờ duyệt |
-| A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Chưa làm |
+| A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Xong |
+| A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Chờ duyệt |
 | A8 | Cài đặt tài khoản, xuất dữ liệu, xóa tài khoản; rà soát mobile | Đổi tên/email/mật khẩu; xuất CSV; xóa tài khoản xóa hết dữ liệu cá nhân; ảnh 390/1280px không tràn | Chưa làm |
 
 ## Nhật ký phiên
+
+### 30/10/2026 — Phase 3 task A7: báo cáo
+
+- Đã xong: `/bao-cao` với tab Tháng / Quý / Năm (`?ky=thang|quy|nam&moc=2026-10|2026-Q4|2026`, `Support\Period`), chuyển kỳ trước/sau; thu nhập, chi tiêu, còn lại so với kỳ trước, tỷ lệ để dành; biểu đồ thu chi theo tháng (kèm bảng), phân bổ chi tiêu, bảng chi tiêu và thu nhập theo danh mục. `CashFlow::byCategory` dùng cho cả thu và chi.
+- Test: `tests/Feature/Personal/ReportTest.php`, toàn bộ `vendor/bin/pest` xanh.
+- Bước tiếp theo: A8 tài khoản, xuất CSV, xóa tài khoản, rà soát mobile.
 
 ### 30/10/2026 — Phase 3 task A6: trang Tổng quan
 

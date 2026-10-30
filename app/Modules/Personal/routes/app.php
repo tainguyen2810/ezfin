@@ -8,6 +8,7 @@ use App\Modules\Personal\Http\Controllers\CategoryController;
 use App\Modules\Personal\Http\Controllers\DashboardController;
 use App\Modules\Personal\Http\Controllers\GoalController;
 use App\Modules\Personal\Http\Controllers\NetWorthController;
+use App\Modules\Personal\Http\Controllers\ReportController;
 use App\Modules\Personal\Http\Controllers\TransactionController;
 use App\Modules\Personal\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -49,4 +50,6 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('tai-san-no', NetWorthController::class)->except('show')
         ->parameters(['tai-san-no' => 'item'])->names('personal.net-worth');
+
+    Route::get('/bao-cao', [ReportController::class, 'index'])->name('personal.reports.index');
 });

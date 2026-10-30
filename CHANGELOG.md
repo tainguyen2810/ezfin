@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — A7: Báo cáo
+
+- Báo cáo thu chi theo tháng, quý, năm; so với kỳ trước; tỷ lệ để dành.
+- Biểu đồ thu chi theo tháng, phân bổ chi tiêu, bảng thu nhập và chi tiêu theo danh mục.
+
 ### Phase 3 — A6: Trang Tổng quan
 
 - Tổng tài sản, tổng nợ, thu nhập và chi tiêu tháng so với tháng trước.
