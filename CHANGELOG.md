@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — A2: Giao dịch và danh mục
+
+- Ghi thu, chi, chuyển tiền giữa các ví (chuyển tiền không tính vào thu chi); số dư ví tự tính.
+- Danh sách giao dịch theo tháng, lọc theo ví, danh mục, loại; tổng thu, chi, chênh lệch.
+- Danh mục thu chi mặc định, thêm/sửa/ẩn danh mục với biểu tượng và màu.
+- Thông báo lỗi nhập liệu bằng tiếng Việt.
+
 ### Phase 3 — A1: Tài khoản khách hàng và ví
 
 - Ứng dụng quản lý tiền trên app.ezfin.vn (flag `personal`): đăng ký (đồng ý điều khoản bắt buộc, nhận email giới thiệu tùy chọn), đăng nhập (khóa 15 phút sau 5 lần sai), quên/đặt lại mật khẩu qua email.

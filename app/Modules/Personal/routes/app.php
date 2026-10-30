@@ -3,7 +3,9 @@
 use App\Modules\Personal\Http\Controllers\Auth\LoginController;
 use App\Modules\Personal\Http\Controllers\Auth\PasswordResetController;
 use App\Modules\Personal\Http\Controllers\Auth\RegisterController;
+use App\Modules\Personal\Http\Controllers\CategoryController;
 use App\Modules\Personal\Http\Controllers\DashboardController;
+use App\Modules\Personal\Http\Controllers\TransactionController;
 use App\Modules\Personal\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +27,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('vi', WalletController::class)->except('show')
         ->parameters(['vi' => 'wallet'])->names('personal.wallets');
+
+    Route::resource('giao-dich', TransactionController::class)->except('show')
+        ->parameters(['giao-dich' => 'transaction'])->names('personal.transactions');
+
+    Route::resource('danh-muc', CategoryController::class)->only(['index', 'store', 'edit', 'update', 'destroy'])
+        ->parameters(['danh-muc' => 'category'])->names('personal.categories');
 });

@@ -3,6 +3,7 @@
 namespace App\Modules\Personal\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Modules\Personal\Actions\CreateDefaultCategories;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class RegisterController
         return view('personal::auth.register');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, CreateDefaultCategories $defaults): RedirectResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -38,6 +39,7 @@ class RegisterController
             'marketing_consent_at' => $request->boolean('marketing') ? now() : null,
         ])->saveQuietly();
 
+        $defaults->handle($user);
         event(new Registered($user));
         Auth::login($user);
         $request->session()->regenerate();
