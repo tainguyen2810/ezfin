@@ -41,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
             ->profile(isSimple: false)
             ->multiFactorAuthentication(
                 AppAuthentication::make()->recoverable()->brandName('EzFin'),
-                isRequired: true,
+                isRequired: (bool) config('ezfin.admin_2fa'),
             )
             ->brandName('EzFin Quản trị')
             ->defaultAvatarProvider(InitialsAvatarProvider::class)

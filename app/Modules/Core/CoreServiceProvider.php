@@ -5,6 +5,7 @@ namespace App\Modules\Core;
 use App\Models\User;
 use App\Modules\Core\Console\CheckDeploymentCommand;
 use App\Modules\Core\Console\CreateAdminCommand;
+use App\Modules\Core\Http\Controllers\InstallController;
 use App\Modules\Core\Models\AuditLog;
 use App\Modules\Core\Models\Redirect;
 use App\Modules\Core\Policies\AuditLogPolicy;
@@ -13,6 +14,7 @@ use App\Modules\Core\Policies\UserPolicy;
 use App\Support\Modules\ModuleServiceProvider;
 use App\Support\Seo\SitemapUrl;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 
 class CoreServiceProvider extends ModuleServiceProvider
 {
@@ -34,9 +36,29 @@ class CoreServiceProvider extends ModuleServiceProvider
         Gate::policy(AuditLog::class, AuditLogPolicy::class);
         Gate::policy(Redirect::class, RedirectPolicy::class);
 
+        $this->bootInstaller();
+
         if ($this->app->runningInConsole()) {
             $this->commands([CreateAdminCommand::class, CheckDeploymentCommand::class]);
         }
+    }
+
+    /**
+     * Trang cài đặt /cai-dat trên mọi tên miền. Không dùng nhóm 'web' vì session, cache đặt ở database
+     * và APP_KEY có thể chưa có lúc cài lần đầu.
+     */
+    private function bootInstaller(): void
+    {
+        if ($this->app->routesAreCached()) {
+            return;
+        }
+
+        Route::middleware('noindex')->controller(InstallController::class)->group(function () {
+            Route::get('/cai-dat', 'show')->name('install.show');
+            Route::post('/cai-dat/database', 'database')->name('install.database');
+            Route::post('/cai-dat/tao-bang', 'migrate')->name('install.migrate');
+            Route::post('/cai-dat/quan-tri', 'admin')->name('install.admin');
+        });
     }
 
     protected function sitemap(): iterable

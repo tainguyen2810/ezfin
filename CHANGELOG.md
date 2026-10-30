@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Trang cài đặt `/cai-dat` và 2FA khi chạy local
+
+- Trang cài đặt từng bước như WordPress: kiểm tra môi trường, nhập MySQL (tự tạo database, ghi `.env`), tạo bảng, tạo tài khoản quản trị. Tự khóa khi đã có tài khoản quản trị cao nhất.
+- 2FA trang quản trị: production luôn bắt buộc; máy dev (`APP_ENV=local`) mặc định không bắt buộc, đổi bằng `EZFIN_ADMIN_2FA`.
+
 ### Phase 1 — Chuẩn bị triển khai và nghiệm thu
 
 - Lệnh `php artisan ezfin:check` kiểm tra máy chủ sau khi cài đặt hoặc deploy, có heartbeat cho cron và queue worker.
