@@ -73,7 +73,8 @@ class CheckDeploymentCommand extends Command
         foreach ([storage_path(), storage_path('framework/cache'), storage_path('logs'), base_path('bootstrap/cache')] as $path) {
             $this->check('Ghi được '.Str::after($path, base_path().DIRECTORY_SEPARATOR), is_dir($path) && is_writable($path), 'Không ghi được, kiểm tra chủ sở hữu (www)');
         }
-        $this->check('Liên kết public/storage', is_link(public_path('storage')) || is_dir(public_path('storage')), 'Chạy php artisan storage:link');
+        // Trên Windows, storage:link tạo junction: is_link()/is_dir() có thể trả false, realpath() vẫn lần ra đích.
+        $this->check('Liên kết public/storage', is_link(public_path('storage')) || is_dir(public_path('storage')) || realpath(public_path('storage')) !== false, 'Chạy php artisan storage:link');
         $this->check('Giao diện đã build', is_file(public_path('build/manifest.json')), 'Chạy npm ci && npm run build');
 
         $this->heartbeat('Cron (schedule:run)', Heartbeat::SCHEDULE, self::SCHEDULE_MAX_MINUTES, 'Thêm cron mỗi phút: php artisan schedule:run');

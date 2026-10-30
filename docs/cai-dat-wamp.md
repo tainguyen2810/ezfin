@@ -78,4 +78,5 @@ Mở http://ezfin.test. Khi sửa giao diện, chạy `npm run dev` để tự c
 | 404 cho mọi trang trừ `/` | Bật `rewrite_module`, kiểm tra `AllowOverride All` |
 | `could not find driver` | Bật `pdo_mysql` cho cả PHP Apache và PHP CLI |
 | Trang trắng, không có CSS | Chạy `npm run build` |
+| `Specified key was too long; max key length is 1000 bytes` khi migrate | MySQL đang mặc định MyISAM. EzFin luôn tạo bảng InnoDB (`DB_ENGINE`, mặc định `InnoDB`); xóa các bảng tạo dở rồi chạy lại `php artisan migrate` |
 | `php -v` ra bản khác 8.3 | Sửa PATH trỏ tới `C:\wamp64\bin\php\php8.3.x` |

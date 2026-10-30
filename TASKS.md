@@ -27,6 +27,15 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 
 ## Nhật ký phiên
 
+### 30/10/2026 — Cài trên WAMP máy chủ dự án
+
+- Đã xong: cài EzFin vào `C:\wamp64\www\ezfin` (ezfin.test, app.ezfin.test), 5 trang chính trả 200.
+- Sửa 2 lỗi gặp khi cài:
+  - MySQL trên máy mặc định dùng MyISAM nên migrate lỗi "key too long". `config/database.php` giờ luôn dùng InnoDB (`DB_ENGINE`).
+  - `ezfin:check` báo sai `public/storage` vì trên Windows `storage:link` tạo junction. Đã thêm bước kiểm tra bằng `realpath()`.
+- Test: `vendor/bin/pest` 401 xanh trên CI. Trên máy Windows trước khi sửa có 400/401 xanh; test hỏng là test của lỗi junction ở trên.
+- Bước tiếp theo: chủ dự án tạo admin (`php artisan ezfin:admin`) và thử giao diện.
+
 ### 29/10/2026 — Chuẩn bị task 19 và 20
 
 - Đã xong:
