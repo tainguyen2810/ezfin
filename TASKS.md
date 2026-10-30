@@ -36,7 +36,7 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | A1 | Đăng ký, đăng nhập, quên mật khẩu, khung app (sidebar, thanh dưới có nút +), ví & tài khoản | Đồng ý điều khoản bắt buộc, email giới thiệu tách riêng; khóa sau 5 lần sai; không lộ email đã đăng ký; ví của người khác trả 404 | Xong |
 | A2 | Danh mục thu/chi, giao dịch, chuyển tiền giữa ví | Số dư ví = số dư đầu + thu − chi ± chuyển; chuyển tiền là 2 dòng chung `transfer_group_id`, tạo trong 1 transaction, không tính vào thu/chi; lọc theo tháng, ví, danh mục | Xong |
 | A3 | Ngân sách tháng theo danh mục | Tiến độ xanh/cam/đỏ theo ngưỡng; cảnh báo vượt ngân sách; xem theo tháng | Xong |
-| A4 | Mục tiêu tài chính | Số tiền mục tiêu, hạn, đã góp; % và số tháng còn lại; đang thực hiện / hoàn thành | Chưa làm |
+| A4 | Mục tiêu tài chính | Số tiền mục tiêu, hạn, đã góp; % và số tháng còn lại; đang thực hiện / hoàn thành | Xong |
 | A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Xong |
 | A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Xong |
 | A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Xong |
