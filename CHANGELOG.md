@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — A8: Tài khoản và dữ liệu
+
+- Trang Tài khoản: sửa thông tin, đổi mật khẩu, rút lại đồng ý nhận email, tải giao dịch (CSV), xóa vĩnh viễn tài khoản.
+- Thanh điều hướng mobile như ảnh mẫu: Tổng quan, Giao dịch, nút +, Báo cáo, Cài đặt.
+- Nhật ký quản trị không ghi thông tin khách hàng tự đăng ký hoặc tự sửa.
+
 ### Phase 3 — A7: Báo cáo
 
 - Báo cáo thu chi theo tháng, quý, năm; so với kỳ trước; tỷ lệ để dành.

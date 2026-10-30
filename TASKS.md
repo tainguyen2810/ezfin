@@ -39,10 +39,18 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | A4 | Mục tiêu tài chính | Số tiền mục tiêu, hạn, đã góp; % và số tháng còn lại; đang thực hiện / hoàn thành | Chưa làm |
 | A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Xong |
 | A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Xong |
-| A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Chờ duyệt |
-| A8 | Cài đặt tài khoản, xuất dữ liệu, xóa tài khoản; rà soát mobile | Đổi tên/email/mật khẩu; xuất CSV; xóa tài khoản xóa hết dữ liệu cá nhân; ảnh 390/1280px không tràn | Chưa làm |
+| A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Xong |
+| A8 | Cài đặt tài khoản, xuất dữ liệu, xóa tài khoản; rà soát mobile | Đổi tên/email/mật khẩu; xuất CSV; xóa tài khoản xóa hết dữ liệu cá nhân; ảnh 390/1280px không tràn | Chờ duyệt |
 
 ## Nhật ký phiên
+
+### 30/10/2026 — Phase 3 task A8: tài khoản, xuất dữ liệu, rà soát mobile
+
+- Đã xong: `/tai-khoan` (menu Cài đặt; avatar trên thanh trên dẫn tới đây): sửa họ tên, email, đồng ý/rút lại nhận email giới thiệu; đổi mật khẩu (cần mật khẩu cũ, đăng xuất thiết bị khác); tải giao dịch CSV (UTF-8 BOM, chặn công thức Excel); xóa vĩnh viễn tài khoản và mọi dữ liệu tài chính sau khi nhập mật khẩu (tài khoản quản trị không tự xóa được). Trên mobile trang này liệt kê đủ các màn hình vì thanh dưới chỉ có Tổng quan, Giao dịch, +, Báo cáo, Cài đặt như ảnh mẫu.
+- Nhật ký quản trị không còn ghi khi khách hàng tự đăng ký, sửa, xóa tài khoản (`User::shouldAudit()`), đúng với chính sách quyền riêng tư; vẫn ghi khi người quản trị thao tác và ghi đăng nhập. Trang Quyền riêng tư bổ sung quyền tự phục vụ.
+- Rà soát mobile 390px: tổng quan, giao dịch, ngân sách, mục tiêu, tài sản & nợ, báo cáo, tài khoản.
+- Test: `tests/Feature/Personal/AccountTest.php`, toàn bộ `vendor/bin/pest` xanh.
+- Bước tiếp theo: bật flag `personal` trên máy Tai để kiểm tra; bật trên production khi Tai đồng ý ra mắt. Sau đó task 19 (staging) và 20 (nghiệm thu).
 
 ### 30/10/2026 — Phase 3 task A7: báo cáo
 

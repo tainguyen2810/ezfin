@@ -27,6 +27,9 @@
 
     <h2>5. Quyền của bạn</h2>
     <p>Theo Nghị định 13/2023/NĐ-CP, bạn có quyền được biết, đồng ý, truy cập, chỉnh sửa, xóa, hạn chế xử lý, phản đối xử lý dữ liệu cá nhân của mình và khiếu nại. Bạn có thể xóa cookie và bộ nhớ phiên bất kỳ lúc nào trong cài đặt trình duyệt. Để thực hiện các quyền khác, vui lòng gửi yêu cầu qua trang <a href="{{ route('legal.contact') }}">Liên hệ</a>.</p>
+    @if (\Laravel\Pennant\Feature::active('personal'))
+        <p>Nếu dùng ứng dụng quản lý tiền, bạn tự sửa thông tin, rút lại đồng ý nhận email, tải toàn bộ giao dịch (CSV) và xóa vĩnh viễn tài khoản cùng mọi dữ liệu tài chính tại trang Tài khoản trong ứng dụng. Nhật ký đăng nhập (thời điểm, địa chỉ IP) được giữ lại một thời gian để bảo vệ an toàn hệ thống.</p>
+    @endif
 
     <h2>6. Bảo mật</h2>
     <p>Website dùng kết nối mã hóa HTTPS. Khu vực quản trị yêu cầu xác thực hai lớp và ghi nhật ký thao tác.</p>

@@ -21,9 +21,13 @@ trait Auditable
 
     public static function bootAuditable(): void
     {
-        static::created(fn (Model $model) => AuditLog::record('created', $model, null, $model->auditValues($model->getAttributes())));
+        static::created(fn (Model $model) => $model->shouldAudit() && AuditLog::record('created', $model, null, $model->auditValues($model->getAttributes())));
 
         static::updated(function (Model $model) {
+            if (! $model->shouldAudit()) {
+                return;
+            }
+
             $changed = $model->getChanges();
             $new = $model->auditValues($changed);
 
@@ -40,7 +44,13 @@ trait Auditable
             AuditLog::record('updated', $model, $old, $new);
         });
 
-        static::deleted(fn (Model $model) => AuditLog::record('deleted', $model, $model->auditValues($model->getAttributes()), null));
+        static::deleted(fn (Model $model) => $model->shouldAudit() && AuditLog::record('deleted', $model, $model->auditValues($model->getAttributes()), null));
+    }
+
+    /** Model ghi đè để bỏ qua một số bản ghi (ví dụ tài khoản khách hàng tự sửa thông tin của mình). */
+    public function shouldAudit(): bool
+    {
+        return true;
     }
 
     /** Tên đối tượng hiển thị trong nhật ký; model ghi đè để đặt tên tiếng Việt. */
