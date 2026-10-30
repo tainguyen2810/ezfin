@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
-/** Tạo tài khoản quản trị (dùng khi cài đặt lần đầu). 2FA được thiết lập ở lần đăng nhập đầu tiên. */
+/** Tạo tài khoản quản trị (cài lần đầu cũng làm được ở trang /cai-dat). 2FA, nếu bắt buộc, được thiết lập ở lần đăng nhập đầu tiên. */
 class CreateAdminCommand extends Command
 {
     protected $signature = 'ezfin:admin {--name=} {--email=} {--role=super-admin}';
@@ -41,7 +41,8 @@ class CreateAdminCommand extends Command
         $user->forceFill(['email_verified_at' => now()])->save();
         $user->assignRole($role);
 
-        $this->info("Đã tạo tài khoản {$email} (".Role::from($role)->label().'). Lần đăng nhập đầu sẽ yêu cầu thiết lập xác thực 2 lớp.');
+        $this->info("Đã tạo tài khoản {$email} (".Role::from($role)->label().').'
+            .(config('ezfin.admin_2fa') ? ' Lần đăng nhập đầu sẽ yêu cầu thiết lập xác thực 2 lớp.' : ''));
         $this->line('Đăng nhập tại: '.(parse_url((string) config('app.url'), PHP_URL_SCHEME) ?: 'https').'://'.config('ezfin.domains.app').'/'.config('ezfin.admin_path'));
 
         return self::SUCCESS;

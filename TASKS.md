@@ -27,6 +27,12 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 
 ## Nhật ký phiên
 
+### 30/10/2026 — Trang cài đặt `/cai-dat`, 2FA tùy chọn khi local
+
+- Đã xong: trang cài đặt kiểu WordPress (`InstallController`, `Core\Support\Installer`, `EnvFile`), chạy không cần session; form dùng mã cài đặt trong `storage/app/ezfin-install.token`, khóa bằng `storage/app/ezfin-installed` hoặc khi đã có super-admin. 2FA theo `config('ezfin.admin_2fa')`.
+- Test: `tests/Feature/Core/InstallerTest.php`, `vendor/bin/pest` toàn bộ.
+- Bước tiếp theo: chủ dự án mở `http://ezfin.test/cai-dat` để tạo tài khoản quản trị rồi thử giao diện.
+
 ### 30/10/2026 — Cài trên WAMP máy chủ dự án
 
 - Đã xong: cài EzFin vào `C:\wamp64\www\ezfin` (ezfin.test, app.ezfin.test), 5 trang chính trả 200.

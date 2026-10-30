@@ -20,16 +20,20 @@ copy .env.example .env
 php artisan key:generate
 ```
 
-## 2. Database
+## 2. Database và tài khoản quản trị
 
-Tạo database `ezfin` (utf8mb4, `utf8mb4_unicode_ci`) trong phpMyAdmin, sửa `DB_*` trong `.env` nếu tài khoản MySQL khác `root` không mật khẩu, rồi chạy:
+Cách nhanh (kiểu WordPress): làm xong bước 3 và 4 rồi mở `http://ezfin.test/cai-dat`. Trang này đi lần lượt: kiểm tra môi trường, nhập thông tin MySQL (tự tạo database nếu chưa có, tự ghi vào `.env`), tạo bảng, tạo tài khoản quản trị. Tạo xong tài khoản thì trang tự khóa (trả 404).
+
+Cách dùng dòng lệnh: tạo database `ezfin` (utf8mb4, `utf8mb4_unicode_ci`) trong phpMyAdmin, sửa `DB_*` trong `.env` nếu tài khoản MySQL khác `root` không mật khẩu, rồi chạy:
 
 ```bat
 php artisan migrate
 php artisan ezfin:admin
 ```
 
-`ezfin:admin` tạo tài khoản quản trị. Trang quản trị: `http://app.ezfin.test/quan-tri` (đổi bằng `EZFIN_ADMIN_PATH`). Lần đăng nhập đầu cần quét mã QR bằng Google Authenticator hoặc ứng dụng tương tự, và lưu lại mã khôi phục.
+Trang quản trị: `http://app.ezfin.test/quan-tri` (đổi bằng `EZFIN_ADMIN_PATH`).
+
+Xác thực 2 lớp (2FA): với `APP_ENV=local` không bắt buộc, có thể bật trong trang hồ sơ. Muốn thử như production thì đặt `EZFIN_ADMIN_2FA=true` trong `.env`; lần đăng nhập đầu sẽ cần quét mã QR bằng Google Authenticator hoặc ứng dụng tương tự và lưu lại mã khôi phục. Production luôn bắt buộc 2FA.
 
 ## 3. Tên miền local
 
