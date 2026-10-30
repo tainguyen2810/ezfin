@@ -1,6 +1,7 @@
 {{-- Thẻ số liệu: nhãn, giá trị, biến động so với kỳ trước. tone: income | expense | neutral | primary.
-     compactValue: giá trị rút gọn hiển thị trên màn hình hẹp (ví dụ "28,5 tr"). --}}
-@props(['label', 'value', 'compactValue' => null, 'change' => null, 'trend' => null, 'icon' => null, 'tone' => 'primary'])
+     compactValue: giá trị rút gọn hiển thị trên màn hình hẹp (ví dụ "28,5 tr").
+     trend (up/down) là chiều mũi tên; positive (true/false) đặt màu tốt/xấu khi khác chiều, ví dụ chi tiêu tăng là xấu. --}}
+@props(['label', 'value', 'compactValue' => null, 'change' => null, 'trend' => null, 'icon' => null, 'tone' => 'primary', 'positive' => null])
 @php
     $tones = [
         'primary' => 'bg-primary-50 text-primary-600',
@@ -8,7 +9,7 @@
         'expense' => 'bg-expense-soft text-expense',
         'neutral' => 'bg-slate-100 text-slate-600',
     ];
-    $trendClass = match ($trend) {
+    $trendClass = $positive !== null ? ($positive ? 'text-income' : 'text-expense') : match ($trend) {
         'up' => 'text-income',
         'down' => 'text-expense',
         default => 'text-slate-500',

@@ -193,7 +193,27 @@
                         ['label' => 'Tiền gốc', 'tone' => 'primary', 'values' => [2000000, 2000000, 2000000, 2000000, 2000000, 2000000]],
                         ['label' => 'Tiền lãi', 'tone' => 'cost', 'values' => [120000, 100000, 80000, 60000, 40000, 20000]],
                     ]" />
+                <x-ui.bar-chart grouped :labels="['T5', 'T6', 'T7', 'T8', 'T9', 'T10']" label-prefix="" caption="Ví dụ thu chi theo tháng (grouped: cột cạnh nhau)."
+                    :series="[
+                        ['label' => 'Thu nhập', 'tone' => 'income', 'values' => [25000000, 26000000, 25000000, 31000000, 25000000, 28500000]],
+                        ['label' => 'Chi tiêu', 'tone' => 'expense', 'values' => [18000000, 21000000, 16500000, 24000000, 19800000, 18200000]],
+                    ]" />
             </div>
+        </section>
+
+        <section class="{{ $section }}">
+            <h2 class="{{ $h2 }}">Biểu đồ tròn</h2>
+            <p class="text-sm text-slate-500">Phân bổ theo danh mục, kèm bảng nhãn, số tiền, tỷ lệ. Màu lấy từ <code>CashFlow::PALETTE</code>, phần gộp dùng <code>OTHER_COLOR</code>.</p>
+            <x-ui.card class="max-w-xl">
+                <x-ui.donut-chart :total="18200000" center-label="Tổng chi tiêu" caption="Ví dụ phân bổ chi tiêu."
+                    :segments="[
+                        ['label' => 'Ăn uống', 'value' => 5824000, 'color' => \App\Modules\Personal\Actions\CashFlow::PALETTE[0]],
+                        ['label' => 'Nhà ở', 'value' => 3500000, 'color' => \App\Modules\Personal\Actions\CashFlow::PALETTE[1]],
+                        ['label' => 'Đi lại', 'value' => 2200000, 'color' => \App\Modules\Personal\Actions\CashFlow::PALETTE[2]],
+                        ['label' => 'Mua sắm', 'value' => 1800000, 'color' => \App\Modules\Personal\Actions\CashFlow::PALETTE[3]],
+                        ['label' => 'Danh mục khác', 'value' => 4876000, 'color' => \App\Modules\Personal\Actions\CashFlow::OTHER_COLOR],
+                    ]" />
+            </x-ui.card>
         </section>
 
         <section class="{{ $section }}">

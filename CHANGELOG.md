@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — A6: Trang Tổng quan
+
+- Tổng tài sản, tổng nợ, thu nhập và chi tiêu tháng so với tháng trước.
+- Dòng tiền 6 tháng, phân bổ chi tiêu theo danh mục, mục tiêu, giao dịch gần đây, ngân sách tháng.
+
 ### Phase 3 — A5: Tài sản và nợ
 
 - Tài sản ròng tính từ số dư ví, tài sản nhập tay (nhà, xe, vàng, chứng khoán...) và các khoản nợ.

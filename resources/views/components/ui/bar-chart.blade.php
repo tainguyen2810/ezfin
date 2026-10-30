@@ -1,13 +1,18 @@
 {{-- Biểu đồ cột (có thể chồng nhiều phần) dựng bằng HTML/CSS: hiển thị cả khi tắt JS; rê chuột hoặc Tab vào cột để xem số.
      labels: nhãn trục ngang; series: [['label' => 'Tiền gốc', 'tone' => 'primary|income|cost', 'values' => [số đồng, ...]], ...]
-     (phần đầu nằm dưới cùng); caption: một câu mô tả cho trình đọc màn hình; xTitle: tên trục ngang (Năm, Tháng).
+     (phần đầu nằm dưới cùng); framed=false: bỏ khung khi đặt trong x-ui.card; grouped: đặt các phần cạnh nhau thay vì chồng (so sánh thu/chi); caption: một câu mô tả cho trình đọc màn hình; xTitle: tên trục ngang (Năm, Tháng).
      Biểu đồ luôn đi kèm bảng số liệu đầy đủ ở trang dùng nó. --}}
-@props(['labels', 'series', 'caption', 'xTitle' => null, 'labelPrefix' => ''])
+@props(['labels', 'series', 'caption', 'xTitle' => null, 'labelPrefix' => '', 'grouped' => false, 'framed' => true])
 @php
-    $tones = ['primary' => 'bg-primary-600', 'income' => 'bg-income', 'cost' => 'bg-orange-600'];
+    $tones = ['primary' => 'bg-primary-600', 'income' => 'bg-income', 'cost' => 'bg-orange-600', 'expense' => 'bg-expense'];
     $labels = array_values($labels);
     $count = count($labels);
-    $totals = array_map(fn ($i) => array_sum(array_map(fn ($s) => $s['values'][$i], $series)), range(0, $count - 1));
+    // Chiều cao trục: tổng các phần (chồng) hoặc phần lớn nhất (cạnh nhau); giá trị âm không vẽ cột.
+    $totals = array_map(function ($i) use ($series, $grouped) {
+        $values = array_map(fn ($s) => max(0, $s['values'][$i]), $series);
+
+        return $grouped ? max($values) : array_sum($values);
+    }, range(0, $count - 1));
 
     // Trục dọc: 4 mốc tròn (1, 2, 2,5, 5 × 10^n).
     $max = max(1, ...$totals);
@@ -34,7 +39,7 @@
         $shown[] = $count - 1;
     }
 @endphp
-<figure {{ $attributes->merge(['class' => 'rounded-card border border-slate-200 bg-white p-4 shadow-card']) }}>
+<figure {{ $attributes->class(['rounded-card border border-slate-200 bg-white p-4 shadow-card' => $framed]) }}>
     <figcaption class="sr-only">{{ $caption }}</figcaption>
     @if (count($series) > 1)
         <ul class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-600" aria-hidden="true">
@@ -59,17 +64,25 @@
                     $readout = $labelPrefix.$label.': '.collect($series)->map(fn ($s) => $s['label'].' '.Format::money($s['values'][$i]))->implode(', ');
                 @endphp
                 <div class="group flex h-full min-w-0 flex-1 items-end justify-center outline-none" tabindex="0" role="img" aria-label="{{ $readout }}">
-                    <div class="flex w-full max-w-6 flex-col-reverse gap-0.5 transition group-hover:opacity-80 group-focus-visible:opacity-80" style="height: {{ $totals[$i] / $top * 100 }}%">
-                        @foreach ($series as $index => $item)
-                            @if ($item['values'][$i] > 0)
-                                <div class="{{ $tones[$item['tone']] }} {{ $index === $topSeries ? 'rounded-t' : '' }}" style="flex: {{ $item['values'][$i] }} 1 0"></div>
-                            @endif
-                        @endforeach
-                    </div>
+                    @if ($grouped)
+                        <div class="flex h-full w-full max-w-10 items-end justify-center gap-0.5 transition group-hover:opacity-80 group-focus-visible:opacity-80">
+                            @foreach ($series as $item)
+                                <div class="w-full max-w-4 rounded-t {{ $tones[$item['tone']] }}" style="height: {{ max(0, $item['values'][$i]) / $top * 100 }}%"></div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="flex w-full max-w-6 flex-col-reverse gap-0.5 transition group-hover:opacity-80 group-focus-visible:opacity-80" style="height: {{ $totals[$i] / $top * 100 }}%">
+                            @foreach ($series as $index => $item)
+                                @if ($item['values'][$i] > 0)
+                                    <div class="{{ $tones[$item['tone']] }} {{ $index === $topSeries ? 'rounded-t' : '' }}" style="flex: {{ $item['values'][$i] }} 1 0"></div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                     {{-- Chú thích bám theo khung biểu đồ, nằm phía đối diện cột đang xem để không che và không tràn ra ngoài. --}}
                     <div class="pointer-events-none absolute top-0 z-10 hidden min-w-40 rounded-lg border border-slate-200 bg-white p-2 text-xs shadow-lg group-hover:block group-focus-visible:block {{ $i < $count / 2 ? 'right-0' : 'left-0' }}" aria-hidden="true">
                         <p class="font-medium text-slate-500">{{ $labelPrefix }}{{ $label }}</p>
-                        @foreach (array_reverse($series) as $item)
+                        @foreach ($grouped ? $series : array_reverse($series) as $item)
                             <p class="mt-1 flex items-center gap-2 whitespace-nowrap">
                                 <span class="h-0.5 w-3 shrink-0 rounded {{ $tones[$item['tone']] }}"></span>
                                 <span class="num font-semibold text-navy-900">{{ Format::money($item['values'][$i]) }}</span>
