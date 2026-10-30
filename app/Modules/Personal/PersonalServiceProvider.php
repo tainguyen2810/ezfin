@@ -6,6 +6,7 @@ use App\Modules\Personal\Models\Budget;
 use App\Modules\Personal\Models\Category;
 use App\Modules\Personal\Models\Goal;
 use App\Modules\Personal\Models\GoalContribution;
+use App\Modules\Personal\Models\NetWorthItem;
 use App\Modules\Personal\Models\Transaction;
 use App\Modules\Personal\Models\Wallet;
 use App\Modules\Personal\Policies\OwnedRecordPolicy;
@@ -24,7 +25,7 @@ class PersonalServiceProvider extends ModuleServiceProvider
     {
         parent::boot();
 
-        foreach ([Wallet::class, Category::class, Transaction::class, Budget::class, Goal::class, GoalContribution::class] as $model) {
+        foreach ([Wallet::class, Category::class, Transaction::class, Budget::class, Goal::class, GoalContribution::class, NetWorthItem::class] as $model) {
             Gate::policy($model, OwnedRecordPolicy::class);
         }
 

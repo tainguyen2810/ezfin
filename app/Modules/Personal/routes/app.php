@@ -7,6 +7,7 @@ use App\Modules\Personal\Http\Controllers\BudgetController;
 use App\Modules\Personal\Http\Controllers\CategoryController;
 use App\Modules\Personal\Http\Controllers\DashboardController;
 use App\Modules\Personal\Http\Controllers\GoalController;
+use App\Modules\Personal\Http\Controllers\NetWorthController;
 use App\Modules\Personal\Http\Controllers\TransactionController;
 use App\Modules\Personal\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -45,4 +46,7 @@ Route::middleware('auth')->group(function () {
         ->parameters(['muc-tieu' => 'goal'])->names('personal.goals');
     Route::post('/muc-tieu/{goal}/gop', [GoalController::class, 'contribute'])->name('personal.goals.contribute');
     Route::delete('/muc-tieu/{goal}/gop/{contribution}', [GoalController::class, 'destroyContribution'])->name('personal.goals.contributions.destroy');
+
+    Route::resource('tai-san-no', NetWorthController::class)->except('show')
+        ->parameters(['tai-san-no' => 'item'])->names('personal.net-worth');
 });

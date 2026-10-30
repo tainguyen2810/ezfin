@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — A5: Tài sản và nợ
+
+- Tài sản ròng tính từ số dư ví, tài sản nhập tay (nhà, xe, vàng, chứng khoán...) và các khoản nợ.
+- Khoản nợ có lãi suất, số trả mỗi tháng; hiện tỷ lệ nợ trên tài sản.
+
 ### Phase 3 — A4: Mục tiêu tài chính
 
 - Đặt mục tiêu (mua nhà, du lịch, quỹ dự phòng...) với số tiền cần, hạn, biểu tượng, màu.
