@@ -27,6 +27,13 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 
 ## Nhật ký phiên
 
+### 30/10/2026 — Làm giao diện web sát ảnh mẫu
+
+- Chủ dự án thấy giao diện chưa giống ảnh mẫu và còn thiếu chức năng. Đã chọn: làm đẹp web công khai trước, sau đó làm ngay ứng dụng quản lý tiền (dashboard, giao dịch, ngân sách, mục tiêu, tài sản & nợ, báo cáo) theo ảnh mẫu.
+- Đã xong: trang chủ (hero, danh mục màu, khối quảng bá có minh họa), ảnh mặt thẻ trong danh sách thẻ, `x-ui.illustration` (có ở `/_ui`).
+- Test: `vendor/bin/pest` toàn bộ xanh.
+- Bước tiếp theo: lên kế hoạch và làm ứng dụng quản lý tiền trên app.ezfin.vn.
+
 ### 30/10/2026 — Trang cài đặt `/cai-dat`, 2FA tùy chọn khi local
 
 - Đã xong: trang cài đặt kiểu WordPress (`InstallController`, `Core\Support\Installer`, `EnvFile`), chạy không cần session; form dùng mã cài đặt trong `storage/app/ezfin-install.token`, khóa bằng `storage/app/ezfin-installed` hoặc khi đã có super-admin. 2FA theo `config('ezfin.admin_2fa')`.

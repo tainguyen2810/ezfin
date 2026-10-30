@@ -124,3 +124,15 @@ it('adds the home and legal pages to the sitemap', function () {
     expect($locs)->toContain(route('home'))
         ->and($locs)->toContain(...collect(CoreServiceProvider::LEGAL_PAGES)->keys()->map(fn ($route) => route($route))->all());
 });
+
+it('promotes only features that are switched on', function () {
+    $this->get(HOME)->assertOk()
+        ->assertSee('Vay mua nhà')
+        ->assertSee(route('planner.tools.show', 'khoan-vay'), false);
+
+    Feature::deactivate('planner');
+
+    $this->get(HOME)->assertOk()
+        ->assertDontSee('Vay mua nhà')
+        ->assertSee('So sánh thẻ tín dụng');
+});

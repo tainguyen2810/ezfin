@@ -37,7 +37,7 @@
                             ->all();
                     @endphp
                     <x-ui.product-card :id="$card->slug" :name="$card->name" :institution="$card->institution->short_name"
-                        :logo="$card->institution->logoUrl()" :highlights="$highlights"
+                        :logo="$card->institution->logoUrl()" :image="$card->imageUrl()" :highlights="$highlights"
                         :detail-url="route('compare.credit-cards.show', $card->slug)" :partner-url="$partnerLinks->get($card->id)?->url()" :partner-label="$partnerLinks->get($card->id)?->cta_label ?? ''"
                         :facts="[
                             'Phí thường niên' => $fee,

@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Giao diện sát ảnh mẫu (web công khai)
+
+- Trang chủ: hero nền chuyển màu, các điểm cam kết, minh họa điện thoại; danh mục có màu riêng (mobile cuộn ngang); 4 khối quảng bá có hình minh họa (thẻ tín dụng, lãi suất tiết kiệm, vay mua nhà, trả góp), chỉ hiện khi tính năng đang bật.
+- Danh sách thẻ tín dụng hiện ảnh mặt thẻ (nếu đã tải lên) thay cho logo ngân hàng.
+- Component mới `x-ui.illustration`.
+
 ### Trang cài đặt `/cai-dat` và 2FA khi chạy local
 
 - Trang cài đặt từng bước như WordPress: kiểm tra môi trường, nhập MySQL (tự tạo database, ghi `.env`), tạo bảng, tạo tài khoản quản trị. Tự khóa khi đã có tài khoản quản trị cao nhất.
