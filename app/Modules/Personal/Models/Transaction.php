@@ -2,6 +2,7 @@
 
 namespace App\Modules\Personal\Models;
 
+use App\Modules\Personal\Casts\DateOnly;
 use App\Modules\Personal\Concerns\BelongsToUser;
 use App\Modules\Personal\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,7 +31,7 @@ class Transaction extends Model
 
     protected function casts(): array
     {
-        return ['type' => TransactionType::class, 'amount' => 'decimal:2', 'occurred_on' => 'date'];
+        return ['type' => TransactionType::class, 'amount' => 'decimal:2', 'occurred_on' => DateOnly::class];
     }
 
     public function wallet(): BelongsTo

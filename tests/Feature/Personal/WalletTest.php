@@ -3,7 +3,9 @@
 use App\Models\User;
 use App\Modules\Personal\Enums\WalletType;
 use App\Modules\Personal\Models\Wallet;
+use App\Modules\Personal\Support\AppMenu;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
 use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
@@ -60,6 +62,10 @@ it('archives a wallet instead of deleting it', function () {
 
 it('keeps the app menu to screens that exist', function () {
     $this->actingAs($this->user)->get(WALLETS)->assertOk()
-        ->assertSee('Tổng quan')->assertSee('Ví &amp; tài khoản', false)
-        ->assertDontSee('Ngân sách');
+        ->assertSee('Tổng quan')->assertSee('Ví &amp; tài khoản', false);
+
+    $routes = collect(AppMenu::items())->pluck('route');
+    expect($routes)->not->toBeEmpty()
+        ->and($routes->every(fn ($route) => Route::has($route)))->toBeTrue()
+        ->and(count(AppMenu::bottom()))->toBeLessThanOrEqual(4);
 });

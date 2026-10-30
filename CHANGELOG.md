@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — A3: Ngân sách tháng
+
+- Đặt hạn mức chi theo danh mục cho từng tháng, dùng lại ngân sách tháng trước.
+- Theo dõi đã chi, còn lại, tỷ lệ; cảnh báo khi dùng từ 80% và khi vượt ngân sách.
+
 ### Phase 3 — A2: Giao dịch và danh mục
 
 - Ghi thu, chi, chuyển tiền giữa các ví (chuyển tiền không tính vào thu chi); số dư ví tự tính.
