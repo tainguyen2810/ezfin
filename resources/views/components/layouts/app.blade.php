@@ -1,6 +1,6 @@
 {{-- Khung ứng dụng khách hàng (app.ezfin.vn): sidebar trên desktop, thanh điều hướng dưới + nút thêm trên mobile.
-     $menu: [['label', 'icon', 'href', 'active']]; $bottom: 4 mục cho thanh dưới; $addUrl: nút + ở giữa. --}}
-@props(['title', 'menu' => [], 'bottom' => [], 'addUrl' => null, 'user' => null])
+     $menu: [['label', 'icon', 'href', 'active']]; $bottom: tối đa 4 mục cho thanh dưới; $addUrl: nút + ở giữa. --}}
+@props(['title', 'menu' => [], 'bottom' => [], 'addUrl' => null, 'addLabel' => 'Thêm giao dịch', 'user' => null])
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -47,12 +47,13 @@
 
     @if ($bottom)
         <nav class="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] lg:hidden" aria-label="Điều hướng nhanh">
-            <div class="grid grid-cols-5 items-end">
+            @php($plusAt = intdiv(count($bottom), 2))
+            <div class="grid items-end" style="grid-template-columns: repeat({{ count($bottom) + ($addUrl ? 1 : 0) }}, minmax(0, 1fr))">
                 @foreach ($bottom as $index => $item)
-                    @if ($index === 2 && $addUrl)
+                    @if ($index === $plusAt && $addUrl)
                         <a href="{{ $addUrl }}" class="-mt-5 flex flex-col items-center">
                             <span class="flex size-14 items-center justify-center rounded-full bg-primary-600 text-white shadow-lg ring-4 ring-white"><x-ui.icon name="plus" class="size-7" /></span>
-                            <span class="sr-only">Thêm giao dịch</span>
+                            <span class="sr-only">{{ $addLabel }}</span>
                         </a>
                     @endif
                     <a href="{{ $item['href'] }}" @class([

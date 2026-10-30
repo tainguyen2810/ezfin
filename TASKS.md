@@ -1,4 +1,6 @@
-# TASKS — Phase 1: Public Website & Compare
+# TASKS
+
+## Phase 1: Public Website & Compare
 
 Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xong` (đã merge, đạt tiêu chí).
 
@@ -25,7 +27,29 @@ Trạng thái: `Chưa làm` · `Đang làm` · `Chờ duyệt` (PR mở) · `Xon
 | 19 | Deploy staging trên aaPanel | HTTPS, cron, queue worker, backup hằng ngày; đã khôi phục thử thành công | Đang làm |
 | 20 | Nghiệm thu Phase 1 | Toàn bộ test xanh; Lighthouse mobile ≥ 90 (trang chủ, so sánh lãi suất, lãi kép); chủ dự án duyệt trên staging | Đang làm |
 
+## Phase 3: Ứng dụng quản lý tiền (app.ezfin.vn)
+
+Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. Bật/tắt bằng flag `personal`. Mọi dữ liệu cá nhân có `user_id`, lọc bằng trait `BelongsToUser` + Policy, có test người A không xem/sửa được dữ liệu người B.
+
+| # | Việc | Tiêu chí nghiệm thu | Trạng thái |
+| --- | --- | --- | --- |
+| A1 | Đăng ký, đăng nhập, quên mật khẩu, khung app (sidebar, thanh dưới có nút +), ví & tài khoản | Đồng ý điều khoản bắt buộc, email giới thiệu tách riêng; khóa sau 5 lần sai; không lộ email đã đăng ký; ví của người khác trả 404 | Chờ duyệt |
+| A2 | Danh mục thu/chi, giao dịch, chuyển tiền giữa ví | Số dư ví = số dư đầu + thu − chi ± chuyển; chuyển tiền là 2 dòng chung `transfer_group_id`, tạo trong 1 transaction, không tính vào thu/chi; lọc theo tháng, ví, danh mục | Chưa làm |
+| A3 | Ngân sách tháng theo danh mục | Tiến độ xanh/cam/đỏ theo ngưỡng; cảnh báo vượt ngân sách; xem theo tháng | Chưa làm |
+| A4 | Mục tiêu tài chính | Số tiền mục tiêu, hạn, đã góp; % và số tháng còn lại; đang thực hiện / hoàn thành | Chưa làm |
+| A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Chưa làm |
+| A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Chưa làm |
+| A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Chưa làm |
+| A8 | Cài đặt tài khoản, xuất dữ liệu, xóa tài khoản; rà soát mobile | Đổi tên/email/mật khẩu; xuất CSV; xóa tài khoản xóa hết dữ liệu cá nhân; ảnh 390/1280px không tràn | Chưa làm |
+
 ## Nhật ký phiên
+
+### 30/10/2026 — Phase 3 task A1: tài khoản khách hàng và ví
+
+- Đã xong: module `Personal` (flag `personal`), đăng ký/đăng nhập/quên mật khẩu trên app.ezfin.vn, khung app dùng `x-personal::shell` + `Personal\Support\AppMenu` (mục chưa có route tự ẩn), ví & tài khoản (`/vi`), trang tổng quan ban đầu (`/tong-quan`), nút Đăng nhập/Bắt đầu miễn phí trên website khi bật flag, cập nhật trang Quyền riêng tư.
+- Cài đặt tài khoản của app sẽ ở `/tai-khoan` (không dùng `/cai-dat` vì trùng trang cài đặt hệ thống).
+- Test: `tests/Feature/Personal`, `vendor/bin/pest` toàn bộ xanh.
+- Bước tiếp theo: A2 giao dịch.
 
 ### 30/10/2026 — Làm giao diện web sát ảnh mẫu
 

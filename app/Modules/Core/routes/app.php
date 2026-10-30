@@ -2,8 +2,11 @@
 
 use App\Modules\Core\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Pennant\Feature;
 
-// Ứng dụng khách hàng mở ở Phase 3; tới lúc đó đưa người dùng về website.
-Route::get('/', fn () => redirect()->route('home'))->name('app.home');
+// Trang đầu của app: vào ứng dụng quản lý tiền khi đang bật, nếu không thì về website.
+Route::get('/', fn () => Feature::active('personal') && Route::has('personal.dashboard')
+    ? redirect()->route('personal.dashboard')
+    : redirect()->route('home'))->name('app.home');
 
 Route::get('/robots.txt', [SeoController::class, 'appRobots'])->name('app.robots');
