@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Personal\Http\Controllers\AccountController;
 use App\Modules\Personal\Http\Controllers\Auth\LoginController;
 use App\Modules\Personal\Http\Controllers\Auth\PasswordResetController;
 use App\Modules\Personal\Http\Controllers\Auth\RegisterController;
@@ -52,4 +53,11 @@ Route::middleware('auth')->group(function () {
         ->parameters(['tai-san-no' => 'item'])->names('personal.net-worth');
 
     Route::get('/bao-cao', [ReportController::class, 'index'])->name('personal.reports.index');
+
+    // /tai-khoan (không dùng /cai-dat: đường dẫn đó là trang cài đặt hệ thống).
+    Route::get('/tai-khoan', [AccountController::class, 'edit'])->name('personal.settings.edit');
+    Route::put('/tai-khoan', [AccountController::class, 'update'])->name('personal.settings.update');
+    Route::put('/tai-khoan/mat-khau', [AccountController::class, 'password'])->middleware('throttle:personal-auth')->name('personal.settings.password');
+    Route::get('/tai-khoan/xuat-giao-dich.csv', [AccountController::class, 'export'])->name('personal.settings.export');
+    Route::delete('/tai-khoan', [AccountController::class, 'destroy'])->middleware('throttle:personal-auth')->name('personal.settings.destroy');
 });

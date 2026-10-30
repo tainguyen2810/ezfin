@@ -51,6 +51,17 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
         return 'Người dùng';
     }
 
+    /**
+     * Nhật ký quản trị chỉ ghi tài khoản nội bộ, hoặc thay đổi do người quản trị thực hiện.
+     * Khách hàng tự đăng ký, sửa, xóa tài khoản của mình thì không ghi (dữ liệu cá nhân).
+     */
+    public function shouldAudit(): bool
+    {
+        $actor = auth()->user();
+
+        return $this->hasAnyRole(Role::values()) || ($actor instanceof self && $actor->hasAnyRole(Role::values()));
+    }
+
     public function isSuperAdmin(): bool
     {
         return $this->hasRole(Role::SuperAdmin->value);

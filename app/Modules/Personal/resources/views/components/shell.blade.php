@@ -4,7 +4,8 @@
     $menu = \App\Modules\Personal\Support\AppMenu::class;
     [$addUrl, $addLabel] = $menu::add();
 @endphp
-<x-layouts.app :title="$title" :menu="$menu::items()" :bottom="$menu::bottom()" :add-url="$addUrl" :add-label="$addLabel" :user="auth()->user()->name">
+<x-layouts.app :title="$title" :menu="$menu::items()" :bottom="$menu::bottom()" :add-url="$addUrl" :add-label="$addLabel" :user="auth()->user()->name"
+    :user-url="Route::has('personal.settings.edit') ? route('personal.settings.edit') : null">
     <x-slot:toolbar>
         @isset($actions){{ $actions }}@endisset
         <form method="POST" action="{{ route('personal.logout') }}" class="lg:hidden">

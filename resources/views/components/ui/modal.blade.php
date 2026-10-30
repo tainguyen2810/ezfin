@@ -1,6 +1,6 @@
-{{-- Mở: $dispatch('open-modal', 'ten-modal'). Đóng: Esc, bấm nền, hoặc $dispatch('close-modal'). --}}
-@props(['name', 'title', 'maxWidth' => 'max-w-md'])
-<div x-data="{ open: false }"
+{{-- Mở: $dispatch('open-modal', 'ten-modal'). Đóng: Esc, bấm nền, hoặc $dispatch('close-modal'). show: mở sẵn (ví dụ khi form trong hộp có lỗi). --}}
+@props(['name', 'title', 'maxWidth' => 'max-w-md', 'show' => false])
+<div x-data="{ open: @js((bool) $show) }"
     x-on:open-modal.window="open = ($event.detail === @js($name))"
     x-on:close-modal.window="open = false"
     x-on:keydown.escape.window="open = false"
