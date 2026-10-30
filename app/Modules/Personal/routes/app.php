@@ -3,6 +3,7 @@
 use App\Modules\Personal\Http\Controllers\Auth\LoginController;
 use App\Modules\Personal\Http\Controllers\Auth\PasswordResetController;
 use App\Modules\Personal\Http\Controllers\Auth\RegisterController;
+use App\Modules\Personal\Http\Controllers\BudgetController;
 use App\Modules\Personal\Http\Controllers\CategoryController;
 use App\Modules\Personal\Http\Controllers\DashboardController;
 use App\Modules\Personal\Http\Controllers\TransactionController;
@@ -33,4 +34,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('danh-muc', CategoryController::class)->only(['index', 'store', 'edit', 'update', 'destroy'])
         ->parameters(['danh-muc' => 'category'])->names('personal.categories');
+
+    Route::get('/ngan-sach', [BudgetController::class, 'index'])->name('personal.budgets.index');
+    Route::get('/ngan-sach/thiet-lap', [BudgetController::class, 'edit'])->name('personal.budgets.edit');
+    Route::put('/ngan-sach', [BudgetController::class, 'update'])->name('personal.budgets.update');
+    Route::post('/ngan-sach/sao-chep', [BudgetController::class, 'copy'])->name('personal.budgets.copy');
 });

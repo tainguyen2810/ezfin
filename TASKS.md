@@ -34,8 +34,8 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | # | Việc | Tiêu chí nghiệm thu | Trạng thái |
 | --- | --- | --- | --- |
 | A1 | Đăng ký, đăng nhập, quên mật khẩu, khung app (sidebar, thanh dưới có nút +), ví & tài khoản | Đồng ý điều khoản bắt buộc, email giới thiệu tách riêng; khóa sau 5 lần sai; không lộ email đã đăng ký; ví của người khác trả 404 | Chờ duyệt |
-| A2 | Danh mục thu/chi, giao dịch, chuyển tiền giữa ví | Số dư ví = số dư đầu + thu − chi ± chuyển; chuyển tiền là 2 dòng chung `transfer_group_id`, tạo trong 1 transaction, không tính vào thu/chi; lọc theo tháng, ví, danh mục | Chờ duyệt |
-| A3 | Ngân sách tháng theo danh mục | Tiến độ xanh/cam/đỏ theo ngưỡng; cảnh báo vượt ngân sách; xem theo tháng | Chưa làm |
+| A2 | Danh mục thu/chi, giao dịch, chuyển tiền giữa ví | Số dư ví = số dư đầu + thu − chi ± chuyển; chuyển tiền là 2 dòng chung `transfer_group_id`, tạo trong 1 transaction, không tính vào thu/chi; lọc theo tháng, ví, danh mục | Xong |
+| A3 | Ngân sách tháng theo danh mục | Tiến độ xanh/cam/đỏ theo ngưỡng; cảnh báo vượt ngân sách; xem theo tháng | Chờ duyệt |
 | A4 | Mục tiêu tài chính | Số tiền mục tiêu, hạn, đã góp; % và số tháng còn lại; đang thực hiện / hoàn thành | Chưa làm |
 | A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Chưa làm |
 | A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Chưa làm |
@@ -43,6 +43,12 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | A8 | Cài đặt tài khoản, xuất dữ liệu, xóa tài khoản; rà soát mobile | Đổi tên/email/mật khẩu; xuất CSV; xóa tài khoản xóa hết dữ liệu cá nhân; ảnh 390/1280px không tràn | Chưa làm |
 
 ## Nhật ký phiên
+
+### 30/10/2026 — Phase 3 task A3: ngân sách tháng
+
+- Đã xong: `/ngan-sach` (tổng ngân sách, đã chi, còn lại; theo danh mục với thanh tiến độ xanh/cam/đỏ; cảnh báo sắp hết từ 80% và vượt ngân sách), thiết lập hạn mức cả tháng, dùng lại ngân sách tháng trước. `Actions\BudgetOverview` dùng lại cho trang Tổng quan. Cast `DateOnly` để cột ngày lưu Y-m-d trên mọi database.
+- Test: `tests/Feature/Personal/BudgetTest.php`, toàn bộ `vendor/bin/pest` xanh.
+- Bước tiếp theo: A4 mục tiêu.
 
 ### 30/10/2026 — Phase 3 task A2: giao dịch và danh mục
 

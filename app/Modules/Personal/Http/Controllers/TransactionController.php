@@ -12,6 +12,7 @@ use App\Modules\Personal\Http\Requests\TransactionRequest;
 use App\Modules\Personal\Models\Category;
 use App\Modules\Personal\Models\Transaction;
 use App\Modules\Personal\Models\Wallet;
+use App\Modules\Personal\Support\Month;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -26,7 +27,7 @@ class TransactionController
 
     public function index(Request $request): View
     {
-        $month = $this->month($request->query('thang'));
+        $month = Month::fromQuery($request->query('thang'));
         $walletId = $request->integer('vi') ?: null;
         $categoryId = $request->integer('danh_muc') ?: null;
         $kind = self::FORM_TYPES[$request->query('loai')] ?? null;
@@ -146,12 +147,5 @@ class TransactionController
             'fromWalletId' => $from?->wallet_id,
             'toWalletId' => $to?->wallet_id,
         ]);
-    }
-
-    private function month(?string $value): Carbon
-    {
-        return is_string($value) && preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $value)
-            ? Carbon::createFromFormat('Y-m-d', $value.'-01')->startOfDay()
-            : today()->startOfMonth();
     }
 }
