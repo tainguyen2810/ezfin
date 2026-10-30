@@ -37,12 +37,19 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | A2 | Danh mục thu/chi, giao dịch, chuyển tiền giữa ví | Số dư ví = số dư đầu + thu − chi ± chuyển; chuyển tiền là 2 dòng chung `transfer_group_id`, tạo trong 1 transaction, không tính vào thu/chi; lọc theo tháng, ví, danh mục | Xong |
 | A3 | Ngân sách tháng theo danh mục | Tiến độ xanh/cam/đỏ theo ngưỡng; cảnh báo vượt ngân sách; xem theo tháng | Xong |
 | A4 | Mục tiêu tài chính | Số tiền mục tiêu, hạn, đã góp; % và số tháng còn lại; đang thực hiện / hoàn thành | Chưa làm |
-| A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Chờ duyệt |
-| A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Chưa làm |
+| A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Xong |
+| A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Chờ duyệt |
 | A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Chưa làm |
 | A8 | Cài đặt tài khoản, xuất dữ liệu, xóa tài khoản; rà soát mobile | Đổi tên/email/mật khẩu; xuất CSV; xóa tài khoản xóa hết dữ liệu cá nhân; ảnh 390/1280px không tràn | Chưa làm |
 
 ## Nhật ký phiên
+
+### 30/10/2026 — Phase 3 task A6: trang Tổng quan
+
+- Đã xong: `/tong-quan` theo ảnh mẫu: thẻ Tổng tài sản, Tổng nợ (kèm tài sản ròng), Thu nhập và Chi tiêu tháng (so với tháng trước, chỉ khi tháng trước có số liệu); lối tắt trên mobile; dòng tiền 6 tháng (cột thu/chi cạnh nhau, kèm bảng số liệu); phân bổ chi tiêu tháng (biểu đồ tròn + bảng tỷ lệ, tối đa 6 danh mục + "Danh mục khác"); mục tiêu, giao dịch gần đây, ngân sách. Chưa có ví thì hướng dẫn thêm ví.
+- Thêm `Actions\CashFlow` (tổng thu chi, theo tháng, chi theo danh mục) dùng lại cho Báo cáo; component `x-ui.donut-chart`, `x-ui.bar-chart` có `grouped` và `framed`, `x-ui.stat-card` có `positive`; đã thêm vào `/_ui`.
+- Test: `tests/Feature/Personal/DashboardTest.php`, toàn bộ `vendor/bin/pest` xanh.
+- Bước tiếp theo: A7 báo cáo.
 
 ### 30/10/2026 — Phase 3 task A5: tài sản và nợ
 

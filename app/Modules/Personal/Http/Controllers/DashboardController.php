@@ -2,18 +2,32 @@
 
 namespace App\Modules\Personal\Http\Controllers;
 
+use App\Modules\Personal\Actions\BudgetOverview;
+use App\Modules\Personal\Actions\CashFlow;
+use App\Modules\Personal\Actions\NetWorth;
+use App\Modules\Personal\Models\Goal;
+use App\Modules\Personal\Models\Transaction;
 use App\Modules\Personal\Models\Wallet;
 use Illuminate\View\View;
 
 class DashboardController
 {
-    public function __invoke(): View
+    public function __invoke(NetWorth $netWorth, CashFlow $cashFlow, BudgetOverview $budgets): View
     {
-        $wallets = Wallet::active()->withBalance()->orderBy('name')->get();
+        $month = today()->startOfMonth();
+        $previous = $month->copy()->subMonth();
 
         return view('personal::dashboard', [
-            'wallets' => $wallets,
-            'total' => $wallets->where('include_in_total', true)->sum(fn (Wallet $wallet) => $wallet->balance()),
+            'hasWallets' => Wallet::active()->exists(),
+            'month' => $month,
+            'netWorth' => $netWorth->handle(),
+            'current' => $cashFlow->totals($month, $month->copy()->endOfMonth()),
+            'previous' => $cashFlow->totals($previous, $previous->copy()->endOfMonth()),
+            'monthly' => $cashFlow->monthly($month, 6),
+            'spending' => $cashFlow->expenseByCategory($month, $month->copy()->endOfMonth()),
+            'recent' => Transaction::with(['category', 'wallet'])->orderByDesc('occurred_on')->orderByDesc('id')->limit(5)->get(),
+            'budgets' => $budgets->handle($month)->sortByDesc('percent')->take(3),
+            'goals' => Goal::withSaved()->get()->reject->isCompleted()->sortBy(fn (Goal $goal) => $goal->deadline?->timestamp ?? PHP_INT_MAX)->take(2),
         ]);
     }
 }
