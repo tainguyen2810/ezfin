@@ -55,18 +55,24 @@ class CashFlow
     }
 
     /**
-     * Chi tiêu theo danh mục, lớn nhất trước; quá $limit danh mục thì gộp phần còn lại thành "Khác".
+     * Chi tiêu theo danh mục, lớn nhất trước; quá $limit danh mục thì gộp phần còn lại thành "Danh mục khác".
      *
      * @return Collection<int, array{category: ?Category, label: string, amount: int, percent: int, color: string}>
      */
     public function expenseByCategory(Carbon $from, Carbon $to, int $limit = 6): Collection
     {
-        $sums = Transaction::where('type', TransactionType::Expense)
+        return $this->byCategory(CategoryType::Expense, $from, $to, $limit);
+    }
+
+    /** @return Collection<int, array{category: ?Category, label: string, amount: int, percent: int, color: string}> */
+    public function byCategory(CategoryType $type, Carbon $from, Carbon $to, int $limit = 6): Collection
+    {
+        $sums = Transaction::where('type', $type === CategoryType::Expense ? TransactionType::Expense : TransactionType::Income)
             ->whereBetween('occurred_on', [$from->toDateString(), $to->toDateString()])
             ->selectRaw('category_id, sum(amount) as total')->groupBy('category_id')->pluck('total', 'category_id')
             ->map(fn ($total) => (int) round((float) $total))->filter()->sortDesc();
 
-        $categories = Category::ofType(CategoryType::Expense)->orderBy('sort')->orderBy('id')->get()->values();
+        $categories = Category::ofType($type)->orderBy('sort')->orderBy('id')->get()->values();
         $total = max(1, $sums->sum());
         // Màu theo vị trí danh mục; nếu trùng màu với phần đã vẽ thì lấy màu kế tiếp còn trống.
         $used = [];
