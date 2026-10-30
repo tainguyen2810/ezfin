@@ -37,12 +37,18 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | A2 | Danh mục thu/chi, giao dịch, chuyển tiền giữa ví | Số dư ví = số dư đầu + thu − chi ± chuyển; chuyển tiền là 2 dòng chung `transfer_group_id`, tạo trong 1 transaction, không tính vào thu/chi; lọc theo tháng, ví, danh mục | Xong |
 | A3 | Ngân sách tháng theo danh mục | Tiến độ xanh/cam/đỏ theo ngưỡng; cảnh báo vượt ngân sách; xem theo tháng | Xong |
 | A4 | Mục tiêu tài chính | Số tiền mục tiêu, hạn, đã góp; % và số tháng còn lại; đang thực hiện / hoàn thành | Chưa làm |
-| A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Chưa làm |
+| A5 | Tài sản & nợ | Ví lấy tự động, chỉ đọc (không cộng trùng); tài sản khác và khoản nợ nhập tay; giá trị ròng | Chờ duyệt |
 | A6 | Tổng quan theo ảnh mẫu | Thẻ số liệu, dòng tiền 6 tháng, phân bổ chi tiêu, giao dịch gần đây, ngân sách, mục tiêu; mục chưa có dữ liệu thì ẩn hoặc hướng dẫn | Chưa làm |
 | A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Chưa làm |
 | A8 | Cài đặt tài khoản, xuất dữ liệu, xóa tài khoản; rà soát mobile | Đổi tên/email/mật khẩu; xuất CSV; xóa tài khoản xóa hết dữ liệu cá nhân; ảnh 390/1280px không tràn | Chưa làm |
 
 ## Nhật ký phiên
+
+### 30/10/2026 — Phase 3 task A5: tài sản và nợ
+
+- Đã xong: `/tai-san-no` hiện tài sản ròng = tiền trong ví (chỉ ví tính vào tổng, tự lấy từ màn hình Ví) + tài sản nhập tay − nợ; tổng tài sản, tổng nợ, trả nợ mỗi tháng, tỷ lệ nợ trên tài sản. Thêm/sửa/xóa tài sản (bất động sản, xe, chứng khoán/quỹ, vàng, cho vay, khác) và khoản nợ (vay mua nhà, mua xe, thẻ tín dụng, tiêu dùng, vay người thân, khác) với lãi suất và số trả mỗi tháng. `Actions\NetWorth` dùng lại cho trang Tổng quan.
+- Test: `tests/Feature/Personal/NetWorthTest.php`, toàn bộ `vendor/bin/pest` xanh.
+- Bước tiếp theo: A6 trang Tổng quan theo ảnh mẫu.
 
 ### 30/10/2026 — Phase 3 task A4: mục tiêu tài chính
 
