@@ -2,6 +2,7 @@
 
 namespace App\Modules\Personal;
 
+use App\Modules\Personal\Console\DemoDataCommand;
 use App\Modules\Personal\Models\Budget;
 use App\Modules\Personal\Models\Category;
 use App\Modules\Personal\Models\Goal;
@@ -30,5 +31,9 @@ class PersonalServiceProvider extends ModuleServiceProvider
         }
 
         RateLimiter::for('personal-auth', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([DemoDataCommand::class]);
+        }
     }
 }
