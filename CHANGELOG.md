@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — Dữ liệu mẫu cho ứng dụng quản lý tiền
+
+- Lệnh `php artisan ezfin:demo-data [email] [--fresh]` tạo 6 tháng giao dịch, 4 ví, ngân sách, mục tiêu, tài sản & nợ để xem giao diện. Không chạy trên production, không chạy cho tài khoản quản trị.
+
 ### Phase 3 — A8: Tài khoản và dữ liệu
 
 - Trang Tài khoản: sửa thông tin, đổi mật khẩu, rút lại đồng ý nhận email, tải giao dịch (CSV), xóa vĩnh viễn tài khoản.

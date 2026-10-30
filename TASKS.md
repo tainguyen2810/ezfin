@@ -44,6 +44,12 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 30/10/2026 — Dữ liệu mẫu cho app
+
+- Đã xong: lệnh `ezfin:demo-data` (Personal\Console\DemoDataCommand) tạo dữ liệu mẫu cho tài khoản có sẵn hoặc demo@ezfin.test; `--fresh` xóa và tạo lại; chặn production và tài khoản quản trị.
+- Test: `tests/Feature/Personal/DemoDataTest.php`, toàn bộ Pest xanh.
+- Bước tiếp theo: Tai xem thử app với dữ liệu mẫu và góp ý giao diện.
+
 ### 30/10/2026 — Phase 3 task A8: tài khoản, xuất dữ liệu, rà soát mobile
 
 - Đã xong: `/tai-khoan` (menu Cài đặt; avatar trên thanh trên dẫn tới đây): sửa họ tên, email, đồng ý/rút lại nhận email giới thiệu; đổi mật khẩu (cần mật khẩu cũ, đăng xuất thiết bị khác); tải giao dịch CSV (UTF-8 BOM, chặn công thức Excel); xóa vĩnh viễn tài khoản và mọi dữ liệu tài chính sau khi nhập mật khẩu (tài khoản quản trị không tự xóa được). Trên mobile trang này liệt kê đủ các màn hình vì thanh dưới chỉ có Tổng quan, Giao dịch, +, Báo cáo, Cài đặt như ảnh mẫu.
