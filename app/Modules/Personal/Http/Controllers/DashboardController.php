@@ -9,7 +9,7 @@ class DashboardController
 {
     public function __invoke(): View
     {
-        $wallets = Wallet::active()->orderBy('name')->get();
+        $wallets = Wallet::active()->withBalance()->orderBy('name')->get();
 
         return view('personal::dashboard', [
             'wallets' => $wallets,

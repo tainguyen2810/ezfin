@@ -12,7 +12,7 @@ class WalletController
 {
     public function index(): View
     {
-        $wallets = Wallet::active()->orderBy('type')->orderBy('name')->get();
+        $wallets = Wallet::active()->withBalance()->orderBy('type')->orderBy('name')->get();
 
         return view('personal::wallets.index', [
             'wallets' => $wallets,

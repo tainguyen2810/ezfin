@@ -3,12 +3,14 @@
 namespace App\Modules\Personal\Models;
 
 use App\Modules\Personal\Concerns\BelongsToUser;
+use App\Modules\Personal\Enums\TransactionType;
 use App\Modules\Personal\Enums\WalletType;
 use Database\Factories\WalletFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Ví hoặc tài khoản chứa tiền của người dùng (tiền mặt, ngân hàng, ví điện tử, sổ tiết kiệm).
@@ -38,14 +40,31 @@ class Wallet extends Model
         ];
     }
 
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public function scopeActive(Builder $query): void
     {
         $query->whereNull('archived_at');
     }
 
-    /** Số dư hiện tại (đồng). Khi có giao dịch: số dư ban đầu cộng thu, trừ chi. */
+    /** Nạp sẵn tổng tiền vào/ra để tính số dư danh sách ví bằng một truy vấn. */
+    public function scopeWithBalance(Builder $query): void
+    {
+        $query->withSum(['transactions as inflow' => fn (Builder $q) => $q->whereIn('type', TransactionType::inflows())], 'amount')
+            ->withSum(['transactions as outflow' => fn (Builder $q) => $q->whereIn('type', TransactionType::outflows())], 'amount');
+    }
+
+    /** Số dư hiện tại (đồng) = số dư ban đầu + tiền vào − tiền ra. */
     public function balance(): int
     {
-        return (int) round((float) $this->opening_balance);
+        if (! array_key_exists('inflow', $this->attributes)) {
+            $this->attributes['inflow'] = $this->transactions()->whereIn('type', TransactionType::inflows())->sum('amount');
+            $this->attributes['outflow'] = $this->transactions()->whereIn('type', TransactionType::outflows())->sum('amount');
+        }
+
+        return (int) round((float) $this->opening_balance + (float) $this->attributes['inflow'] - (float) $this->attributes['outflow']);
     }
 }
