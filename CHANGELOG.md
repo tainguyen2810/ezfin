@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — A4: Mục tiêu tài chính
+
+- Đặt mục tiêu (mua nhà, du lịch, quỹ dự phòng...) với số tiền cần, hạn, biểu tượng, màu.
+- Theo dõi đã để dành, % hoàn thành, số tháng còn lại và số cần để dành mỗi tháng; ghi góp thêm / rút bớt.
+
 ### Phase 3 — A3: Ngân sách tháng
 
 - Đặt hạn mức chi theo danh mục cho từng tháng, dùng lại ngân sách tháng trước.

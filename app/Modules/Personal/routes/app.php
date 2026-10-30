@@ -6,6 +6,7 @@ use App\Modules\Personal\Http\Controllers\Auth\RegisterController;
 use App\Modules\Personal\Http\Controllers\BudgetController;
 use App\Modules\Personal\Http\Controllers\CategoryController;
 use App\Modules\Personal\Http\Controllers\DashboardController;
+use App\Modules\Personal\Http\Controllers\GoalController;
 use App\Modules\Personal\Http\Controllers\TransactionController;
 use App\Modules\Personal\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -39,4 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/ngan-sach/thiet-lap', [BudgetController::class, 'edit'])->name('personal.budgets.edit');
     Route::put('/ngan-sach', [BudgetController::class, 'update'])->name('personal.budgets.update');
     Route::post('/ngan-sach/sao-chep', [BudgetController::class, 'copy'])->name('personal.budgets.copy');
+
+    Route::resource('muc-tieu', GoalController::class)
+        ->parameters(['muc-tieu' => 'goal'])->names('personal.goals');
+    Route::post('/muc-tieu/{goal}/gop', [GoalController::class, 'contribute'])->name('personal.goals.contribute');
+    Route::delete('/muc-tieu/{goal}/gop/{contribution}', [GoalController::class, 'destroyContribution'])->name('personal.goals.contributions.destroy');
 });
