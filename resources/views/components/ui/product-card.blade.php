@@ -1,11 +1,15 @@
 {{-- Thẻ sản phẩm trong danh sách so sánh. facts: ['Phí thường niên' => '0 đ', ...]; highlights: nhãn khách quan.
+     image: ảnh sản phẩm (vd. mặt thẻ), có thì hiện thay logo.
      detailUrl null = chưa có trang chi tiết (không hiện nút). Slot footer: nguồn, ngày xác minh. --}}
 @props([
-    'id', 'name', 'institution', 'logo' => null, 'facts' => [], 'highlights' => [],
+    'id', 'name', 'institution', 'logo' => null, 'image' => null, 'facts' => [], 'highlights' => [],
     'detailUrl' => null, 'partnerUrl' => null, 'partnerLabel' => 'Đăng ký', 'sponsored' => false, 'comparable' => true,
 ])
 <article {{ $attributes->merge(['class' => 'rounded-card border border-slate-200 bg-white p-4 shadow-card sm:p-5']) }}>
     <div class="flex gap-4">
+        @if ($image)
+            <img src="{{ $image }}" alt="{{ $name }}" width="128" height="81" class="h-[4.5rem] w-28 shrink-0 rounded-lg object-cover shadow-md sm:h-20 sm:w-32" loading="lazy">
+        @else
         <div class="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
             @if ($logo)
                 <img src="{{ $logo }}" alt="{{ $institution }}" width="64" height="40" class="max-h-10 max-w-16 object-contain" loading="lazy">
@@ -13,6 +17,7 @@
                 <span class="text-xs font-semibold text-slate-500">{{ Str::limit($institution, 10, '') }}</span>
             @endif
         </div>
+        @endif
         <div class="min-w-0 flex-1">
             <div class="flex flex-wrap items-center gap-2">
                 <h3 class="text-base font-semibold">
@@ -53,7 +58,7 @@
             </label>
         @endif
         @if ($detailUrl)
-            <x-ui.button :href="$detailUrl" variant="outline">Xem chi tiết</x-ui.button>
+            <x-ui.button :href="$detailUrl" :variant="$partnerUrl ? 'outline' : 'primary'">Xem chi tiết</x-ui.button>
         @endif
         @if ($partnerUrl)
             <x-ui.button :href="$partnerUrl" icon="arrow-top-right-on-square" rel="sponsored nofollow noopener" target="_blank">{{ $partnerLabel }}</x-ui.button>

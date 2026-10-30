@@ -207,5 +207,15 @@
                     author="Tên tác giả" :date="\Illuminate\Support\Carbon::parse('2026-10-20')" :minutes="4" />
             </div>
         </section>
+        <section class="{{ $section }}">
+            <h2 class="{{ $h2 }}">Hình minh họa</h2>
+            <p class="text-sm text-slate-500">Trang trí khối quảng bá và hero, không chứa số liệu: <code>&lt;x-ui.illustration name="card" /&gt;</code>.</p>
+            <div class="flex flex-wrap items-end gap-6">
+                @foreach (['card', 'piggy', 'house', 'bag'] as $art)
+                    <figure class="text-center text-xs text-slate-500"><x-ui.illustration :name="$art" class="w-32" /><figcaption>{{ $art }}</figcaption></figure>
+                @endforeach
+                <figure class="text-center text-xs text-slate-500"><x-ui.illustration name="phone" class="h-48" /><figcaption>phone</figcaption></figure>
+            </div>
+        </section>
     </div>
 </x-layouts.public>

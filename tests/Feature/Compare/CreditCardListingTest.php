@@ -177,3 +177,10 @@ it('hides the page and menu item when the compare module is off', function () {
 
     $this->get(LISTING_URL)->assertNotFound();
 });
+
+it('shows the card artwork instead of the bank logo when uploaded', function () {
+    publishedCard('Thẻ Có Ảnh', ['annual_fee' => 0], $this->alpha, ['image_path' => 'products/the-co-anh.png']);
+
+    $this->get(LISTING_URL)->assertOk()
+        ->assertSee('src="/storage/products/the-co-anh.png" alt="Thẻ Có Ảnh"', false);
+});
