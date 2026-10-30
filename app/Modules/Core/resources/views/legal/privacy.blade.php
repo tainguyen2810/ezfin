@@ -1,4 +1,4 @@
-<x-core::legal-page title="Quyền riêng tư" updated="29/10/2026"
+<x-core::legal-page title="Quyền riêng tư" updated="30/10/2026"
     description="EzFin thu thập dữ liệu gì, dùng để làm gì và quyền của bạn theo Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân.">
     <p>EzFin tôn trọng quyền riêng tư của bạn và xử lý dữ liệu cá nhân theo Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân. Trang này mô tả đúng những gì website đang thu thập ở thời điểm cập nhật. Khi bổ sung tính năng mới (ví dụ tài khoản người dùng hay công cụ đo lường truy cập), chúng tôi cập nhật trang này trước khi triển khai.</p>
 
@@ -9,9 +9,12 @@
         <li><strong>Danh sách so sánh:</strong> sản phẩm bạn chọn để so sánh được lưu trong bộ nhớ phiên của trình duyệt (sessionStorage), không gửi về máy chủ và tự xóa khi đóng tab.</li>
         <li><strong>Số liệu bạn nhập vào công cụ tính và bộ lọc:</strong> nằm trên địa chỉ trang (URL) để bạn chia sẻ được kết quả. EzFin không lưu riêng các số liệu này ngoài nhật ký máy chủ.</li>
         <li><strong>Lượt bấm sang đối tác:</strong> khi bạn bấm nút đến ngân hàng hoặc đối tác (đường dẫn bắt đầu bằng <code>/di/</code>), EzFin ghi thời điểm, liên kết được bấm, trang EzFin bạn đang xem, loại trình duyệt và một mã băm một chiều của địa chỉ IP (không lưu IP gốc). Mỗi lượt bấm có một mã ngẫu nhiên được gửi kèm sang đối tác để đối soát hoa hồng; mã này không chứa thông tin cá nhân. Dữ liệu dùng để thống kê, chống gian lận và đối soát, tự xóa sau {{ \App\Modules\Partner\Models\OutboundClick::RETENTION_MONTHS }} tháng.</li>
+        @if (\Laravel\Pennant\Feature::active('personal'))
+            <li><strong>Tài khoản ứng dụng quản lý tiền (app.ezfin.vn), nếu bạn đăng ký:</strong> họ tên, email, mật khẩu (chỉ lưu dạng băm), thời điểm bạn đồng ý điều khoản và (nếu chọn) đồng ý nhận email giới thiệu, cùng dữ liệu tài chính bạn tự nhập như ví, số dư. Dữ liệu này chỉ dùng để hiển thị cho chính bạn, không chia sẻ hay bán cho ngân hàng, đối tác hoặc bên quảng cáo, và không ghi vào nhật ký quản trị.</li>
+        @endif
         <li><strong>Thông tin bạn chủ động gửi:</strong> khi bạn liên hệ qua email, chúng tôi lưu nội dung thư để trả lời.</li>
     </ul>
-    <p>Hiện EzFin <strong>chưa</strong> dùng công cụ phân tích truy cập hay cookie quảng cáo của bên thứ ba, và chưa có tài khoản cho người dùng.</p>
+    <p>Hiện EzFin <strong>chưa</strong> dùng công cụ phân tích truy cập hay cookie quảng cáo của bên thứ ba.</p>
 
     <h2>2. Mục đích sử dụng</h2>
     <p>Vận hành và bảo vệ website, sửa lỗi, trả lời liên hệ và tuân thủ yêu cầu của cơ quan nhà nước có thẩm quyền. EzFin không bán dữ liệu cá nhân.</p>

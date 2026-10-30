@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Phase 3 — A1: Tài khoản khách hàng và ví
+
+- Ứng dụng quản lý tiền trên app.ezfin.vn (flag `personal`): đăng ký (đồng ý điều khoản bắt buộc, nhận email giới thiệu tùy chọn), đăng nhập (khóa 15 phút sau 5 lần sai), quên/đặt lại mật khẩu qua email.
+- Khung ứng dụng: sidebar trên desktop, thanh điều hướng dưới có nút + trên mobile.
+- Ví & tài khoản: tiền mặt, ngân hàng, ví điện tử, sổ tiết kiệm; số dư ban đầu; ẩn ví thay vì xóa. Dữ liệu chỉ chủ tài khoản xem được.
+- Website hiện nút Đăng nhập / Bắt đầu miễn phí khi bật ứng dụng.
+
 ### Giao diện sát ảnh mẫu (web công khai)
 
 - Trang chủ: hero nền chuyển màu, các điểm cam kết, minh họa điện thoại; danh mục có màu riêng (mobile cuộn ngang); 4 khối quảng bá có hình minh họa (thẻ tín dụng, lãi suất tiết kiệm, vay mua nhà, trả góp), chỉ hiện khi tính năng đang bật.

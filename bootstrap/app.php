@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(PublicRedirects::class);
 
+        // Ứng dụng khách hàng (module Personal); trang quản trị Filament có trang đăng nhập riêng.
+        $middleware->redirectGuestsTo(fn () => route('personal.login'));
+        $middleware->redirectUsersTo(fn () => route('personal.dashboard'));
+
         $middleware->alias([
             'noindex' => NoIndex::class,
         ]);

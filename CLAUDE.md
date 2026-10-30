@@ -27,6 +27,7 @@ Tiến độ và tiêu chí nghiệm thu: `TASKS.md`. Thay đổi quan trọng: 
 - Link đối tác: không bao giờ in URL đối tác trực tiếp; dùng `Partner\Actions\PartnerLinks` (trả rỗng khi tắt flag `partner`) lấy `$link->url()` (`/di/{mã}`), nút mang `rel="sponsored nofollow noopener"` và trang phải có `<x-ui.disclosure />`.
 - Trang chủ (`Core\Http\Controllers\HomeController`) ghép dữ liệu từ module qua Action công khai, kiểm tra feature flag, ẩn mục chưa có dữ liệu. Trang pháp lý dùng `<x-core::legal-page>`, danh sách ở `CoreServiceProvider::LEGAL_PAGES` (footer, sitemap). Đổi cách xếp hạng thì sửa luôn trang Phương pháp đánh giá.
 - File tải lên: ổ `public`, URL tương đối `/storage/...` (chạy được trên cả hai tên miền); cần URL tuyệt đối thì bọc `url()`. Không nhận SVG do người dùng tải lên.
+- Ứng dụng quản lý tiền (module Personal, flag `personal`, app.ezfin.vn): model dữ liệu cá nhân dùng trait `Personal\Concerns\BelongsToUser` (tự lọc theo người đăng nhập, tự gán `user_id`) + Policy kiểm tra `isOwnedBy`; mỗi màn hình có test người A không xem/sửa được dữ liệu người B. Không dùng `Auditable` cho dữ liệu cá nhân. Màn hình dùng `<x-personal::shell title="...">`; thêm mục menu ở `Personal\Support\AppMenu`.
 - Chỉ tạo schema cho phase hiện tại. Tiền `DECIMAL(18,2)`, lãi suất `DECIMAL(7,4)`; không dùng float cho tiền.
 
 ## Giao diện

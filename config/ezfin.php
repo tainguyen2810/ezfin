@@ -4,6 +4,7 @@ use App\Modules\Compare\CompareServiceProvider;
 use App\Modules\Content\ContentServiceProvider;
 use App\Modules\Core\CoreServiceProvider;
 use App\Modules\Partner\PartnerServiceProvider;
+use App\Modules\Personal\PersonalServiceProvider;
 use App\Modules\Planner\PlannerServiceProvider;
 
 return [
@@ -52,6 +53,7 @@ return [
         PlannerServiceProvider::class,
         ContentServiceProvider::class,
         PartnerServiceProvider::class,
+        PersonalServiceProvider::class,
     ],
 
     /*

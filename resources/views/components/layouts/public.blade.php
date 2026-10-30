@@ -18,6 +18,8 @@
         ->all();
     $footerLinks = collect(\App\Modules\Core\CoreServiceProvider::LEGAL_PAGES)->filter(fn ($label, $route) => Route::has($route));
     $company = array_filter(config('ezfin.company', []), 'filled');
+    // Nút vào ứng dụng quản lý tiền (app.ezfin.vn) khi tính năng đang bật.
+    $accountLinks = Route::has('personal.login') && \Laravel\Pennant\Feature::active('personal');
 @endphp
 <!DOCTYPE html>
 <html lang="vi">
@@ -61,6 +63,12 @@
                 </button>
             @endif
             @isset($actions)<div class="hidden items-center gap-2 lg:flex">{{ $actions }}</div>@endisset
+            @if ($accountLinks)
+                <div class="hidden shrink-0 items-center gap-2 lg:flex">
+                    <x-ui.button :href="route('personal.login')" variant="outline" size="sm">Đăng nhập</x-ui.button>
+                    <x-ui.button :href="route('personal.register')" size="sm">Bắt đầu miễn phí</x-ui.button>
+                </div>
+            @endif
         </div>
         @if ($navItems)
             <nav id="menu-mobile" x-show="menu" x-cloak x-transition class="border-t border-slate-200 bg-white px-4 py-3 lg:hidden" aria-label="Menu chính">
@@ -70,6 +78,12 @@
                     </a>
                 @endforeach
                 @isset($actions)<div class="mt-3 flex flex-col gap-2 border-t border-slate-100 pt-3">{{ $actions }}</div>@endisset
+                @if ($accountLinks)
+                    <div class="mt-3 grid grid-cols-2 gap-2 border-t border-slate-100 pt-3">
+                        <x-ui.button :href="route('personal.login')" variant="outline">Đăng nhập</x-ui.button>
+                        <x-ui.button :href="route('personal.register')">Bắt đầu miễn phí</x-ui.button>
+                    </div>
+                @endif
             </nav>
         @endif
     </header>
