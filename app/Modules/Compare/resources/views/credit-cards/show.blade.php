@@ -24,7 +24,7 @@
             </div>
             <div class="min-w-0 flex-1">
                 <h1 class="text-2xl font-bold sm:text-3xl">{{ $card->name }}</h1>
-                <p class="mt-1 text-slate-600">{{ $card->institution->name }}</p>
+                <p class="mt-1 text-slate-600"><a href="{{ route('compare.institutions.show', $card->institution->slug) }}" class="underline decoration-slate-300 underline-offset-4 hover:text-navy-900">{{ $card->institution->name }}</a></p>
                 @if ($benefits->isNotEmpty())
                     <div class="mt-3 flex flex-wrap gap-1.5">
                         @foreach ($benefits as $benefit)<x-ui.badge variant="primary">{{ $benefit }}</x-ui.badge>@endforeach

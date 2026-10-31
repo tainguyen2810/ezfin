@@ -22,7 +22,7 @@
             </div>
             <div class="min-w-0 flex-1">
                 <h1 class="text-2xl font-bold sm:text-3xl">{{ $account->name }}</h1>
-                <p class="mt-1 text-slate-600">{{ $account->institution->name }}</p>
+                <p class="mt-1 text-slate-600"><a href="{{ route('compare.institutions.show', $account->institution->slug) }}" class="underline decoration-slate-300 underline-offset-4 hover:text-navy-900">{{ $account->institution->name }}</a></p>
                 @if ($features)
                     <div class="mt-3 flex flex-wrap gap-1.5">
                         @foreach ($features as $feature)<x-ui.badge variant="primary">{{ $feature }}</x-ui.badge>@endforeach

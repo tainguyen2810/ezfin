@@ -3,6 +3,7 @@
 namespace App\Modules\Compare\Http\Controllers;
 
 use App\Modules\Compare\Actions\CompareSavingsRates;
+use App\Modules\Compare\Actions\SavingsRateBoard;
 use App\Modules\Compare\Enums\InterestPayment;
 use App\Modules\Compare\Enums\SavingsChannel;
 use App\Modules\Compare\Models\SavingsRate;
@@ -32,6 +33,24 @@ class SavingsController
             'channels' => collect(SavingsChannel::cases())->mapWithKeys(fn (SavingsChannel $channel) => [$channel->slug() => $channel->getLabel()]),
             'payments' => collect(InterestPayment::cases())->mapWithKeys(fn (InterestPayment $payment) => [$payment->slug() => $payment->getLabel()])
                 ->put(SavingsFilters::ANY_PAYMENT, 'Mọi hình thức'),
+        ]);
+    }
+
+    /** Bảng tổng hợp: mỗi ngân hàng một dòng, mỗi kỳ hạn một cột; mặc định kênh online. */
+    public function table(Request $request, SavingsRateBoard $board): View
+    {
+        $channel = SavingsChannel::fromSlug((string) $request->query('kenh')) ?? SavingsChannel::Online;
+        $rows = $board->matrix($channel);
+        // Mức cao nhất mỗi kỳ hạn; bỏ cột kỳ hạn không ngân hàng nào công bố.
+        $best = array_filter(collect(SavingsFilters::TERMS)->mapWithKeys(fn (int $term) => [$term => $rows->max(fn (array $row) => $row['rates'][$term])])->all(),
+            fn (?float $rate) => $rate !== null);
+
+        return view('compare::savings.table', [
+            'channel' => $channel,
+            'rows' => $rows,
+            'terms' => array_keys($best),
+            'best' => $best,
+            'channels' => collect(SavingsChannel::cases())->mapWithKeys(fn (SavingsChannel $c) => [$c->slug() => $c->getLabel()]),
         ]);
     }
 }

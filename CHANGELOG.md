@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Lãi suất theo ngân hàng
+
+- Bảng lãi suất tiết kiệm các ngân hàng theo kỳ hạn (`/lai-suat-tiet-kiem/bang-lai-suat`), chọn kênh online hoặc tại quầy, tô mức cao nhất mỗi kỳ hạn.
+- Trang từng ngân hàng (`/ngan-hang/{slug}`): lãi suất theo kỳ hạn và kênh, biểu đồ lịch sử lãi suất 6 và 12 tháng, thẻ tín dụng và tài khoản của ngân hàng đó. Danh sách ở `/ngan-hang`, có trong menu và sitemap.
+- Component biểu đồ đường `<x-ui.line-chart>`.
+
 ### Font SF Pro
 
 - Font chữ: SF Pro trên máy Apple (font hệ thống), máy khác dùng Inter tự host (dáng gần SF, đủ dấu tiếng Việt). Apple không cho phép nhúng SF Pro lên website nên không tự host SF Pro. Bỏ Plus Jakarta Sans.
