@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Bộ dữ liệu demo toàn website
+
+- `php artisan ezfin:demo` tạo 14 ngân hàng/công ty tài chính (logo chữ), 24 sản phẩm tiết kiệm với lãi suất theo kỳ hạn, 20 thẻ tín dụng (ảnh mặt thẻ), 10 tài khoản thanh toán, link đối tác và lượt bấm 60 ngày, 10 bài viết có ảnh bìa, 3 tác giả, tài khoản app demo@ezfin.test.
+- `--purge` xóa đúng phần đã tạo (kể cả file ảnh, nhật ký quản trị liên quan); `--fresh` tạo lại. Khi đang có dữ liệu demo, mọi trang hiện dải thông báo "Bản demo". Không chạy trên production.
+
 ### Giao diện mới "Bạc hà"
 
 - Bộ màu mới: mực xanh đậm, xanh bạc hà, điểm xanh chanh; xám ngả xanh cho nền và viền. Font Plus Jakarta Sans (có tiếng Việt), thay Be Vietnam Pro.

@@ -44,6 +44,12 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 31/10/2026 — Bộ dữ liệu demo toàn website
+
+- Đã xong: lệnh `ezfin:demo` (`app/Console/Commands/DemoSiteCommand.php`, dữ liệu `database/seeders/Demo/{DemoCatalog,DemoArticles}.php`, ảnh trong `database/seeders/Demo/assets`), `App\Support\Demo\DemoManifest`, component `x-ui.demo-notice`. Tai sẽ duyệt rồi xóa bằng `--purge`.
+- Test: `tests/Feature/DemoSiteTest.php`, toàn bộ Pest xanh.
+- Lưu ý: tên ngân hàng là thật nhưng lãi suất, biểu phí, tác giả là giả lập; không bao giờ chạy trên production.
+
 ### 30/10/2026 — Giao diện mới "Bạc hà"
 
 - Đã xong: Tai chọn hướng A "Bạc hà" (artifact so sánh 3 hướng: https://claude.ai/artifact/TF7HnPKMdLB1YBJPMhtVMr). Đổi token màu trong `resources/css/app.css` (navy = mực xanh đậm, slate ngả xanh, primary xanh bạc hà, `highlight` xanh chanh, `--radius-card` 1.25rem, `--radius-control`), font Plus Jakarta Sans, component nút/ô nhập/tab/nhãn/thẻ số liệu, logo, menu app và web, chân trang tối.

@@ -10,6 +10,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-gradient-to-br from-white via-slate-50 to-primary-50">
+    <x-ui.demo-notice />
     <main class="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-10">
         <a href="{{ route('home') }}" class="mx-auto"><x-ui.logo /><span class="sr-only">Về trang chủ EzFin</span></a>
         <div class="mt-6 rounded-card border border-slate-200 bg-white p-6 shadow-card sm:p-8">

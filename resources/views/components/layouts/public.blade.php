@@ -44,6 +44,8 @@
 <body class="flex min-h-screen flex-col">
     <a href="#noi-dung" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2">Bỏ qua tới nội dung</a>
 
+    <x-ui.demo-notice />
+
     <header x-data="{ menu: false }" class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div class="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
             <a href="{{ Route::has('home') ? route('home') : '/' }}" aria-label="EzFin trang chủ"><x-ui.logo /></a>
