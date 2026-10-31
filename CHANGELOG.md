@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Nhập sao kê ngân hàng (app)
+
+- Nhập giao dịch từ file sao kê CSV hoặc Excel (.xlsx) vào một ví: tự nhận cột ngày, nội dung, ghi nợ/ghi có; xem trước và sửa cột trước khi nhập.
+- Nhập lại cùng sao kê không tạo trùng; dòng có thể trùng với giao dịch đã ghi tay được đánh dấu để bạn chọn.
+
 ### Khoản định kỳ và nhắc hạn (app)
 
 - Màn hình "Định kỳ & nhắc hạn": lương, tiền nhà, hóa đơn, trả góp... tự ghi giao dịch khi đến hạn, hoặc nhắc để bạn bấm "Đã trả"; hạn trả thẻ tín dụng, khoản vay có thể chỉ nhắc mà không ghi giao dịch.

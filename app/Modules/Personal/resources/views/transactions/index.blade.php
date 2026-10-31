@@ -7,6 +7,7 @@
 @endphp
 <x-personal::shell title="Giao dịch">
     <x-slot:actions>
+        <x-ui.button :href="route('personal.imports.create', array_filter(['vi' => $filters['vi']]))" icon="arrow-up-tray" size="sm" variant="outline"><span class="hidden sm:inline">Nhập sao kê</span><span class="sr-only sm:hidden">Nhập sao kê</span></x-ui.button>
         <div class="hidden sm:block"><x-ui.button :href="route('personal.transactions.create')" icon="plus" size="sm">Thêm giao dịch</x-ui.button></div>
     </x-slot:actions>
 

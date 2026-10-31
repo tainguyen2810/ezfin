@@ -4,6 +4,7 @@ namespace App\Modules\Personal\Actions;
 
 use App\Models\User;
 use App\Modules\Core\Enums\Role;
+use App\Modules\Personal\Imports\StatementUploads;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -26,5 +27,7 @@ class DeleteAccount
             DB::table('password_reset_tokens')->where('email', $user->email)->delete();
             $user->delete();
         });
+
+        app(StatementUploads::class)->forgetUser($user->id);
     }
 }

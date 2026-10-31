@@ -11,6 +11,7 @@ use App\Modules\Personal\Http\Controllers\GoalController;
 use App\Modules\Personal\Http\Controllers\NetWorthController;
 use App\Modules\Personal\Http\Controllers\RecurringTransactionController;
 use App\Modules\Personal\Http\Controllers\ReportController;
+use App\Modules\Personal\Http\Controllers\StatementImportController;
 use App\Modules\Personal\Http\Controllers\TransactionController;
 use App\Modules\Personal\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,12 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('vi', WalletController::class)->except('show')
         ->parameters(['vi' => 'wallet'])->names('personal.wallets');
+
+    // Nhập sao kê: đặt trước resource giao dịch.
+    Route::get('/giao-dich/nhap-sao-ke', [StatementImportController::class, 'create'])->name('personal.imports.create');
+    Route::post('/giao-dich/nhap-sao-ke', [StatementImportController::class, 'store'])->middleware('throttle:20,1')->name('personal.imports.store');
+    Route::get('/giao-dich/nhap-sao-ke/{token}', [StatementImportController::class, 'show'])->name('personal.imports.show');
+    Route::post('/giao-dich/nhap-sao-ke/{token}', [StatementImportController::class, 'import'])->name('personal.imports.import');
 
     Route::resource('giao-dich', TransactionController::class)->except('show')
         ->parameters(['giao-dich' => 'transaction'])->names('personal.transactions');
