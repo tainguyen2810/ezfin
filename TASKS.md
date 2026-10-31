@@ -48,9 +48,17 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | --- | --- | --- | --- |
 | B1 | Trang lãi suất từng ngân hàng, bảng ngân hàng × kỳ hạn, biểu đồ lịch sử lãi suất | Lấy biểu lãi mới nhất đã hiệu lực, bậc tiền thấp nhất; ngân hàng ngừng hoạt động hoặc chưa có sản phẩm xuất bản trả 404; có trong sitemap; biểu đồ kèm bảng số liệu | Xong |
 | B2 | Giao dịch định kỳ, nhắc hạn thanh toán thẻ/khoản vay qua email | Tạo giao dịch đúng chu kỳ, không trùng khi chạy lại; email nhắc trước hạn; người A không thấy dữ liệu người B | Xong |
-| B3 | Nhập sao kê ngân hàng (CSV/Excel) vào app | Xem trước, chọn cột, báo dòng lỗi; không nhập trùng khi nhập lại | Chưa làm |
+| B3 | Nhập sao kê ngân hàng (CSV/Excel) vào app | Xem trước, chọn cột, báo dòng lỗi; không nhập trùng khi nhập lại | Xong |
 
 ## Nhật ký phiên
+
+### 31/10/2026 — B3: nhập sao kê ngân hàng
+
+- Đã xong: `/giao-dich/nhap-sao-ke` (nút "Nhập sao kê" ở màn Giao dịch). Tải CSV (UTF-8/UTF-16, phân cách `,` `;` tab, ô nhiều dòng) hoặc .xlsx (OpenSpout, khai báo thẳng trong composer.json; trước đây có sẵn qua Filament) → tự tìm dòng tiêu đề và cột ngày, nội dung, số tiền (một cột có dấu hoặc ghi nợ/ghi có) theo tên cột tiếng Việt/Anh → xem trước, sửa cột → chọn danh mục cho khoản chi, khoản thu → nhập. .xls và PDF chưa hỗ trợ (báo hướng dẫn).
+- Chống trùng: `transactions.import_hash` (ví, ngày, số tiền, nội dung, thứ tự lặp trong file; unique theo ví), nhập lại cùng sao kê thì bỏ qua; dòng trùng ngày + số tiền với giao dịch ghi tay được đánh dấu "có thể trùng", chỉ nhập khi tích chọn. Dòng không có ô ngày (tổng cộng, số dư) bị bỏ qua; ngày sai báo lỗi.
+- File đã đọc giữ tạm ở ổ `local` (riêng tư) `statement-imports/{user}`: xóa khi nhập xong, khi tải file mới (bản quá 1 ngày), khi xóa tài khoản.
+- Test: `tests/Feature/Personal/StatementImportTest.php`; Pest toàn bộ xanh; xem ảnh 390/1280px.
+- Chưa làm: tự gợi ý danh mục theo nội dung giao dịch.
 
 ### 31/10/2026 — B2: định kỳ và nhắc hạn
 
