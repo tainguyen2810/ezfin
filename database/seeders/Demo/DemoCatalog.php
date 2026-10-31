@@ -171,12 +171,17 @@ class DemoCatalog
                     "$label của $short, lãi trả cuối kỳ, gửi từ 1 triệu đồng.", null,
                     $channel === 'online' ? ['Lãi cao hơn gửi tại quầy', 'Mở và tất toán trên ứng dụng'] : ['Gửi và rút tại mọi chi nhánh'],
                     $channel === 'online' ? ['Cần dùng ngân hàng điện tử'] : ['Lãi thấp hơn gửi online']);
+                // Ba lần công bố biểu lãi (khoảng 6 tháng, 3 tháng trước và gần đây) để trang ngân hàng có biểu đồ lịch sử.
+                $tables = [[mt_rand(170, 190), -mt_rand(30, 60) / 100], [mt_rand(80, 100), -mt_rand(5, 30) / 100], [mt_rand(3, 25), 0]];
                 foreach (self::BASE_RATES as $term => $base) {
                     $rate = round($base + $offset + $channelOffset + mt_rand(-10, 10) / 100, 2);
-                    $rate = $term < 6 ? min($rate, 4.75) : $rate;
-                    $product->savingsRates()->create(['term_months' => $term, 'channel' => $channel,
-                        'interest_payment' => 'end_of_term', 'min_amount' => 1_000_000, 'rate' => max($rate, 1.6),
-                        'effective_from' => today()->subDays(mt_rand(3, 25))->toDateString()]);
+                    foreach ($tables as [$daysAgo, $change]) {
+                        $value = round($rate + $change, 2);
+                        $value = $term < 6 ? min($value, 4.75) : $value;
+                        $product->savingsRates()->create(['term_months' => $term, 'channel' => $channel,
+                            'interest_payment' => 'end_of_term', 'min_amount' => 1_000_000, 'rate' => max($value, 1.6),
+                            'effective_from' => today()->subDays($daysAgo)->toDateString()]);
+                    }
                 }
                 if ($channel === 'counter') {
                     $product->savingsRates()->create(['term_months' => 0, 'channel' => $channel,

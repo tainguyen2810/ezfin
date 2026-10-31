@@ -42,7 +42,22 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | A7 | Báo cáo tháng/quý/năm | Thu, chi, tiết kiệm, theo danh mục; khớp số liệu kiểm thử | Xong |
 | A8 | Cài đặt tài khoản, xuất dữ liệu, xóa tài khoản; rà soát mobile | Đổi tên/email/mật khẩu; xuất CSV; xóa tài khoản xóa hết dữ liệu cá nhân; ảnh 390/1280px không tràn | Xong |
 
+## Hoàn thiện tính năng (đề xuất 31/10/2026, chủ dự án đồng ý)
+
+| # | Việc | Tiêu chí nghiệm thu | Trạng thái |
+| --- | --- | --- | --- |
+| B1 | Trang lãi suất từng ngân hàng, bảng ngân hàng × kỳ hạn, biểu đồ lịch sử lãi suất | Lấy biểu lãi mới nhất đã hiệu lực, bậc tiền thấp nhất; ngân hàng ngừng hoạt động hoặc chưa có sản phẩm xuất bản trả 404; có trong sitemap; biểu đồ kèm bảng số liệu | Xong |
+| B2 | Giao dịch định kỳ, nhắc hạn thanh toán thẻ/khoản vay qua email | Tạo giao dịch đúng chu kỳ, không trùng khi chạy lại; email nhắc trước hạn; người A không thấy dữ liệu người B | Chưa làm |
+| B3 | Nhập sao kê ngân hàng (CSV/Excel) vào app | Xem trước, chọn cột, báo dòng lỗi; không nhập trùng khi nhập lại | Chưa làm |
+
 ## Nhật ký phiên
+
+### 31/10/2026 — B1: trang lãi suất theo ngân hàng
+
+- Đã xong: `/lai-suat-tiet-kiem/bang-lai-suat` (bảng ngân hàng × kỳ hạn, chọn kênh online/tại quầy, tô mức cao nhất mỗi kỳ hạn, bỏ cột kỳ hạn trống), `/ngan-hang` (danh sách tổ chức, lãi 12 tháng), `/ngan-hang/{slug}` (lãi theo kỳ hạn và kênh, biểu đồ lịch sử 6 và 12 tháng kèm bảng số liệu, thẻ và tài khoản của ngân hàng). Logic ở `Compare\Actions\SavingsRateBoard`. Component mới `<x-ui.line-chart>` (có ở `/_ui`). Menu thêm "Ngân hàng"; trang thẻ, tài khoản link về trang ngân hàng; sitemap thêm các trang mới.
+- Dữ liệu demo: mỗi gói tiết kiệm có 3 lần công bố biểu lãi (khoảng 6 tháng, 3 tháng trước và gần đây), cùng ngày cho mọi kỳ hạn trong một lần công bố. Bản cũ để ngày khác nhau theo kỳ hạn nên trang so sánh chỉ thấy một phần kỳ hạn. Cần `php artisan ezfin:demo --fresh` trên máy đang có demo.
+- Test: `tests/Feature/Compare/BankRatePagesTest.php`; Pest toàn bộ xanh; xem ảnh 390/1280px.
+- Tiếp theo: B2.
 
 ### 31/10/2026 — Font SF Pro
 

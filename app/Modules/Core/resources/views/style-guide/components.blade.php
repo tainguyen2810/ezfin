@@ -109,6 +109,12 @@
                     <x-ui.progress label="Mua nhà" :value="105000000" :max="300000000" mode="goal" detail="Đã tiết kiệm 105.000.000 đ" />
                 </div>
             </x-ui.card>
+            <x-ui.line-chart caption="Ví dụ biểu đồ lịch sử lãi suất 6 và 12 tháng"
+                :labels="['02/05/2026', '01/08/2026', '15/10/2026']"
+                :series="[
+                    ['label' => '6 tháng', 'tone' => 'ink', 'values' => [4.6, 4.8, 5.0]],
+                    ['label' => '12 tháng', 'tone' => 'primary', 'values' => [5.2, 5.4, 5.75]],
+                ]" />
         </section>
 
         <section class="{{ $section }}">

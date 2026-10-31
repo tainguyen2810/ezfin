@@ -10,6 +10,10 @@
         <x-ui.breadcrumb :items="['Trang chủ' => route('home'), 'Lãi suất tiết kiệm' => null]" />
         <h1 class="mt-3 text-2xl font-bold sm:text-3xl">So sánh lãi suất tiết kiệm</h1>
         <p class="mt-1 max-w-3xl text-slate-600">Nhập số tiền và kỳ hạn để xem ngân hàng nào trả nhiều tiền lãi nhất theo biểu lãi suất đã công bố.</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+            <x-ui.button variant="secondary" size="sm" :href="route('compare.savings.table')" icon="table-cells">Bảng lãi suất các ngân hàng</x-ui.button>
+            <x-ui.button variant="secondary" size="sm" :href="route('compare.institutions.index')" icon="building-library">Lãi suất từng ngân hàng</x-ui.button>
+        </div>
 
         <x-ui.card class="mt-6">
             <form method="GET" action="{{ route('compare.savings.index') }}" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto] lg:items-end">
