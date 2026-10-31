@@ -36,7 +36,7 @@
             </div>
             <x-ui.card>
                 <p class="text-3xl font-bold text-navy-900">Tài chính thông minh cho cuộc sống tốt hơn</p>
-                <p class="mt-2 text-xl font-semibold text-navy-900">Tiêu đề mục · Plus Jakarta Sans 600</p>
+                <p class="mt-2 text-xl font-semibold text-navy-900">Tiêu đề mục · SF Pro / Inter 600</p>
                 <p class="mt-2 text-slate-600">Đoạn văn thường: Lãi suất tiết kiệm kỳ hạn 12 tháng, lĩnh lãi cuối kỳ. Ạ ặ ẩ ễ ố ộ ữ ỹ đ Đ.</p>
                 <p class="num mt-2 text-2xl font-bold text-navy-900">{{ Format::money(520000000) }} · {{ Format::rate(5.5) }} · {{ Format::date('2026-10-29') }}</p>
             </x-ui.card>

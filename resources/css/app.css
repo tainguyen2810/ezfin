@@ -1,10 +1,7 @@
 @import 'tailwindcss';
 
-/* Be Vietnam Pro tự host (đủ bộ ký tự tiếng Việt), không tải font từ dịch vụ bên ngoài. */
-@import '@fontsource/plus-jakarta-sans/400.css';
-@import '@fontsource/plus-jakarta-sans/500.css';
-@import '@fontsource/plus-jakarta-sans/600.css';
-@import '@fontsource/plus-jakarta-sans/700.css';
+/* Inter tự host (đủ bộ ký tự tiếng Việt), không tải font từ dịch vụ bên ngoài. */
+@import '@fontsource-variable/inter/index.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -16,7 +13,8 @@
  */
 @theme {
     /* Hướng giao diện "Bạc hà": nền mực xanh đậm, nhấn xanh bạc hà, điểm xanh chanh. */
-    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    /* SF Pro trên máy Apple (font hệ thống, Apple không cho nhúng lên web); máy khác dùng Inter tự host, dáng gần SF và đủ dấu tiếng Việt. */
+    --font-sans: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter Variable', 'Segoe UI', Roboto, sans-serif;
 
     /* "navy" giữ tên cũ để không phải sửa view: nay là mực xanh đậm cho chữ tiêu đề và khối tối. */
     --color-navy-50: #f1f6f4;
