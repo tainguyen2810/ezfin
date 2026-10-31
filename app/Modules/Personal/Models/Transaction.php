@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $occurred_on
  * @property ?string $note
  * @property ?string $transfer_group_id
+ * @property ?int $recurring_transaction_id
  */
 class Transaction extends Model
 {
@@ -42,6 +43,12 @@ class Transaction extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /** Khoản định kỳ đã sinh ra giao dịch này (nếu có). */
+    public function recurring(): BelongsTo
+    {
+        return $this->belongsTo(RecurringTransaction::class, 'recurring_transaction_id');
     }
 
     /** Vế còn lại của chuyển tiền. */

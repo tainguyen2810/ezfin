@@ -47,10 +47,18 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | # | Việc | Tiêu chí nghiệm thu | Trạng thái |
 | --- | --- | --- | --- |
 | B1 | Trang lãi suất từng ngân hàng, bảng ngân hàng × kỳ hạn, biểu đồ lịch sử lãi suất | Lấy biểu lãi mới nhất đã hiệu lực, bậc tiền thấp nhất; ngân hàng ngừng hoạt động hoặc chưa có sản phẩm xuất bản trả 404; có trong sitemap; biểu đồ kèm bảng số liệu | Xong |
-| B2 | Giao dịch định kỳ, nhắc hạn thanh toán thẻ/khoản vay qua email | Tạo giao dịch đúng chu kỳ, không trùng khi chạy lại; email nhắc trước hạn; người A không thấy dữ liệu người B | Chưa làm |
+| B2 | Giao dịch định kỳ, nhắc hạn thanh toán thẻ/khoản vay qua email | Tạo giao dịch đúng chu kỳ, không trùng khi chạy lại; email nhắc trước hạn; người A không thấy dữ liệu người B | Xong |
 | B3 | Nhập sao kê ngân hàng (CSV/Excel) vào app | Xem trước, chọn cột, báo dòng lỗi; không nhập trùng khi nhập lại | Chưa làm |
 
 ## Nhật ký phiên
+
+### 31/10/2026 — B2: định kỳ và nhắc hạn
+
+- Đã xong: màn hình `/dinh-ky` (app) cho khoản thu/chi lặp lại hằng tuần, tháng, quý, năm; 3 cách xử lý (`RecurringMode`): tự ghi giao dịch, nhắc rồi bấm "Đã trả" để ghi, chỉ nhắc hạn (trả thẻ tín dụng, khoản vay: không ghi giao dịch, qua hạn tự sang kỳ sau). Email nhắc trước 0–7 ngày, mỗi người một email/ngày, mỗi kỳ nhắc một lần. Lệnh `php artisan ezfin:recurring [--date=]` chạy 6:00 hằng ngày (cần cron `schedule:run` và queue worker như tài liệu triển khai). Tổng quan có mục "Sắp đến hạn" (7 ngày tới). Giao dịch sinh ra có `recurring_transaction_id`; xóa khoản định kỳ vẫn giữ giao dịch.
+- Kỳ thứ n luôn tính từ ngày bắt đầu (ngày 31 → 28/2 → 31/3), không ghi bù các kỳ trước ngày tạo; khóa dòng khi ghi nên chạy lại hoặc bấm hai lần không tạo trùng.
+- Dữ liệu mẫu (`ezfin:demo-data`): 9 khoản định kỳ, trong đó có hạn thẻ tín dụng, bảo hiểm năm, một khoản đang chờ xác nhận.
+- Test: `tests/Feature/Personal/RecurringTransactionTest.php`; Pest toàn bộ xanh; xem ảnh 390/1280px.
+- Tiếp theo: B3 (nhập sao kê).
 
 ### 31/10/2026 — B1: trang lãi suất theo ngân hàng
 
