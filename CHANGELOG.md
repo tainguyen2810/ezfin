@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Khoản định kỳ và nhắc hạn (app)
+
+- Màn hình "Định kỳ & nhắc hạn": lương, tiền nhà, hóa đơn, trả góp... tự ghi giao dịch khi đến hạn, hoặc nhắc để bạn bấm "Đã trả"; hạn trả thẻ tín dụng, khoản vay có thể chỉ nhắc mà không ghi giao dịch.
+- Email nhắc trước hạn (đúng ngày đến 7 ngày trước), gửi lúc 6 giờ sáng.
+- Tổng quan có mục "Sắp đến hạn" cho 7 ngày tới.
+
 ### Lãi suất theo ngân hàng
 
 - Bảng lãi suất tiết kiệm các ngân hàng theo kỳ hạn (`/lai-suat-tiet-kiem/bang-lai-suat`), chọn kênh online hoặc tại quầy, tô mức cao nhất mỗi kỳ hạn.

@@ -26,7 +26,7 @@ it('creates a demo account with months of data the app screens can show', functi
 
     Feature::activate('personal');
     $this->actingAs($user);
-    foreach (['tong-quan', 'giao-dich', 'ngan-sach', 'muc-tieu', 'tai-san-no', 'bao-cao'] as $page) {
+    foreach (['tong-quan', 'giao-dich', 'ngan-sach', 'muc-tieu', 'tai-san-no', 'bao-cao', 'dinh-ky'] as $page) {
         $this->get("http://app.ezfin.test/$page")->assertOk();
     }
 });

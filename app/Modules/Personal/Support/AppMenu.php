@@ -15,6 +15,7 @@ final class AppMenu
         ['personal.dashboard', 'Tổng quan', 'home', 'Tổng quan'],
         ['personal.transactions.index', 'Giao dịch', 'arrows-right-left', 'Giao dịch'],
         ['personal.wallets.index', 'Ví & tài khoản', 'wallet', 'Ví'],
+        ['personal.recurring.index', 'Định kỳ & nhắc hạn', 'arrow-path', 'Định kỳ'],
         ['personal.budgets.index', 'Ngân sách', 'chart-pie', 'Ngân sách'],
         ['personal.goals.index', 'Mục tiêu', 'flag', 'Mục tiêu'],
         ['personal.net-worth.index', 'Tài sản & nợ', 'scale', 'Tài sản'],

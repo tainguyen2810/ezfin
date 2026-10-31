@@ -9,6 +9,7 @@ use App\Modules\Personal\Http\Controllers\CategoryController;
 use App\Modules\Personal\Http\Controllers\DashboardController;
 use App\Modules\Personal\Http\Controllers\GoalController;
 use App\Modules\Personal\Http\Controllers\NetWorthController;
+use App\Modules\Personal\Http\Controllers\RecurringTransactionController;
 use App\Modules\Personal\Http\Controllers\ReportController;
 use App\Modules\Personal\Http\Controllers\TransactionController;
 use App\Modules\Personal\Http\Controllers\WalletController;
@@ -35,6 +36,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('giao-dich', TransactionController::class)->except('show')
         ->parameters(['giao-dich' => 'transaction'])->names('personal.transactions');
+
+    Route::resource('dinh-ky', RecurringTransactionController::class)->except('show')
+        ->parameters(['dinh-ky' => 'recurring'])->names('personal.recurring');
+    Route::post('/dinh-ky/{recurring}/ghi-nhan', [RecurringTransactionController::class, 'record'])->name('personal.recurring.record');
+    Route::post('/dinh-ky/{recurring}/bo-qua', [RecurringTransactionController::class, 'skip'])->name('personal.recurring.skip');
 
     Route::resource('danh-muc', CategoryController::class)->only(['index', 'store', 'edit', 'update', 'destroy'])
         ->parameters(['danh-muc' => 'category'])->names('personal.categories');

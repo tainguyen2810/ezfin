@@ -14,6 +14,7 @@ use App\Modules\Personal\Models\Category;
 use App\Modules\Personal\Models\Goal;
 use App\Modules\Personal\Models\GoalContribution;
 use App\Modules\Personal\Models\NetWorthItem;
+use App\Modules\Personal\Models\RecurringTransaction;
 use App\Modules\Personal\Models\Transaction;
 use App\Modules\Personal\Models\Wallet;
 use Carbon\CarbonImmutable;
@@ -97,10 +98,11 @@ class DemoDataCommand extends Command
             $this->createBudgets();
             $this->createGoals();
             $this->createNetWorth();
+            $this->createRecurring();
         });
 
         $this->info("Đã tạo dữ liệu mẫu cho [$email]: ".Transaction::count().' giao dịch, '.Wallet::count().' ví, '
-            .Budget::count().' ngân sách, '.Goal::count().' mục tiêu, '.NetWorthItem::count().' tài sản & nợ.');
+            .Budget::count().' ngân sách, '.Goal::count().' mục tiêu, '.NetWorthItem::count().' tài sản & nợ, '.RecurringTransaction::count().' khoản định kỳ.');
         if ($password !== null) {
             $this->line("Đăng nhập app.ezfin.test với email $email, mật khẩu: $password");
         }
@@ -110,6 +112,7 @@ class DemoDataCommand extends Command
 
     private function wipe(): void
     {
+        RecurringTransaction::query()->delete();
         Transaction::query()->delete();
         Budget::query()->delete();
         GoalContribution::query()->delete();
@@ -247,6 +250,45 @@ class DemoDataCommand extends Command
         ] as [$kind, $name, $amount, $rate, $payment]) {
             NetWorthItem::create(['kind' => $kind, 'name' => $name, 'amount' => $amount, 'interest_rate' => $rate,
                 'monthly_payment' => $payment, 'valued_on' => $valued, 'note' => null]);
+        }
+    }
+
+    /**
+     * Khoản định kỳ. Các khoản cố định đã có giao dịch mẫu đến hết tháng này nên kỳ tiếp theo tính từ tháng sau,
+     * tránh ghi trùng; thêm vài khoản nhắc hạn sắp đến để thấy mục "Sắp đến hạn".
+     */
+    private function createRecurring(): void
+    {
+        $today = CarbonImmutable::today();
+        $nextMonth = $today->startOfMonth()->addMonthNoOverflow();
+        $start = fn (int $day) => $today->startOfMonth()->subMonthsNoOverflow(5)->setDay($day);
+
+        foreach ([
+            ['Lương công ty', 'income', 'Lương', 'bank', 25_000_000, 'monthly', $start(5), null, 'auto', null],
+            ['Tiền thuê nhà', 'expense', 'Nhà ở', 'bank', 6_000_000, 'monthly', $start(1), null, 'auto', 2],
+            ['Internet', 'expense', 'Hóa đơn & tiện ích', 'ewallet', 220_000, 'monthly', $start(12), null, 'auto', null],
+            ['Gửi bố mẹ', 'expense', 'Gia đình', 'bank', 2_000_000, 'monthly', $start(8), null, 'auto', null],
+            ['Tiền điện', 'expense', 'Hóa đơn & tiện ích', 'bank', 850_000, 'monthly', $start(10), null, 'confirm', 3],
+            ['Khóa học tiếng Anh online', 'expense', 'Học tập', 'bank', 490_000, 'monthly', $start(15), $today->addMonthsNoOverflow(2)->setDay(15), 'auto', null],
+        ] as [$name, $type, $category, $wallet, $amount, $frequency, $startsOn, $endsOn, $mode, $remind]) {
+            $item = new RecurringTransaction(['name' => $name, 'type' => $type, 'category_id' => $this->categories[$category]->id,
+                'wallet_id' => $this->wallets[$wallet]->id, 'amount' => $amount, 'frequency' => $frequency,
+                'starts_on' => $startsOn, 'ends_on' => $endsOn, 'mode' => $mode, 'remind_days_before' => $remind]);
+            $item->scheduleFrom($nextMonth);
+            $item->save();
+        }
+
+        // Nhắc hạn: thẻ tín dụng (chi tiêu thẻ đã ghi từng lần nên chỉ nhắc), bảo hiểm năm, một hóa đơn đang chờ xác nhận.
+        foreach ([
+            ['Hạn thanh toán thẻ tín dụng', 'expense', null, null, 4_800_000, 'monthly', $today->addDays(3), 'remind', 3],
+            ['Phí bảo hiểm sức khỏe', 'expense', 'Sức khỏe', 'bank', 3_600_000, 'yearly', $today->addDays(20), 'confirm', 7],
+            ['Phí gửi xe tháng', 'expense', 'Đi lại', 'cash', 300_000, 'monthly', $today->subDays(1), 'confirm', 1],
+        ] as [$name, $type, $category, $wallet, $amount, $frequency, $startsOn, $mode, $remind]) {
+            $item = new RecurringTransaction(['name' => $name, 'type' => $type, 'category_id' => $category ? $this->categories[$category]->id : null,
+                'wallet_id' => $wallet ? $this->wallets[$wallet]->id : null, 'amount' => $amount, 'frequency' => $frequency,
+                'starts_on' => $startsOn, 'mode' => $mode, 'remind_days_before' => $remind]);
+            $item->next_due_on = $startsOn;
+            $item->save();
         }
     }
 

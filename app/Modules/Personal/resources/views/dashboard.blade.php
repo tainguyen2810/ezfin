@@ -54,6 +54,28 @@
                 @endforeach
             </nav>
 
+            @if ($upcoming->isNotEmpty())
+                <x-ui.card title="Sắp đến hạn" :padding="false">
+                    <x-slot:action><a href="{{ route('personal.recurring.index') }}" class="font-medium text-primary-700 hover:underline">Xem tất cả</a></x-slot:action>
+                    <ul class="mt-2 divide-y divide-slate-100">
+                        @foreach ($upcoming as $item)
+                            <li class="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 sm:px-5">
+                                @include('personal::recurring._icon', ['size' => 'sm'])
+                                <div class="min-w-0 flex-1">
+                                    <p class="truncate text-sm font-medium text-navy-900">{{ $item->name }}</p>
+                                    <p class="num text-xs text-slate-500">{{ Format::date($item->next_due_on) }} · {{ $item->mode->short() }}</p>
+                                </div>
+                                @include('personal::recurring._due')
+                                <p @class(['num w-28 shrink-0 text-right text-sm font-semibold', 'text-income' => $item->type->isInflow(), 'text-navy-900' => ! $item->type->isInflow()])>{{ $item->type->isInflow() ? '+' : '−' }}{{ Format::money($item->amountInt()) }}</p>
+                                @if ($item->awaitsConfirmation($today))
+                                    <div class="basis-full pl-11">@include('personal::recurring._actions')</div>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                </x-ui.card>
+            @endif
+
             <div class="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-5">
                 <x-ui.card title="Dòng tiền 6 tháng gần nhất">
                     @if ($hasFlow)
