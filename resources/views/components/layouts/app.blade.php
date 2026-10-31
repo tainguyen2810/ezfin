@@ -28,6 +28,7 @@
     </aside>
 
     <div class="lg:pl-64">
+        <x-ui.demo-notice />
         <header class="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
             <span class="lg:hidden"><x-ui.logo /></span>
             <h1 class="hidden text-lg font-semibold lg:block">{{ $title }}</h1>

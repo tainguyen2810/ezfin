@@ -90,6 +90,7 @@
             <x-ui.data-freshness :verified-at="now()->subDays(3)" source="Website chính thức của ngân hàng" source-url="#" />
             <x-ui.data-freshness :verified-at="now()->subDays(45)" source="Biểu phí công bố" />
             <x-ui.disclosure />
+            <x-ui.demo-notice :show="true" class="rounded-xl" />
         </section>
 
         <section class="{{ $section }}">
