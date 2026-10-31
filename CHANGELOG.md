@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Font SF Pro
+
+- Font chữ: SF Pro trên máy Apple (font hệ thống), máy khác dùng Inter tự host (dáng gần SF, đủ dấu tiếng Việt). Apple không cho phép nhúng SF Pro lên website nên không tự host SF Pro. Bỏ Plus Jakarta Sans.
+
 ### Bộ dữ liệu demo toàn website
 
 - `php artisan ezfin:demo` tạo 14 ngân hàng/công ty tài chính (logo chữ), 24 sản phẩm tiết kiệm với lãi suất theo kỳ hạn, 20 thẻ tín dụng (ảnh mặt thẻ), 10 tài khoản thanh toán, link đối tác và lượt bấm 60 ngày, 10 bài viết có ảnh bìa, 3 tác giả, tài khoản app demo@ezfin.test.

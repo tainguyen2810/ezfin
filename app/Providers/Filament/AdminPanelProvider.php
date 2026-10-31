@@ -46,7 +46,8 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('EzFin Quản trị')
             ->defaultAvatarProvider(InitialsAvatarProvider::class)
             ->colors(['primary' => Color::Emerald, 'gray' => Color::Slate])
-            ->font('Plus Jakarta Sans', provider: LocalFontProvider::class)
+            // Filament bọc tên font trong dấu nháy đơn, nên chuỗi này tạo ra cùng danh sách font như website.
+            ->font("SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter Variable", provider: LocalFontProvider::class)
             ->renderHook(PanelsRenderHook::HEAD_END, fn () => Blade::render("@vite('resources/css/admin.css')"))
             ->sidebarCollapsibleOnDesktop()
             ->pages([Dashboard::class])

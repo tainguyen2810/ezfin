@@ -23,8 +23,8 @@ class InitialsAvatarProvider implements AvatarProvider
             ->pipe(fn ($letters) => $letters->count() > 1 ? $letters->first().$letters->last() : $letters->first());
 
         $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
-            .'<rect width="64" height="64" fill="#1e3a8a"/>'
-            .'<text x="50%" y="50%" dy=".35em" text-anchor="middle" fill="#fff" font-family="Plus Jakarta Sans, sans-serif" font-size="26" font-weight="600">'
+            .'<rect width="64" height="64" fill="#0d2b24"/>'
+            .'<text x="50%" y="50%" dy=".35em" text-anchor="middle" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="26" font-weight="600">'
             .e($initials ?: '?')
             .'</text></svg>';
 

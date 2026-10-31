@@ -44,6 +44,11 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 31/10/2026 — Font SF Pro
+
+- Đã xong: Tai yêu cầu SF Pro Display. Giấy phép của Apple không cho nhúng lên web, nên `--font-sans` = SF Pro/-apple-system trên máy Apple, `Inter Variable` (@fontsource-variable/inter) cho máy khác; Filament dùng cùng danh sách.
+- Test: Pest toàn bộ xanh; xem ảnh trang chủ.
+
 ### 31/10/2026 — Bộ dữ liệu demo toàn website
 
 - Đã xong: lệnh `ezfin:demo` (`app/Console/Commands/DemoSiteCommand.php`, dữ liệu `database/seeders/Demo/{DemoCatalog,DemoArticles}.php`, ảnh trong `database/seeders/Demo/assets`), `App\Support\Demo\DemoManifest`, component `x-ui.demo-notice`. Tai sẽ duyệt rồi xóa bằng `--purge`.
