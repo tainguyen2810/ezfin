@@ -55,11 +55,18 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | # | Việc | Tiêu chí nghiệm thu | Trạng thái |
 | --- | --- | --- | --- |
 | C1 | SEO kỹ thuật: trang đích "Lãi suất tiết kiệm X tháng cao nhất tháng mm/yyyy", FAQ + schema (FAQPage, ItemList, Organization, WebSite), FAQ cho bài viết | Số liệu lấy từ biểu lãi đang hiệu lực, tự đổi theo tháng; kỳ hạn chưa có dữ liệu trả 404 và không vào sitemap; JSON-LD hợp lệ; có test | Xong |
-| C2 | Đo chuyển đổi affiliate + dashboard quản trị | Postback có khóa bí mật và nhập CSV đối soát theo mã click, không ghi trùng; dashboard click, chuyển đổi, hoa hồng theo ngân hàng, sản phẩm, trang nguồn, theo kỳ; có test | Chưa làm |
+| C2 | Đo chuyển đổi affiliate + dashboard quản trị | Postback có khóa bí mật và nhập CSV đối soát theo mã click, không ghi trùng; dashboard click, chuyển đổi, hoa hồng theo ngân hàng, sản phẩm, trang nguồn, theo kỳ; có test | Xong |
 | C3 | Thu email: báo lãi suất tăng, bản tin tuần | Xác nhận 2 bước (double opt-in), hủy 1 chạm + List-Unsubscribe; chống spam đăng ký; chỉ gửi khi lãi thật sự tăng, không gửi trùng; có test | Chưa làm |
 | C4 | Trang pháp lý: miễn trừ trách nhiệm, công bố liên kết, quyền riêng tư theo Luật Bảo vệ dữ liệu cá nhân 2025 | Nêu đúng dữ liệu đang thu (gồm email đăng ký, click, chuyển đổi), mục đích, căn cứ, thời hạn lưu, quyền của chủ thể; có trong footer và sitemap | Chưa làm |
 
 ## Nhật ký phiên
+
+### 13/11/2026 — C2: đo chuyển đổi affiliate
+
+- Đã xong: bảng `affiliate_conversions` (khóa chống trùng mạng + mã giao dịch; lưu bản sao link và trang nguồn vì click tự xóa sau 12 tháng). Postback `GET ezfin.vn/postback/{mạng}?token=…&click_id=…&transaction_id=…&status=…&commission=…&time=…` (ngoài nhóm `web`, không tạo phiên; tắt khi `EZFIN_POSTBACK_TOKEN` trống; nhận `sub_id`, `order_id`, `payout` làm tên thay thế). Nhập file đối soát CSV ở Quản trị → Đối tác → Chuyển đổi (có lỗi thì không ghi dòng nào). Trang Quản trị → Đối tác → Hiệu quả đối tác: click, chuyển đổi, tỷ lệ, hoa hồng đã duyệt/chờ duyệt theo ngân hàng, link/sản phẩm, trang nguồn, biểu đồ theo ngày; kỳ 7/30/90 ngày, tháng này, tháng trước. Logic ở `Partner\Actions\{RecordConversion,ImportConversions,AffiliateReport}`. Quản trị nạp thêm `Modules/*/Filament/Pages`. Demo tạo chuyển đổi mạng "demo".
+- Cách gắn với mạng affiliate: URL đích của link đối tác chứa `{click_id}` ở tham số subID; khai báo URL postback ở mạng với token bí mật.
+- Test: `tests/Feature/Partner/ConversionTrackingTest.php`; Pest toàn bộ xanh; xem ảnh dashboard 1280/390px.
+- Tiếp theo: C3.
 
 ### 13/11/2026 — C1: SEO kỹ thuật
 

@@ -11,7 +11,7 @@ class SeoController
     public function robots(): Response
     {
         $lines = config('ezfin.indexable')
-            ? ['User-agent: *', 'Disallow: /di/', 'Disallow: /_ui', '', 'Sitemap: '.route('sitemap')]
+            ? ['User-agent: *', 'Disallow: /di/', 'Disallow: /postback/', 'Disallow: /_ui', '', 'Sitemap: '.route('sitemap')]
             : ['User-agent: *', 'Disallow: /'];
 
         return $this->text($lines);

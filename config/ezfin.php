@@ -45,6 +45,13 @@ return [
     ],
 
     /*
+    | Đối tác: khóa bí mật cho URL postback chuyển đổi (/postback/{mạng}?token=...). Để trống = tắt postback.
+    */
+    'partner' => [
+        'postback_token' => env('EZFIN_POSTBACK_TOKEN'),
+    ],
+
+    /*
     | Module đang cài. Thứ tự là thứ tự đăng ký; Core luôn đứng đầu.
     */
     'modules' => [

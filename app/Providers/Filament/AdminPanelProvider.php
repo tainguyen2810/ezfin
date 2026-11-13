@@ -73,6 +73,9 @@ class AdminPanelProvider extends PanelProvider
             if (is_dir("$directory/Resources")) {
                 $panel->discoverResources(in: "$directory/Resources", for: "$namespace\\Resources");
             }
+            if (is_dir("$directory/Pages")) {
+                $panel->discoverPages(in: "$directory/Pages", for: "$namespace\\Pages");
+            }
             if (is_dir("$directory/Widgets")) {
                 $panel->discoverWidgets(in: "$directory/Widgets", for: "$namespace\\Widgets");
             }
