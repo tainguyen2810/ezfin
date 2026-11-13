@@ -22,6 +22,11 @@
     <h2>Thẻ tín dụng</h2>
     <p>Mặc định sắp xếp theo phí thường niên thấp. Bạn có thể đổi sang: {{ collect(\App\Modules\Compare\Support\CreditCardFilters::SORTS)->except(\App\Modules\Compare\Support\CreditCardFilters::DEFAULT_SORT)->map(fn ($label) => mb_strtolower($label))->join(', ', ' hoặc ') }}. Bộ lọc theo ngân hàng, mức phí, nhu cầu và thu nhập chỉ loại bớt thẻ, không đổi thứ tự.</p>
 
+    <h2>Gợi ý thẻ tín dụng</h2>
+    <p>Trang Gợi ý thẻ chỉ dùng câu trả lời của bạn để tính trên trang, không lưu lại. Thẻ yêu cầu thu nhập cao hơn thu nhập bạn nhập bị loại; thẻ chưa công bố mức thu nhập vẫn được giữ.
+        Nếu có tháng bạn chỉ trả một phần dư nợ, thẻ lãi suất thấp được xếp trước. Sau đó xếp theo số nhóm ưu tiên khớp với bạn, rồi lợi ích ròng ước tính (hoàn tiền một năm theo mức chi tiêu và trần hoàn tiền, trừ phí thường niên), rồi phí giao dịch ngoại tệ nếu bạn chi tiêu ở nước ngoài.
+        Quan hệ đối tác không ảnh hưởng thứ tự.</p>
+
     <h2>Khoản vay</h2>
     <p>Mặc định sắp xếp theo lãi ưu đãi thấp. Bạn có thể đổi sang: {{ collect(\App\Modules\Compare\Support\LoanFilters::SORTS)->except(\App\Modules\Compare\Support\LoanFilters::DEFAULT_SORT)->map(fn ($label) => mb_strtolower($label))->join(', ', ' hoặc ') }}.
         Lãi ưu đãi thường chỉ áp dụng một thời gian; chúng tôi luôn hiện kèm cách tính lãi sau ưu đãi do ngân hàng công bố.

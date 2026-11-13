@@ -65,10 +65,16 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | --- | --- | --- | --- |
 | D1 | So sánh vay tiêu dùng, vay mua nhà, vay mua xe | Lọc theo loại vay, ngân hàng, số tiền, thời hạn; ước tính tiền trả tháng đầu theo lãi ưu đãi; ghi rõ lãi sau ưu đãi; chỉ xuất bản khi có nguồn và ngày xác minh; nút đối tác có công bố; quản trị, sitemap, JSON-LD; có test | Xong |
 | D2 | Biểu đồ lịch sử lãi suất theo kỳ hạn toàn thị trường | Trang đích kỳ hạn có biểu đồ mức cao nhất và trung bình theo tháng, kèm bảng số liệu; chỉ dùng các lần công bố biểu lãi đã lưu, không nội suy; có test | Xong |
-| D3 | Quiz gợi ý thẻ tín dụng | Form GET chạy khi tắt JS, không lưu dữ liệu người dùng; xếp thẻ theo điều kiện thu nhập, nhóm chi tiêu, ước tính hoàn tiền trừ phí năm, lãi nếu trả không đủ; giải thích lý do từng thẻ; không xét hoa hồng; có test | Chưa làm |
+| D3 | Quiz gợi ý thẻ tín dụng | Form GET chạy khi tắt JS, không lưu dữ liệu người dùng; xếp thẻ theo điều kiện thu nhập, nhóm chi tiêu, ước tính hoàn tiền trừ phí năm, lãi nếu trả không đủ; giải thích lý do từng thẻ; không xét hoa hồng; có test | Xong |
 | D4 | Tỷ giá ngoại tệ và giá vàng hằng ngày | Nhập tay hoặc nhập file trong quản trị (chưa tự lấy từ nguồn ngoài cho tới khi chủ dự án xác nhận điều khoản); trang công khai ghi nguồn và giờ cập nhật, ẩn khi chưa có dữ liệu hoặc tắt flag; lịch sử theo ngày; có test | Chưa làm |
 
 ## Nhật ký phiên
+
+### 13/11/2026 — D3: quiz gợi ý thẻ tín dụng
+
+- Đã xong: `/the-tin-dung/goi-y` (form GET 5 câu: thu nhập, chi tiêu bằng thẻ/tháng, ưu tiên theo `CardBenefit`, cách trả nợ, chi tiêu nước ngoài; không lưu). `Compare\Actions\RecommendCreditCards`: loại thẻ đòi thu nhập cao hơn (giữ thẻ chưa công bố), người hay trả một phần thì lãi suất thấp trước, sau đó số ưu tiên khớp, lợi ích ròng ước tính (hoàn tiền một năm có trần trừ phí năm), phí ngoại tệ nếu chi ở nước ngoài; mỗi thẻ có danh sách lý do. Trang không có câu trả lời được lập chỉ mục, có câu trả lời thì noindex. Lối vào từ trang thẻ tín dụng, sitemap, Phương pháp đánh giá cập nhật.
+- Test: `tests/Feature/Compare/CardQuizTest.php`; Pest toàn bộ xanh; ảnh ở `screenshots/d3-quiz`.
+- Tiếp theo: D4.
 
 ### 13/11/2026 — D2: lịch sử lãi suất toàn thị trường
 

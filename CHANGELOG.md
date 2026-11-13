@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Gợi ý thẻ tín dụng
+
+- Trang "Thẻ tín dụng nào hợp với bạn?": trả lời 5 câu hỏi để xem thẻ đủ điều kiện, xếp theo cách chi tiêu và trả nợ, kèm lý do và ước tính hoàn tiền trừ phí. Câu trả lời không được lưu.
+
 ### Lịch sử lãi suất toàn thị trường
 
 - Trang "Lãi suất tiết kiệm X tháng cao nhất" có biểu đồ mức cao nhất và trung bình của các ngân hàng trong 12 tháng qua, kèm bảng số liệu.

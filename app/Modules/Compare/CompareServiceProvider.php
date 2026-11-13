@@ -36,6 +36,7 @@ class CompareServiceProvider extends ModuleServiceProvider
     {
         yield new SitemapUrl(route('compare.savings.index'));
         yield new SitemapUrl(route('compare.credit-cards.index'));
+        yield new SitemapUrl(route('compare.credit-cards.quiz'));
         yield new SitemapUrl(route('compare.bank-accounts.index'));
 
         // Trang vay: tất cả và từng loại vay đang có khoản vay xuất bản (cùng điều kiện với trang danh sách).

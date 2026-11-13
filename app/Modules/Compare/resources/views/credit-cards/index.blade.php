@@ -5,6 +5,11 @@
         <x-ui.breadcrumb :items="['Trang chủ' => route('home'), 'Thẻ tín dụng' => null]" />
         <h1 class="mt-3 text-2xl font-bold sm:text-3xl">So sánh thẻ tín dụng</h1>
         <p class="mt-1 max-w-3xl text-slate-600">Lọc theo ngân hàng, phí và nhu cầu chi tiêu, chọn tối đa 3 thẻ để so sánh chi tiết. Thông tin chỉ để tham khảo; điều kiện cấp thẻ và hạn mức do ngân hàng quyết định.</p>
+        <a href="{{ route('compare.credit-cards.quiz') }}" class="mt-4 flex items-center gap-3 rounded-card border border-primary-200 bg-primary-50 p-4 text-navy-900 hover:border-primary-400 sm:inline-flex">
+            <x-ui.icon name="sparkles" class="size-5 shrink-0 text-primary-700" />
+            <span><strong>Chưa biết chọn thẻ nào?</strong> Trả lời 5 câu hỏi để xem thẻ hợp với cách bạn chi tiêu.</span>
+            <x-ui.icon name="chevron-right" class="size-5 shrink-0 text-primary-700" />
+        </a>
 
         <div class="mt-6 grid gap-6 lg:grid-cols-[280px_1fr]">
             <x-ui.filter-panel :action="route('compare.credit-cards.index')" :active-count="$filters->activeCount()">

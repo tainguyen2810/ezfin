@@ -4,11 +4,13 @@ namespace App\Modules\Compare\Http\Controllers;
 
 use App\Modules\Compare\Actions\FindComparableCreditCards;
 use App\Modules\Compare\Actions\FindSimilarCreditCards;
+use App\Modules\Compare\Actions\RecommendCreditCards;
 use App\Modules\Compare\Actions\SearchCreditCards;
 use App\Modules\Compare\Enums\CardBenefit;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
+use App\Modules\Compare\Support\CardQuizAnswers;
 use App\Modules\Compare\Support\CreditCardComparison;
 use App\Modules\Compare\Support\CreditCardFilters;
 use App\Modules\Compare\Support\CreditCardSchema;
@@ -95,6 +97,19 @@ class CreditCardController
             'facts' => $rows->whereNotIn('label', ['Nhóm lợi ích', 'Ưu điểm', 'Hạn chế'])->mapWithKeys(fn (array $row) => [$row['label'] => $row['values'][0]]),
             'similar' => $similar->handle($card),
             'schema' => CreditCardSchema::for($card),
+        ]);
+    }
+
+    /** Quiz gợi ý thẻ: form GET, câu trả lời không được lưu. Trang có kết quả không lập chỉ mục. */
+    public function quiz(Request $request, RecommendCreditCards $recommend): View
+    {
+        $answers = CardQuizAnswers::fromRequest($request);
+
+        return view('compare::credit-cards.quiz', [
+            'answers' => $answers,
+            'result' => $answers->isComplete() ? $recommend->handle($answers) : null,
+            'submitted' => array_intersect(array_keys($request->query()), CardQuizAnswers::QUERY_KEYS) !== [],
+            'priorities' => collect(CardBenefit::cases())->mapWithKeys(fn (CardBenefit $benefit) => [$benefit->slug() => $benefit->getLabel()]),
         ]);
     }
 }
