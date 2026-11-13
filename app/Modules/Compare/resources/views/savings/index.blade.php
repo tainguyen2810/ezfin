@@ -83,6 +83,7 @@
                 Thứ tự chỉ dựa trên tiền lãi tính theo biểu lãi suất đã công bố. Hãy xác nhận lại với ngân hàng trước khi gửi.
                 Đây không phải khuyến nghị tài chính cá nhân.
             </p>
+            @include('compare::savings._term-links')
         </div>
     </div>
 </x-layouts.public>

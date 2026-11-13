@@ -2,6 +2,7 @@
 
 namespace App\Modules\Compare\Http\Controllers;
 
+use App\Modules\Compare\Actions\BestSavingsRates;
 use App\Modules\Compare\Actions\CompareSavingsRates;
 use App\Modules\Compare\Actions\SavingsRateBoard;
 use App\Modules\Compare\Enums\InterestPayment;
@@ -51,6 +52,28 @@ class SavingsController
             'terms' => array_keys($best),
             'best' => $best,
             'channels' => collect(SavingsChannel::cases())->mapWithKeys(fn (SavingsChannel $c) => [$c->slug() => $c->getLabel()]),
+        ]);
+    }
+
+    /**
+     * Trang đích "Lãi suất tiết kiệm X tháng cao nhất tháng mm/yyyy": tự cập nhật theo biểu lãi đang hiệu lực.
+     * Kỳ hạn không có trang đích hoặc chưa ngân hàng nào công bố thì 404 (không đăng trang rỗng).
+     */
+    public function term(string $months, BestSavingsRates $best, SavingsRateBoard $board): View
+    {
+        // So khớp chuỗi để "012-thang" không thành bản trùng của "12-thang".
+        abort_unless(in_array($months, array_map('strval', BestSavingsRates::TERMS), true), 404);
+        $months = (int) $months;
+
+        $rows = $best->forTerm($months);
+        abort_if($rows->isEmpty(), 404);
+
+        return view('compare::savings.term', [
+            'months' => $months,
+            'rows' => $rows,
+            'updatedAt' => $board->lastPublishedAt($months),
+            'otherTerms' => array_values(array_diff($best->availableTerms(), [$months])),
+            'sampleAmount' => SavingsFilters::DEFAULT_AMOUNT,
         ]);
     }
 }

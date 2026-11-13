@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### SEO: trang lãi suất cao nhất theo kỳ hạn
+
+- Trang "Lãi suất tiết kiệm 12 tháng cao nhất tháng 11/2026" cho các kỳ hạn 1–36 tháng (`/lai-suat-tiet-kiem/12-thang`...), tự cập nhật theo biểu lãi và tháng hiện tại; kèm tiền lãi trên 100 triệu, thay đổi 30 ngày, câu hỏi thường gặp.
+- Dữ liệu có cấu trúc: FAQPage, ItemList, Organization, WebSite. Biên tập viên thêm được câu hỏi thường gặp cho bài viết.
+
 ### Nhập sao kê ngân hàng (app)
 
 - Nhập giao dịch từ file sao kê CSV hoặc Excel (.xlsx) vào một ví: tự nhận cột ngày, nội dung, ghi nợ/ghi có; xem trước và sửa cột trước khi nhập.

@@ -28,6 +28,7 @@ class ArticleRevision extends Model
     {
         return [
             'references' => 'array',
+            'faq' => 'array',
             'created_at' => 'datetime',
         ];
     }

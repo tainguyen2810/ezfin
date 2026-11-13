@@ -244,5 +244,13 @@
                 <figure class="text-center text-xs text-slate-500"><x-ui.illustration name="phone" class="h-48" /><figcaption>phone</figcaption></figure>
             </div>
         </section>
+        <section class="{{ $section }}">
+            <h2 class="{{ $h2 }}">Câu hỏi thường gặp</h2>
+            <p class="text-sm text-slate-500"><code>&lt;x-ui.faq :items="[['question' => ..., 'answer' => ...]]" /&gt;</code>: mở/đóng không cần JS, kèm dữ liệu FAQPage.</p>
+            <x-ui.faq title="" :schema="false" :items="[
+                ['question' => 'Câu hỏi mẫu thứ nhất?', 'answer' => 'Câu trả lời ngắn, văn bản thuần.'],
+                ['question' => 'Câu hỏi mẫu thứ hai?', 'answer' => 'Mở bằng cách bấm vào câu hỏi.'],
+            ]" />
+        </section>
     </div>
 </x-layouts.public>

@@ -72,6 +72,16 @@ class ArticleForm
                     ->addActionLabel('Thêm nguồn')
                     ->defaultItems(0)
                     ->maxItems(20),
+                Repeater::make('faq')->label('Câu hỏi thường gặp')
+                    ->helperText('Hiện cuối bài và gửi cho Google dạng FAQ. Chỉ viết câu hỏi người đọc thật sự hỏi; câu trả lời ngắn, văn bản thuần.')
+                    ->schema([
+                        TextInput::make('question')->label('Câu hỏi')->required()->maxLength(255),
+                        Textarea::make('answer')->label('Trả lời')->required()->rows(3)->maxLength(2000),
+                    ])
+                    ->addActionLabel('Thêm câu hỏi')
+                    ->defaultItems(0)
+                    ->maxItems(Article::MAX_FAQ)
+                    ->collapsible(),
             ]),
             Section::make('Xuất bản')->columnSpan(['lg' => 1])->schema([
                 TextEntry::make('status')->label('Trạng thái')->badge()->hiddenOn('create'),

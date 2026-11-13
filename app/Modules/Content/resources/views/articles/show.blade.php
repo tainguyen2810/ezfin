@@ -51,6 +51,10 @@
         {{-- Nội dung đã lọc XSS khi lưu (App\Modules\Content\Support\ArticleHtml). --}}
         <div class="article-body mt-8">{!! $article->body !!}</div>
 
+        @if ($article->faq)
+            <x-ui.faq class="mt-10" :items="$article->faq" />
+        @endif
+
         @if ($article->references)
             <section class="mt-10" aria-labelledby="nguon-tham-khao">
                 <h2 id="nguon-tham-khao" class="text-lg font-semibold">Nguồn tham khảo</h2>

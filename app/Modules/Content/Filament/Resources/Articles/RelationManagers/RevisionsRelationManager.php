@@ -43,6 +43,8 @@ class RevisionsRelationManager extends RelationManager
             RepeatableEntry::make('references')->label('Nguồn tham khảo')->placeholder('—')
                 ->schema([TextEntry::make('title')->hiddenLabel(), TextEntry::make('url')->hiddenLabel()->placeholder('—')])
                 ->columns(2),
+            RepeatableEntry::make('faq')->label('Câu hỏi thường gặp')->placeholder('—')
+                ->schema([TextEntry::make('question')->hiddenLabel()->weight('bold'), TextEntry::make('answer')->hiddenLabel()]),
         ]);
     }
 

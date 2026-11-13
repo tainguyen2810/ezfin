@@ -38,6 +38,7 @@ use Illuminate\Validation\ValidationException;
  * @property ?string $excerpt
  * @property ?string $body
  * @property ?list<array{title: string, url: ?string}> $references
+ * @property ?list<array{question: string, answer: string}> $faq
  * @property ?string $cover_path
  * @property ArticleStatus $status
  * @property ?string $review_note
@@ -55,9 +56,11 @@ class Article extends Model
     public const COVER_DIRECTORY = 'articles';
 
     /** Trường được lưu vào lịch sử sửa. */
-    public const REVISIONED = ['title', 'excerpt', 'body', 'references'];
+    public const REVISIONED = ['title', 'excerpt', 'body', 'references', 'faq'];
 
-    protected $fillable = ['category_id', 'author_id', 'title', 'slug', 'excerpt', 'body', 'references', 'cover_path'];
+    public const MAX_FAQ = 10;
+
+    protected $fillable = ['category_id', 'author_id', 'title', 'slug', 'excerpt', 'body', 'references', 'faq', 'cover_path'];
 
     protected $attributes = ['status' => 'draft'];
 
@@ -69,6 +72,7 @@ class Article extends Model
         return [
             'status' => ArticleStatus::class,
             'references' => 'array',
+            'faq' => 'array',
             'submitted_at' => 'datetime',
             'published_at' => 'datetime',
             'content_updated_at' => 'datetime',
@@ -94,6 +98,24 @@ class Article extends Model
                 ->all();
 
             return $references === [] ? null : json_encode($references, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        });
+    }
+
+    /** Câu hỏi thường gặp: văn bản thuần (in ra có escape), bỏ cặp thiếu câu hỏi hoặc câu trả lời. */
+    protected function faq(): Attribute
+    {
+        return Attribute::make(set: function (?array $value) {
+            $faq = collect($value ?? [])
+                ->map(fn ($item) => [
+                    'question' => trim(strip_tags((string) ($item['question'] ?? ''))),
+                    'answer' => trim(strip_tags((string) ($item['answer'] ?? ''))),
+                ])
+                ->filter(fn (array $item) => $item['question'] !== '' && $item['answer'] !== '')
+                ->take(self::MAX_FAQ)
+                ->values()
+                ->all();
+
+            return $faq === [] ? null : json_encode($faq, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         });
     }
 

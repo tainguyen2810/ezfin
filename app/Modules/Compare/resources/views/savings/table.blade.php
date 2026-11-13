@@ -52,5 +52,6 @@
             </x-ui.table>
             <p class="mt-3 text-xs text-slate-500">Đơn vị %/năm. "—": ngân hàng chưa công bố kỳ hạn này ở kênh {{ mb_strtolower($channel->getLabel()) }}. Lãi suất do ngân hàng quyết định và có thể thay đổi; xem nguồn và ngày xác minh ở trang từng ngân hàng.</p>
         @endif
+        @include('compare::savings._term-links')
     </div>
 </x-layouts.public>

@@ -13,6 +13,7 @@ Route::get('/the-tin-dung/{slug}', [CreditCardController::class, 'show'])->where
 
 Route::get('/lai-suat-tiet-kiem', [SavingsController::class, 'index'])->name('compare.savings.index');
 Route::get('/lai-suat-tiet-kiem/bang-lai-suat', [SavingsController::class, 'table'])->name('compare.savings.table');
+Route::get('/lai-suat-tiet-kiem/{months}-thang', [SavingsController::class, 'term'])->whereNumber('months')->name('compare.savings.term');
 
 Route::get('/ngan-hang', [InstitutionController::class, 'index'])->name('compare.institutions.index');
 Route::get('/ngan-hang/{slug}', [InstitutionController::class, 'show'])->where('slug', '[a-z0-9-]{1,120}')->name('compare.institutions.show');
