@@ -95,6 +95,7 @@ class FinancialProduct extends Model
         $route = match ($this->type) {
             ProductType::CreditCard => 'compare.credit-cards.show',
             ProductType::BankAccount => 'compare.bank-accounts.show',
+            ProductType::Loan => 'compare.loans.show',
             default => null,
         };
 
@@ -153,6 +154,11 @@ class FinancialProduct extends Model
     public function bankAccount(): HasOne
     {
         return $this->hasOne(BankAccountDetail::class, 'product_id');
+    }
+
+    public function loan(): HasOne
+    {
+        return $this->hasOne(LoanDetail::class, 'product_id');
     }
 
     public function savingsRates(): HasMany

@@ -83,7 +83,7 @@ class DemoSiteCommand extends Command
         Auth::forgetUser();
 
         $this->info('Đã tạo dữ liệu demo:');
-        $this->line("- {$catalog['institutions']} ngân hàng, công ty tài chính; {$catalog['savings']} sản phẩm tiết kiệm; {$catalog['cards']} thẻ tín dụng; {$catalog['accounts']} tài khoản thanh toán");
+        $this->line("- {$catalog['institutions']} ngân hàng, công ty tài chính; {$catalog['savings']} sản phẩm tiết kiệm; {$catalog['cards']} thẻ tín dụng; {$catalog['accounts']} tài khoản thanh toán; {$catalog['loans']} khoản vay");
         $this->line("- {$catalog['links']} link đối tác kèm lượt bấm 60 ngày; $articles bài viết, 3 tác giả");
         $this->line('- '.$personal);
         $this->line('Đã bật các mục: so sánh, công cụ tính, kiến thức, đối tác, app quản lý tiền.');

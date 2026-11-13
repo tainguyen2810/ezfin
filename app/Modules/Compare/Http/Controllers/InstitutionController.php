@@ -28,7 +28,7 @@ class InstitutionController
     {
         $institution = FinancialInstitution::query()->active()->where('slug', $slug)->firstOrFail();
         $products = FinancialProduct::query()->published()->where('institution_id', $institution->id)
-            ->with(['creditCard', 'bankAccount'])->orderBy('name')->get();
+            ->with(['creditCard', 'bankAccount', 'loan'])->orderBy('name')->get();
         abort_if($products->isEmpty(), 404);
 
         return view('compare::institutions.show', [
@@ -37,6 +37,7 @@ class InstitutionController
             'history' => $board->history($institution),
             'cards' => $products->where('type', ProductType::CreditCard)->filter->creditCard->values(),
             'accounts' => $products->where('type', ProductType::BankAccount)->filter->bankAccount->values(),
+            'loans' => $products->where('type', ProductType::Loan)->filter->loan->values(),
         ]);
     }
 }

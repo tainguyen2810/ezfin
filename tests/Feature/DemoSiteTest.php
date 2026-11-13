@@ -25,7 +25,7 @@ it('fills every section with demo data and shows the demo notice', function () {
     $this->artisan('ezfin:demo')->assertSuccessful();
 
     expect(FinancialInstitution::count())->toBe(14)
-        ->and(FinancialProduct::published()->count())->toBe(54)
+        ->and(FinancialProduct::published()->count())->toBe(67)
         ->and(OutboundLink::count())->toBeGreaterThan(30)
         ->and(OutboundClick::count())->toBeGreaterThan(100)
         ->and(Article::count())->toBe(10)
@@ -33,10 +33,11 @@ it('fills every section with demo data and shows the demo notice', function () {
         ->and(User::where('email', 'demo@ezfin.test')->exists())->toBeTrue()
         ->and(Storage::disk('public')->allFiles())->not->toBeEmpty();
 
-    foreach (['/', '/the-tin-dung', '/lai-suat-tiet-kiem', '/tai-khoan-ngan-hang', '/kien-thuc'] as $path) {
+    foreach (['/', '/the-tin-dung', '/lai-suat-tiet-kiem', '/tai-khoan-ngan-hang', '/vay', '/kien-thuc'] as $path) {
         $this->get('http://ezfin.test'.$path)->assertOk()->assertSee('Bản demo');
     }
     $this->get('http://ezfin.test/the-tin-dung')->assertSee('VPBank StepUP');
+    $this->get('http://ezfin.test/vay?loai=mua-nha')->assertSee('Vietcombank Vay mua nhà ở');
 });
 
 it('refuses to run twice and purges exactly what it created', function () {

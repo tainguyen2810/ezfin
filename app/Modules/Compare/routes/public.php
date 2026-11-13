@@ -3,6 +3,7 @@
 use App\Modules\Compare\Http\Controllers\BankAccountController;
 use App\Modules\Compare\Http\Controllers\CreditCardController;
 use App\Modules\Compare\Http\Controllers\InstitutionController;
+use App\Modules\Compare\Http\Controllers\LoanController;
 use App\Modules\Compare\Http\Controllers\SavingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,6 @@ Route::get('/ngan-hang/{slug}', [InstitutionController::class, 'show'])->where('
 
 Route::get('/tai-khoan-ngan-hang', [BankAccountController::class, 'index'])->name('compare.bank-accounts.index');
 Route::get('/tai-khoan-ngan-hang/{slug}', [BankAccountController::class, 'show'])->where('slug', '[a-z0-9-]{1,150}')->name('compare.bank-accounts.show');
+
+Route::get('/vay', [LoanController::class, 'index'])->name('compare.loans.index');
+Route::get('/vay/{slug}', [LoanController::class, 'show'])->where('slug', '[a-z0-9-]{1,150}')->name('compare.loans.show');

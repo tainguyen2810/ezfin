@@ -128,6 +128,24 @@
                     </ul>
                 </section>
             @endif
+            @if ($loans->isNotEmpty())
+                <section aria-labelledby="khoan-vay">
+                    <h2 id="khoan-vay" class="text-lg font-semibold">Khoản vay {{ $name }}</h2>
+                    <ul class="mt-3 grid gap-3 sm:grid-cols-2">
+                        @foreach ($loans as $loan)
+                            <li>
+                                <a href="{{ route('compare.loans.show', $loan->slug) }}" class="group flex items-center gap-3 rounded-card border border-slate-200 bg-white p-3 shadow-card hover:border-primary-300">
+                                    <span class="min-w-0 flex-1">
+                                        <span class="block font-semibold text-navy-900 group-hover:text-primary-700">{{ $loan->name }}</span>
+                                        <span class="num block text-xs text-slate-500">{{ $loan->loan->kind->getLabel() }}@if ($loan->loan->promo_rate !== null) · lãi từ {{ Format::rate($loan->loan->promo_rate) }}@endif</span>
+                                    </span>
+                                    <x-ui.icon name="chevron-right" class="size-5 shrink-0 text-slate-400" />
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </section>
+            @endif
         </div>
     </div>
 </x-layouts.public>

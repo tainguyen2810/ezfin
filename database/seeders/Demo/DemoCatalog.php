@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
- * Ngân hàng, lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng và link đối tác DEMO.
+ * Ngân hàng, lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng, khoản vay và link đối tác DEMO.
  * Số liệu là giả lập để duyệt giao diện, không phải biểu phí thật của ngân hàng.
  */
 class DemoCatalog
@@ -136,6 +136,39 @@ class DemoCatalog
             'Tài khoản truyền thống, miễn phí quản lý khi nhận lương qua HDBank.', ['Miễn phí khi nhận lương'], ['Có phí nếu không nhận lương']],
     ];
 
+    /**
+     * [ngân hàng, tên, loại, lãi ưu đãi, số tháng ưu đãi (null = cố định), biên độ, ghi chú lãi sau ưu đãi, vay tối thiểu, tối đa,
+     *  thời hạn tối đa (tháng), % giá trị tài sản, thu nhập tối thiểu, phí hồ sơ %, phí trả trước %, ghi chú trả trước, tóm tắt, ưu, nhược]
+     */
+    private const LOANS = [
+        ['vietcombank', 'Vietcombank Vay mua nhà ở', 'home', 6.5, 12, 3.5, 'Lãi tiết kiệm 24 tháng + 3,5%', 100_000_000, 10_000_000_000, 360, 70, null, 0, 2, '2% trong 3 năm đầu, miễn phí từ năm thứ tư',
+            'Vay mua nhà, đất, căn hộ với thời hạn tới 30 năm, lãi ưu đãi năm đầu.', ['Thời hạn tới 30 năm', 'Biên độ thấp'], ['Ưu đãi chỉ 12 tháng']],
+        ['bidv', 'BIDV Vay mua nhà dự án', 'home', 5.9, 24, 3.8, 'Lãi cơ sở + 3,8%', 100_000_000, 15_000_000_000, 360, 80, null, 0, 2, '2% trong 5 năm đầu',
+            'Vay mua căn hộ tại dự án ngân hàng liên kết, cố định lãi 2 năm đầu.', ['Ưu đãi 24 tháng', 'Vay tới 80% giá trị'], ['Chỉ áp dụng dự án liên kết']],
+        ['techcombank', 'Techcombank Vay mua nhà', 'home', 7.0, 36, 3.5, 'Lãi cơ sở + 3,5%', 200_000_000, 20_000_000_000, 420, 75, null, 0.5, 3, '3% năm đầu, giảm dần, miễn phí từ năm thứ sáu',
+            'Cố định lãi 3 năm đầu, giải ngân nhanh, thời hạn tới 35 năm.', ['Cố định lãi 36 tháng', 'Thời hạn tới 35 năm'], ['Lãi ưu đãi cao hơn gói ngắn hạn']],
+        ['vpbank', 'VPBank Vay mua nhà', 'home', 6.9, 12, 3.9, 'Lãi cơ sở + 3,9%', 100_000_000, 10_000_000_000, 300, 75, null, 0, 3, '3% trong 3 năm đầu',
+            'Vay mua nhà, xây sửa nhà với hồ sơ đơn giản.', ['Hồ sơ đơn giản'], ['Biên độ sau ưu đãi cao']],
+        ['mb', 'MB Vay mua nhà Home Loan', 'home', 6.2, 18, 3.6, 'Lãi cơ sở + 3,6%', 100_000_000, 10_000_000_000, 300, 80, null, 0, 1.5, '1,5% trong 3 năm đầu',
+            'Ưu đãi lãi 18 tháng, phí trả nợ trước hạn thấp.', ['Phí trả trước thấp', 'Vay tới 80% giá trị'], ['Thời hạn tối đa 25 năm']],
+        ['acb', 'ACB Vay mua xe', 'auto', 7.5, 12, 3.5, 'Lãi cơ sở + 3,5%', 100_000_000, 5_000_000_000, 96, 80, null, 0, 2, '2% trong 2 năm đầu',
+            'Vay mua ô tô mới và đã qua sử dụng, thế chấp bằng chính chiếc xe.', ['Nhận cả xe đã qua sử dụng'], ['Ưu đãi chỉ 12 tháng']],
+        ['tpbank', 'TPBank Vay mua ô tô', 'auto', 6.9, 6, 4.0, 'Lãi cơ sở + 4%', 100_000_000, 5_000_000_000, 96, 85, null, 0, 3, '3% năm đầu, 2% năm thứ hai',
+            'Duyệt online, vay tới 85% giá trị xe.', ['Vay tới 85% giá xe', 'Duyệt nhanh'], ['Ưu đãi 6 tháng', 'Biên độ cao']],
+        ['vib', 'VIB Vay mua xe', 'auto', 7.9, 24, 3.4, 'Lãi cơ sở + 3,4%', 100_000_000, 5_000_000_000, 96, 80, null, 0, 1, '1% trong 2 năm đầu',
+            'Cố định lãi 24 tháng, phí trả nợ trước hạn thấp.', ['Ưu đãi 24 tháng', 'Phí trả trước thấp'], ['Lãi ưu đãi không thấp nhất']],
+        ['vpbank', 'VPBank Vay tín chấp theo lương', 'personal', 14.0, null, null, null, 20_000_000, 1_000_000_000, 60, null, 8_000_000, 0, 3, '3% số tiền trả trước',
+            'Vay không tài sản bảo đảm dựa trên thu nhập chuyển khoản qua ngân hàng.', ['Không cần tài sản bảo đảm', 'Lãi cố định cả kỳ hạn'], ['Lãi cao hơn vay thế chấp']],
+        ['techcombank', 'Techcombank Vay tiêu dùng không tài sản', 'personal', 13.5, null, null, null, 30_000_000, 1_000_000_000, 60, null, 10_000_000, 0, 2, '2% số tiền trả trước',
+            'Hạn mức tới 1 tỷ đồng, duyệt trên ứng dụng.', ['Duyệt online', 'Hạn mức cao'], ['Yêu cầu thu nhập từ 10 triệu đồng']],
+        ['shinhan', 'Shinhan Vay tín chấp', 'personal', 12.9, null, null, null, 20_000_000, 1_500_000_000, 60, null, 7_000_000, 0, 3, null,
+            'Lãi cố định, trả góp hằng tháng, dành cho người có thu nhập ổn định.', ['Lãi thấp trong nhóm tín chấp'], ['Hồ sơ chứng minh thu nhập']],
+        ['fe-credit', 'FE Credit Vay tiền mặt', 'personal', 28.0, null, null, null, 10_000_000, 100_000_000, 48, null, 3_000_000, 0, 5, '5% số tiền trả trước',
+            'Vay nhanh cho người có thu nhập thấp, hồ sơ đơn giản.', ['Duyệt nhanh', 'Thu nhập tối thiểu thấp'], ['Lãi rất cao', 'Hạn mức thấp']],
+        ['home-credit', 'Home Credit Vay tiền mặt', 'personal', 26.0, null, null, null, 10_000_000, 80_000_000, 36, null, 3_000_000, 0, 4, null,
+            'Vay tiền mặt trên ứng dụng, giải ngân trong ngày.', ['Giải ngân nhanh'], ['Lãi cao', 'Thời hạn ngắn']],
+    ];
+
     /** @var array<string, FinancialInstitution> */
     private array $institutions = [];
 
@@ -155,10 +188,11 @@ class DemoCatalog
         $savings = $this->savings();
         $cards = $this->cards();
         $accounts = $this->accounts();
-        $links = $this->partnerLinks([...$cards, ...$accounts, ...$savings]);
+        $loans = $this->loans();
+        $links = $this->partnerLinks([...$cards, ...$accounts, ...$loans, ...$savings]);
 
         return ['institutions' => count($this->institutions), 'savings' => count($savings), 'cards' => count($cards),
-            'accounts' => count($accounts), 'links' => $links];
+            'accounts' => count($accounts), 'loans' => count($loans), 'links' => $links];
     }
 
     /** @return list<FinancialProduct> */
@@ -227,6 +261,21 @@ class DemoCatalog
         return $products;
     }
 
+    /** @return list<FinancialProduct> */
+    private function loans(): array
+    {
+        $products = [];
+        foreach (self::LOANS as [$bank, $name, $kind, $rate, $promo, $margin, $note, $min, $max, $term, $ltv, $income, $fee, $prepay, $prepayNote, $summary, $pros, $cons]) {
+            $product = $this->product(ProductType::Loan, $bank, $name, $summary, null, $pros, $cons);
+            $product->loan()->create(['kind' => $kind, 'promo_rate' => $rate, 'promo_months' => $promo, 'floating_margin' => $margin,
+                'floating_note' => $note, 'min_amount' => $min, 'max_amount' => $max, 'max_term_months' => $term, 'max_ltv' => $ltv,
+                'min_monthly_income' => $income, 'processing_fee' => $fee, 'prepayment_fee' => $prepay, 'prepayment_note' => $prepayNote]);
+            $products[] = $product;
+        }
+
+        return $products;
+    }
+
     /** Link đối tác cho khoảng 2/3 sản phẩm, kèm lượt bấm 60 ngày gần nhất để trang thống kê có số liệu. */
     private function partnerLinks(array $products): int
     {
@@ -238,6 +287,7 @@ class DemoCatalog
             $cta = match ($product->type) {
                 ProductType::CreditCard => 'Mở thẻ',
                 ProductType::BankAccount => 'Mở tài khoản',
+                ProductType::Loan => 'Đăng ký vay',
                 default => 'Gửi online',
             };
             $link = $this->manifest->track(OutboundLink::create(['product_id' => $product->id, 'name' => $product->name,
@@ -245,7 +295,11 @@ class DemoCatalog
             $rows = [];
             foreach (range(1, mt_rand(5, 90)) as $n) {
                 $rows[] = ['link_id' => $link->id, 'click_id' => Str::lower(Str::random(24)), 'ip_hash' => hash('sha256', Str::random(16)),
-                    'user_agent' => 'Mozilla/5.0 (demo)', 'referer_path' => $product->type === ProductType::CreditCard ? Arr::random(['/the-tin-dung', '/the-tin-dung/'.$product->slug, '/']) : Arr::random(['/lai-suat-tiet-kiem', '/lai-suat-tiet-kiem/12-thang', '/ngan-hang/'.$product->institution->slug]),
+                    'user_agent' => 'Mozilla/5.0 (demo)', 'referer_path' => match ($product->type) {
+                        ProductType::CreditCard => Arr::random(['/the-tin-dung', '/the-tin-dung/'.$product->slug, '/']),
+                        ProductType::Loan => Arr::random(['/vay', '/vay/'.$product->slug, '/']),
+                        default => Arr::random(['/lai-suat-tiet-kiem', '/lai-suat-tiet-kiem/12-thang', '/ngan-hang/'.$product->institution->slug]),
+                    },
                     'created_at' => now()->subMinutes(mt_rand(1, 60 * 24 * 60))];
             }
             OutboundClick::insert($rows);
@@ -256,7 +310,11 @@ class DemoCatalog
                     'network' => 'demo', 'external_id' => 'DEMO-'.Str::upper(Str::random(10)), 'click_id' => $click['click_id'],
                     'link_id' => $link->id, 'source_path' => $click['referer_path'],
                     'status' => collect(ConversionStatus::cases())->random(),
-                    'commission' => $product->type === ProductType::CreditCard ? mt_rand(3, 12) * 50_000 : mt_rand(1, 4) * 20_000,
+                    'commission' => match ($product->type) {
+                        ProductType::CreditCard => mt_rand(3, 12) * 50_000,
+                        ProductType::Loan => mt_rand(4, 20) * 100_000,
+                        default => mt_rand(1, 4) * 20_000,
+                    },
                     'occurred_at' => $click['created_at']->copy()->addHours(mt_rand(1, 72))->min(now()),
                 ]));
             }
