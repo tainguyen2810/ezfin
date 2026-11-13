@@ -23,6 +23,7 @@ class CoreServiceProvider extends ModuleServiceProvider
         'legal.about' => 'Giới thiệu',
         'legal.methodology' => 'Phương pháp đánh giá',
         'legal.disclosure' => 'Công bố liên kết',
+        'legal.disclaimer' => 'Miễn trừ trách nhiệm',
         'legal.terms' => 'Điều khoản sử dụng',
         'legal.privacy' => 'Quyền riêng tư',
         'legal.contact' => 'Liên hệ',
