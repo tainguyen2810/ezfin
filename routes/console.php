@@ -20,3 +20,7 @@ Schedule::command('ezfin:recurring')->dailyAt('06:00')->withoutOverlapping()->on
 // Heartbeat cho `php artisan ezfin:check`: cron còn chạy, queue worker còn xử lý job.
 Schedule::call(fn () => Heartbeat::beat(Heartbeat::SCHEDULE))->everyMinute()->name('heartbeat:schedule');
 Schedule::job(new QueueHeartbeat)->everyFiveMinutes()->name('heartbeat:queue');
+
+// Nhận tin qua email (lệnh tự bỏ qua khi tắt flag newsletter): báo lãi tăng hằng ngày, bản tin tuần sáng thứ Hai.
+Schedule::command('ezfin:rate-alerts')->dailyAt('07:30')->withoutOverlapping()->onOneServer();
+Schedule::command('ezfin:newsletter-weekly')->weeklyOn(1, '08:00')->withoutOverlapping()->onOneServer();

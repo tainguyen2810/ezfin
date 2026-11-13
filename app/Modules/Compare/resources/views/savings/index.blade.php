@@ -84,6 +84,9 @@
                 Đây không phải khuyến nghị tài chính cá nhân.
             </p>
             @include('compare::savings._term-links')
+            @if (\Laravel\Pennant\Feature::active('newsletter'))
+                @include('newsletter::signup', ['term' => in_array($filters->term, \App\Modules\Compare\Actions\BestSavingsRates::TERMS, true) ? $filters->term : 12])
+            @endif
         </div>
     </div>
 </x-layouts.public>

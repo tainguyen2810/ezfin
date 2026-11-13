@@ -56,10 +56,20 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | --- | --- | --- | --- |
 | C1 | SEO kỹ thuật: trang đích "Lãi suất tiết kiệm X tháng cao nhất tháng mm/yyyy", FAQ + schema (FAQPage, ItemList, Organization, WebSite), FAQ cho bài viết | Số liệu lấy từ biểu lãi đang hiệu lực, tự đổi theo tháng; kỳ hạn chưa có dữ liệu trả 404 và không vào sitemap; JSON-LD hợp lệ; có test | Xong |
 | C2 | Đo chuyển đổi affiliate + dashboard quản trị | Postback có khóa bí mật và nhập CSV đối soát theo mã click, không ghi trùng; dashboard click, chuyển đổi, hoa hồng theo ngân hàng, sản phẩm, trang nguồn, theo kỳ; có test | Xong |
-| C3 | Thu email: báo lãi suất tăng, bản tin tuần | Xác nhận 2 bước (double opt-in), hủy 1 chạm + List-Unsubscribe; chống spam đăng ký; chỉ gửi khi lãi thật sự tăng, không gửi trùng; có test | Chưa làm |
+| C3 | Thu email: báo lãi suất tăng, bản tin tuần | Xác nhận 2 bước (double opt-in), hủy 1 chạm + List-Unsubscribe; chống spam đăng ký; chỉ gửi khi lãi thật sự tăng, không gửi trùng; có test | Xong |
 | C4 | Trang pháp lý: miễn trừ trách nhiệm, công bố liên kết, quyền riêng tư theo Luật Bảo vệ dữ liệu cá nhân 2025 | Nêu đúng dữ liệu đang thu (gồm email đăng ký, click, chuyển đổi), mục đích, căn cứ, thời hạn lưu, quyền của chủ thể; có trong footer và sitemap | Chưa làm |
 
 ## Nhật ký phiên
+
+### 13/11/2026 — C3: nhận tin qua email
+
+- Đã xong: module `Newsletter` (flag `newsletter`, mặc định bật). Form `@include('newsletter::signup', ['term' => 12])` ở trang đích lãi suất theo kỳ hạn, trang so sánh lãi suất, cuối bài viết (bản tin tuần). Double opt-in: POST `/nhan-tin` chỉ gửi thư, lựa chọn nằm trong link mã hóa hết hạn sau 7 ngày, chưa ghi gì vào database; trang xác nhận cần bấm nút (trình quét link không tự xác nhận). Chống lạm dụng: ô ẩn chống bot, 10 lần/phút/IP, 3 thư xác nhận/giờ/email, thông báo giống nhau cho mọi email.
+- Gửi: `ezfin:rate-alerts` 7:30 hằng ngày (mức cao nhất thị trường của kỳ hạn tăng ≥ 0,01 điểm so với mốc thì báo, gộp một thư/người; giảm thì hạ mốc; chạy lại không trùng). `ezfin:newsletter-weekly` 8:00 thứ Hai (lãi cao nhất 1/3/6/12/24 tháng so với tuần trước, bài mới 7 ngày; tối đa một bản/tuần). Thư có List-Unsubscribe + One-Click (RFC 8058, `/nhan-tin/huy/{token}` miễn CSRF), link quản lý `/nhan-tin/quan-ly/{token}`. Hủy hết thì xóa hẳn email.
+- Quản trị → Nội dung → Người nhận tin (chỉ quản trị cao nhất; chỉ xem và xóa theo yêu cầu). Không dùng Auditable.
+- Lấy số liệu qua `Compare\Actions\BestSavingsRates` và `Content\Actions\LatestArticles`.
+- Test: `tests/Feature/Newsletter/NewsletterTest.php`; Pest toàn bộ xanh; xem ảnh 360/1280px.
+- Cần trên server: cron `schedule:run` và queue worker (đã có trong tài liệu triển khai), SMTP Brevo.
+- Tiếp theo: C4.
 
 ### 13/11/2026 — C2: đo chuyển đổi affiliate
 
