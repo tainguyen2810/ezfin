@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Tỷ giá và giá vàng
+
+- Trang Tỷ giá ngoại tệ và Giá vàng: bảng theo nguồn công bố, giờ cập nhật, thay đổi so với hôm trước, biểu đồ 30 ngày, đổi ngoại tệ sang đồng. Số liệu nhập tay hoặc nhập file trong quản trị.
+
 ### Gợi ý thẻ tín dụng
 
 - Trang "Thẻ tín dụng nào hợp với bạn?": trả lời 5 câu hỏi để xem thẻ đủ điều kiện, xếp theo cách chi tiêu và trả nợ, kèm lý do và ước tính hoàn tiền trừ phí. Câu trả lời không được lưu.

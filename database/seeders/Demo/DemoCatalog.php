@@ -7,6 +7,8 @@ use App\Modules\Compare\Enums\ProductStatus;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
+use App\Modules\Markets\Models\FxRate;
+use App\Modules\Markets\Models\GoldPrice;
 use App\Modules\Partner\Enums\ConversionStatus;
 use App\Modules\Partner\Models\AffiliateConversion;
 use App\Modules\Partner\Models\OutboundClick;
@@ -17,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
- * Ngân hàng, lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng, khoản vay và link đối tác DEMO.
+ * Ngân hàng, lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng, khoản vay, tỷ giá, giá vàng và link đối tác DEMO.
  * Số liệu là giả lập để duyệt giao diện, không phải biểu phí thật của ngân hàng.
  */
 class DemoCatalog
@@ -190,9 +192,10 @@ class DemoCatalog
         $accounts = $this->accounts();
         $loans = $this->loans();
         $links = $this->partnerLinks([...$cards, ...$accounts, ...$loans, ...$savings]);
+        $quotes = $this->marketQuotes();
 
         return ['institutions' => count($this->institutions), 'savings' => count($savings), 'cards' => count($cards),
-            'accounts' => count($accounts), 'loans' => count($loans), 'links' => $links];
+            'accounts' => count($accounts), 'loans' => count($loans), 'links' => $links, 'quotes' => $quotes];
     }
 
     /** @return list<FinancialProduct> */
@@ -259,6 +262,34 @@ class DemoCatalog
         }
 
         return $products;
+    }
+
+    /** Tỷ giá (8 ngoại tệ) và giá vàng (5 loại) mỗi sáng trong 30 ngày, dao động nhẹ để có biểu đồ. */
+    private function marketQuotes(): int
+    {
+        $fx = ['USD' => 25_440, 'EUR' => 27_650, 'JPY' => 168.4, 'GBP' => 33_020, 'CNY' => 3_560, 'KRW' => 18.9, 'AUD' => 16_720, 'SGD' => 19_640];
+        $gold = [['SJC', 'Vàng miếng SJC 1 lượng', 86_000_000], ['SJC', 'Nhẫn tròn trơn 99,99', 84_300_000], ['SJC', 'Nữ trang 99,99', 83_800_000],
+            ['PNJ', 'Vàng miếng SJC 1 lượng', 86_000_000], ['PNJ', 'Nhẫn trơn PNJ 999.9', 84_200_000]];
+        $count = 0;
+        foreach (range(29, 0) as $daysAgo) {
+            $at = today()->subDays($daysAgo)->setTime(8, 30);
+            $drift = (29 - $daysAgo) / 29;
+            foreach ($fx as $code => $base) {
+                $sell = round($base * (1 + 0.01 * $drift + mt_rand(-20, 20) / 10_000), $base < 1000 ? 2 : 0);
+                $this->manifest->track(FxRate::create(['source' => 'Vietcombank', 'currency' => $code, 'quoted_at' => $at,
+                    'buy_cash' => round($sell * 0.985, 2), 'buy_transfer' => round($sell * 0.988, 2), 'sell' => $sell,
+                    'source_url' => 'https://www.vietcombank.com.vn']));
+                $count++;
+            }
+            foreach ($gold as [$source, $product, $base]) {
+                $sell = (int) (round($base * (1 + 0.03 * $drift + mt_rand(-30, 30) / 10_000) / 100_000) * 100_000);
+                $this->manifest->track(GoldPrice::create(['source' => $source, 'product' => $product, 'quoted_at' => $at,
+                    'buy' => $sell - 2_000_000, 'sell' => $sell, 'source_url' => $source === 'SJC' ? 'https://sjc.com.vn' : 'https://www.pnj.com.vn']));
+                $count++;
+            }
+        }
+
+        return $count;
     }
 
     /** @return list<FinancialProduct> */

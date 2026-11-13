@@ -111,6 +111,30 @@
             </section>
         @endif
 
+        @if ($markets)
+            <section aria-labelledby="thi-truong" class="grid gap-3 sm:grid-cols-2">
+                <h2 id="thi-truong" class="sr-only">Tỷ giá và giá vàng hôm nay</h2>
+                @foreach ([
+                    [$markets['usd'], 'markets.fx', 'Tỷ giá USD bán ra', 'currency-dollar', fn ($quote) => Format::decimal((float) $quote->sell, 0).' đ', fn ($change) => Format::decimal(abs($change), 0)],
+                    [$markets['gold'], 'markets.gold', null, 'sparkles', fn ($quote) => Format::money($quote->sell), fn ($change) => Format::money(abs($change))],
+                ] as [$item, $route, $label, $icon, $value, $delta])
+                    @if ($item)
+                        <a href="{{ route($route) }}" class="flex items-center gap-4 rounded-card border border-slate-200 bg-white p-4 shadow-card hover:border-primary-300">
+                            <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700"><x-ui.icon :name="$icon" class="size-5" /></span>
+                            <span class="min-w-0 flex-1">
+                                <span class="block text-sm text-slate-500">{{ $label ?? 'Giá vàng bán ra · '.$item['quote']->product }}</span>
+                                <span class="num block text-lg font-bold text-navy-900">{{ $value($item['quote']) }}
+                                    @if ($item['change'])<span @class(['text-sm font-semibold', 'text-income' => $item['change'] > 0, 'text-expense' => $item['change'] < 0])>{{ $item['change'] > 0 ? '▲' : '▼' }} {{ $delta($item['change']) }}</span>@endif
+                                </span>
+                                <span class="block text-xs text-slate-500">{{ $item['quote']->source }} · {{ $item['quote']->quoted_at->format('H:i') }} {{ Format::date($item['quote']->quoted_at) }}</span>
+                            </span>
+                            <x-ui.icon name="chevron-right" class="size-5 shrink-0 text-slate-400" />
+                        </a>
+                    @endif
+                @endforeach
+            </section>
+        @endif
+
         @if ($savings->isNotEmpty())
             <section aria-labelledby="lai-suat-cao">
                 <div class="flex flex-wrap items-end justify-between gap-2">

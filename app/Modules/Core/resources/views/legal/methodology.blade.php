@@ -36,6 +36,12 @@
     <h2>Tài khoản ngân hàng</h2>
     <p>Mặc định sắp xếp theo phí quản lý tài khoản thấp. Bạn có thể đổi sang: {{ collect(\App\Modules\Compare\Support\BankAccountFilters::SORTS)->except(\App\Modules\Compare\Support\BankAccountFilters::DEFAULT_SORT)->map(fn ($label) => mb_strtolower($label))->join(', ', ' hoặc ') }}.</p>
 
+    @if (\Laravel\Pennant\Feature::active('markets'))
+        <h2>Tỷ giá và giá vàng</h2>
+        <p>Người vận hành của EzFin chép bảng tỷ giá do ngân hàng công bố và bảng giá vàng do doanh nghiệp vàng công bố vào hệ thống, ghi rõ nguồn và thời điểm công bố. EzFin không tự lấy dữ liệu từ website khác khi chưa được phép, và không hiển thị số liệu "trực tiếp" giả lập.
+            Mức thay đổi so với lần công bố cuối của ngày hôm trước cùng nguồn. Bảng nào quá {{ \App\Modules\Markets\Actions\MarketBoard::STALE_DAYS }} ngày chưa cập nhật sẽ được ghi rõ là số liệu cũ.</p>
+    @endif
+
     <h2>Những điều EzFin không làm</h2>
     <ul>
         <li>Không chấm điểm sao hay đăng đánh giá của người dùng không có thật.</li>

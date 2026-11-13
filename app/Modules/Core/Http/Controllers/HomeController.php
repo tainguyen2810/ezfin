@@ -5,6 +5,7 @@ namespace App\Modules\Core\Http\Controllers;
 use App\Modules\Compare\Actions\CompareSavingsRates;
 use App\Modules\Compare\Support\SavingsFilters;
 use App\Modules\Content\Actions\LatestArticles;
+use App\Modules\Markets\Actions\MarketBoard;
 use App\Modules\Planner\Tools\ToolRegistry;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
@@ -27,6 +28,7 @@ class HomeController
             'savings' => $compare ? app(CompareSavingsRates::class)->handle($savingsFilters)->take(self::TOP_SAVINGS) : collect(),
             'tools' => Feature::active('planner') ? app(ToolRegistry::class)->all() : [],
             'articles' => Feature::active('content') ? app(LatestArticles::class)->handle(3) : collect(),
+            'markets' => Feature::active('markets') ? app(MarketBoard::class)->summary() : null,
         ]);
     }
 }
