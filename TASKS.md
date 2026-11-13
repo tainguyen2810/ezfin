@@ -57,9 +57,16 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | C1 | SEO kỹ thuật: trang đích "Lãi suất tiết kiệm X tháng cao nhất tháng mm/yyyy", FAQ + schema (FAQPage, ItemList, Organization, WebSite), FAQ cho bài viết | Số liệu lấy từ biểu lãi đang hiệu lực, tự đổi theo tháng; kỳ hạn chưa có dữ liệu trả 404 và không vào sitemap; JSON-LD hợp lệ; có test | Xong |
 | C2 | Đo chuyển đổi affiliate + dashboard quản trị | Postback có khóa bí mật và nhập CSV đối soát theo mã click, không ghi trùng; dashboard click, chuyển đổi, hoa hồng theo ngân hàng, sản phẩm, trang nguồn, theo kỳ; có test | Xong |
 | C3 | Thu email: báo lãi suất tăng, bản tin tuần | Xác nhận 2 bước (double opt-in), hủy 1 chạm + List-Unsubscribe; chống spam đăng ký; chỉ gửi khi lãi thật sự tăng, không gửi trùng; có test | Xong |
-| C4 | Trang pháp lý: miễn trừ trách nhiệm, công bố liên kết, quyền riêng tư theo Luật Bảo vệ dữ liệu cá nhân 2025 | Nêu đúng dữ liệu đang thu (gồm email đăng ký, click, chuyển đổi), mục đích, căn cứ, thời hạn lưu, quyền của chủ thể; có trong footer và sitemap | Chưa làm |
+| C4 | Trang pháp lý: miễn trừ trách nhiệm, công bố liên kết, quyền riêng tư theo Luật Bảo vệ dữ liệu cá nhân 2025 | Nêu đúng dữ liệu đang thu (gồm email đăng ký, click, chuyển đổi), mục đích, căn cứ, thời hạn lưu, quyền của chủ thể; có trong footer và sitemap | Xong |
 
 ## Nhật ký phiên
+
+### 13/11/2026 — C4: trang pháp lý
+
+- Đã xong: trang mới `/mien-tru-trach-nhiem` (footer, sitemap qua `CoreServiceProvider::LEGAL_PAGES`). Viết lại Quyền riêng tư theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 (thay Nghị định 13 từ 01/01/2026): bên kiểm soát (lấy từ `ezfin.company`, không bịa), từng loại dữ liệu + mục đích + thời hạn lưu (gồm chuyển đổi affiliate, email nhận tin), căn cứ xử lý, chia sẻ và chuyển ra nước ngoài (dịch vụ email), quyền của chủ thể, bảo mật và sự cố, trẻ em. Công bố liên kết: cách kiếm tiền, danh sách tổ chức đang có link đối tác (tự lấy từ `PartnerLinks::activeInstitutions()`), dữ liệu đo lường. Điều khoản và Phương pháp đánh giá cập nhật (trang lãi cao nhất theo kỳ hạn, email báo lãi tăng). Thêm `EZFIN_POSTBACK_TOKEN` vào tài liệu triển khai; CLAUDE.md thêm quy ước chuyển đổi và nhận tin.
+- Lưu ý: nội dung pháp lý do Claude soạn theo hiểu biết chung, chủ dự án nên nhờ luật sư rà soát trước khi ra mắt; cần điền `EZFIN_COMPANY_*` trên production để trang ghi đúng bên kiểm soát dữ liệu.
+- Test: `tests/Feature/Core/LegalComplianceTest.php`; Pest toàn bộ xanh.
+- Tiếp theo: Tai duyệt nội dung pháp lý; đặt `EZFIN_POSTBACK_TOKEN` và khai báo URL postback ở mạng affiliate khi có hợp đồng.
 
 ### 13/11/2026 — C3: nhận tin qua email
 

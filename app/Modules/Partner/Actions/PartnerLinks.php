@@ -36,4 +36,24 @@ class PartnerLinks
     {
         return $this->forProducts([$productId])->get($productId);
     }
+
+    /**
+     * Tên các tổ chức đang có liên kết đối tác bật (cho trang Công bố liên kết). Rỗng khi tắt module đối tác.
+     *
+     * @return list<string>
+     */
+    public function activeInstitutions(): array
+    {
+        if (! Feature::active('partner')) {
+            return [];
+        }
+
+        return OutboundLink::query()->active()->whereNotNull('product_id')
+            ->with('product.institution:id,name,short_name')
+            ->get(['id', 'product_id'])
+            ->map(fn (OutboundLink $link) => $link->product?->institution)
+            ->filter()
+            ->map(fn ($institution) => $institution->short_name ?: $institution->name)
+            ->unique()->sort()->values()->all();
+    }
 }

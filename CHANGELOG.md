@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Trang pháp lý
+
+- Trang Miễn trừ trách nhiệm mới. Quyền riêng tư viết lại theo Luật Bảo vệ dữ liệu cá nhân 2025, nêu rõ email nhận tin, lượt bấm và chuyển đổi affiliate. Công bố liên kết ghi cách EzFin kiếm tiền và danh sách tổ chức đang có liên kết đối tác.
+
 ### Nhận tin qua email
 
 - "Báo cho tôi khi lãi suất tăng" theo kỳ hạn và bản tin tuần (lãi suất cao nhất, bài viết mới). Đăng ký cần xác nhận qua email; hủy bằng một lần bấm, hủy hết thì EzFin xóa email.
