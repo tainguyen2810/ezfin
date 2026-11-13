@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### So sánh khoản vay
+
+- Trang Vay mới: so sánh vay tiêu dùng tín chấp, vay mua nhà, vay mua ô tô theo lãi ưu đãi, lãi sau ưu đãi, hạn mức, thời hạn và phí. Nhập số tiền, thời hạn để ước tính tiền trả tháng đầu. Quản trị thêm mục Khoản vay.
+
 ### Trang pháp lý
 
 - Trang Miễn trừ trách nhiệm mới. Quyền riêng tư viết lại theo Luật Bảo vệ dữ liệu cá nhân 2025, nêu rõ email nhận tin, lượt bấm và chuyển đổi affiliate. Công bố liên kết ghi cách EzFin kiếm tiền và danh sách tổ chức đang có liên kết đối tác.

@@ -4,9 +4,11 @@ namespace App\Modules\Compare;
 
 use App\Modules\Compare\Actions\BestSavingsRates;
 use App\Modules\Compare\Actions\SavingsRateBoard;
+use App\Modules\Compare\Enums\LoanKind;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
+use App\Modules\Compare\Models\LoanDetail;
 use App\Modules\Compare\Policies\FinancialInstitutionPolicy;
 use App\Modules\Compare\Policies\FinancialProductPolicy;
 use App\Support\Modules\ModuleServiceProvider;
@@ -24,6 +26,7 @@ class CompareServiceProvider extends ModuleServiceProvider
         return [
             new NavItem('Lãi suất tiết kiệm', 'compare.savings.index', order: 10),
             new NavItem('Thẻ tín dụng', 'compare.credit-cards.index', order: 20),
+            new NavItem('Vay', 'compare.loans.index', order: 25),
             new NavItem('Tài khoản ngân hàng', 'compare.bank-accounts.index', order: 30),
             new NavItem('Ngân hàng', 'compare.institutions.index', order: 35),
         ];
@@ -34,6 +37,19 @@ class CompareServiceProvider extends ModuleServiceProvider
         yield new SitemapUrl(route('compare.savings.index'));
         yield new SitemapUrl(route('compare.credit-cards.index'));
         yield new SitemapUrl(route('compare.bank-accounts.index'));
+
+        // Trang vay: tất cả và từng loại vay đang có khoản vay xuất bản (cùng điều kiện với trang danh sách).
+        $loanKinds = LoanDetail::query()
+            ->whereHas('product', fn (Builder $query) => $query->ofType(ProductType::Loan)->published()->whereHas('institution', fn (Builder $query) => $query->active()))
+            ->distinct()->pluck('kind');
+        if ($loanKinds->isNotEmpty()) {
+            yield new SitemapUrl(route('compare.loans.index'));
+            foreach (LoanKind::cases() as $kind) {
+                if ($loanKinds->contains($kind)) {
+                    yield new SitemapUrl(route('compare.loans.index', ['loai' => $kind->slug()]));
+                }
+            }
+        }
         yield new SitemapUrl(route('compare.savings.table'));
         yield new SitemapUrl(route('compare.institutions.index'));
 
@@ -56,6 +72,7 @@ class CompareServiceProvider extends ModuleServiceProvider
         foreach ([
             [ProductType::CreditCard, 'creditCard', 'compare.credit-cards.show'],
             [ProductType::BankAccount, 'bankAccount', 'compare.bank-accounts.show'],
+            [ProductType::Loan, 'loan', 'compare.loans.show'],
         ] as [$type, $details, $route]) {
             $products = FinancialProduct::query()->ofType($type)->published()->indexable()
                 ->whereHas('institution', fn (Builder $query) => $query->active())

@@ -9,6 +9,7 @@ enum ProductType: string implements HasLabel
     case CreditCard = 'credit_card';
     case Savings = 'savings';
     case BankAccount = 'bank_account';
+    case Loan = 'loan';
 
     public function getLabel(): string
     {
@@ -16,6 +17,7 @@ enum ProductType: string implements HasLabel
             self::CreditCard => 'Thẻ tín dụng',
             self::Savings => 'Tiết kiệm',
             self::BankAccount => 'Tài khoản thanh toán',
+            self::Loan => 'Khoản vay',
         };
     }
 }

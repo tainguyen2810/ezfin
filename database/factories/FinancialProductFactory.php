@@ -49,6 +49,15 @@ class FinancialProductFactory extends Factory
         });
     }
 
+    public function loan(): static
+    {
+        return $this->state(function () {
+            $name = 'Khoản vay thử nghiệm '.Str::upper(Str::random(5));
+
+            return ['type' => ProductType::Loan, 'name' => $name, 'slug' => Str::slug($name)];
+        });
+    }
+
     public function verified(): static
     {
         return $this->state(fn () => [

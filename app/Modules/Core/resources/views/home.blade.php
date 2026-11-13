@@ -3,6 +3,7 @@
 
     $sections = collect([
         ['compare.credit-cards.index', 'compare', 'credit-card', 'Thẻ tín dụng', 'So sánh và mở thẻ', 'bg-violet-50 text-violet-700'],
+        ['compare.loans.index', 'compare', 'home', 'Vay', 'Mua nhà, mua xe', 'bg-orange-50 text-orange-700'],
         ['compare.bank-accounts.index', 'compare', 'building-library', 'Tài khoản ngân hàng', 'Phí và tiện ích', 'bg-blue-50 text-blue-700'],
         ['compare.savings.index', 'compare', 'banknotes', 'Tiết kiệm', 'Lãi suất cao nhất', 'bg-green-50 text-green-700'],
         ['planner.tools.index', 'planner', 'calculator', 'Công cụ tính', 'Lãi kép, vay, trả góp', 'bg-amber-50 text-amber-700'],
@@ -81,7 +82,7 @@
     <div class="mx-auto max-w-7xl space-y-14 px-4 py-10 sm:px-6">
         @if ($sections->isNotEmpty())
             <nav aria-label="Khám phá">
-                <ul class="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-5 sm:px-0">
+                <ul class="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:px-0 lg:grid-cols-6">
                     @foreach ($sections as [$route, , $icon, $label, $hint, $color])
                         <li class="w-28 shrink-0 snap-start sm:w-auto">
                             <a href="{{ route($route) }}" class="group flex h-full flex-col items-center gap-2 rounded-card border border-slate-200 bg-white p-3 text-center text-sm sm:gap-3 sm:p-4 sm:text-base shadow-card transition hover:-translate-y-0.5 hover:border-primary-300">

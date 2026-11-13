@@ -1,5 +1,5 @@
 <x-core::legal-page title="Phương pháp đánh giá" updated="13/11/2026"
-    description="Cách EzFin thu thập, xác minh và xếp hạng lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng. Không chấm sao, không xếp theo hoa hồng.">
+    description="Cách EzFin thu thập, xác minh và xếp hạng lãi suất tiết kiệm, thẻ tín dụng, khoản vay, tài khoản ngân hàng. Không chấm sao, không xếp theo hoa hồng.">
     <p>Trang này mô tả cách EzFin lấy dữ liệu, kiểm tra và sắp xếp sản phẩm. Mục tiêu là để bạn tự kiểm chứng được mọi con số trên website.</p>
 
     <h2>Nguồn dữ liệu</h2>
@@ -21,6 +21,12 @@
 
     <h2>Thẻ tín dụng</h2>
     <p>Mặc định sắp xếp theo phí thường niên thấp. Bạn có thể đổi sang: {{ collect(\App\Modules\Compare\Support\CreditCardFilters::SORTS)->except(\App\Modules\Compare\Support\CreditCardFilters::DEFAULT_SORT)->map(fn ($label) => mb_strtolower($label))->join(', ', ' hoặc ') }}. Bộ lọc theo ngân hàng, mức phí, nhu cầu và thu nhập chỉ loại bớt thẻ, không đổi thứ tự.</p>
+
+    <h2>Khoản vay</h2>
+    <p>Mặc định sắp xếp theo lãi ưu đãi thấp. Bạn có thể đổi sang: {{ collect(\App\Modules\Compare\Support\LoanFilters::SORTS)->except(\App\Modules\Compare\Support\LoanFilters::DEFAULT_SORT)->map(fn ($label) => mb_strtolower($label))->join(', ', ' hoặc ') }}.
+        Lãi ưu đãi thường chỉ áp dụng một thời gian; chúng tôi luôn hiện kèm cách tính lãi sau ưu đãi do ngân hàng công bố.
+        Khi bạn nhập số tiền và thời hạn, khoản vay có hạn mức hoặc thời hạn tối đa không đáp ứng bị ẩn; thông số ngân hàng chưa công bố thì không bị loại.
+        Tiền trả tháng đầu là ước tính theo dư nợ giảm dần với lãi ưu đãi, chưa gồm phí hồ sơ và bảo hiểm.</p>
 
     <h2>Tài khoản ngân hàng</h2>
     <p>Mặc định sắp xếp theo phí quản lý tài khoản thấp. Bạn có thể đổi sang: {{ collect(\App\Modules\Compare\Support\BankAccountFilters::SORTS)->except(\App\Modules\Compare\Support\BankAccountFilters::DEFAULT_SORT)->map(fn ($label) => mb_strtolower($label))->join(', ', ' hoặc ') }}.</p>
