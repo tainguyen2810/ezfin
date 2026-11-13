@@ -20,7 +20,7 @@ it('stores article FAQ as plain text, drops empty pairs and renders FAQPage data
         ['question' => 'Câu thiếu trả lời', 'answer' => ' '],
     ]])->saveQuietly();
 
-    expect($article->fresh()->faq)->toBe([['question' => 'Lãi kép là gì?', 'answer' => 'xLãi được cộng vào gốc.']]);
+    expect($article->fresh()->faq)->toEqual([['question' => 'Lãi kép là gì?', 'answer' => 'xLãi được cộng vào gốc.']]);
 
     $this->get(route('content.articles.show', [$article->category->slug, $article->slug]))
         ->assertOk()
