@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Lịch sử lãi suất toàn thị trường
+
+- Trang "Lãi suất tiết kiệm X tháng cao nhất" có biểu đồ mức cao nhất và trung bình của các ngân hàng trong 12 tháng qua, kèm bảng số liệu.
+
 ### So sánh khoản vay
 
 - Trang Vay mới: so sánh vay tiêu dùng tín chấp, vay mua nhà, vay mua ô tô theo lãi ưu đãi, lãi sau ưu đãi, hạn mức, thời hạn và phí. Nhập số tiền, thời hạn để ước tính tiền trả tháng đầu. Quản trị thêm mục Khoản vay.

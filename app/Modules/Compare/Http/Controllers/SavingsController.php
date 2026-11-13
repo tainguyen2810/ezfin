@@ -72,6 +72,7 @@ class SavingsController
             'months' => $months,
             'rows' => $rows,
             'updatedAt' => $board->lastPublishedAt($months),
+            'history' => $board->marketHistory($months),
             'otherTerms' => array_values(array_diff($best->availableTerms(), [$months])),
             'sampleAmount' => SavingsFilters::DEFAULT_AMOUNT,
         ]);
