@@ -55,6 +55,10 @@
             <x-ui.faq class="mt-10" :items="$article->faq" />
         @endif
 
+        @if (\Laravel\Pennant\Feature::active('newsletter'))
+            @include('newsletter::signup', ['term' => null])
+        @endif
+
         @if ($article->references)
             <section class="mt-10" aria-labelledby="nguon-tham-khao">
                 <h2 id="nguon-tham-khao" class="text-lg font-semibold">Nguồn tham khảo</h2>

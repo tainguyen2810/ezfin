@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => route('personal.login'));
         $middleware->redirectUsersTo(fn () => route('personal.dashboard'));
 
+        // Hủy nhận tin một chạm từ hộp thư (RFC 8058): trình thư gửi POST không có CSRF token. Token trong URL là đủ.
+        $middleware->validateCsrfTokens(except: ['nhan-tin/huy/*']);
+
         $middleware->alias([
             'noindex' => NoIndex::class,
         ]);

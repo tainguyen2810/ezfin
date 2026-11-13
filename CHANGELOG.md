@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Nhận tin qua email
+
+- "Báo cho tôi khi lãi suất tăng" theo kỳ hạn và bản tin tuần (lãi suất cao nhất, bài viết mới). Đăng ký cần xác nhận qua email; hủy bằng một lần bấm, hủy hết thì EzFin xóa email.
+
 ### Đo chuyển đổi affiliate
 
 - Nhận chuyển đổi từ mạng affiliate qua postback có khóa bí mật, hoặc nhập file đối soát CSV; báo lại cùng mã giao dịch chỉ cập nhật trạng thái và hoa hồng.

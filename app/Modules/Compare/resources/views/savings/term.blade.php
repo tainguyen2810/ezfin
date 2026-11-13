@@ -126,6 +126,10 @@
             <x-ui.button :href="route('compare.savings.table')" variant="outline">Xem bảng mọi kỳ hạn</x-ui.button>
         </div>
 
+        @if (\Laravel\Pennant\Feature::active('newsletter'))
+            @include('newsletter::signup', ['term' => $months])
+        @endif
+
         <x-ui.faq class="mt-10" :items="$faq" />
 
         @if ($otherTerms)
