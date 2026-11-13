@@ -19,6 +19,27 @@
 @endphp
 <x-layouts.public :canonical="route('home')"
     description="So sánh lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng và dùng công cụ tính lãi, khoản vay miễn phí. Dữ liệu có nguồn và ngày xác minh, xếp hạng không theo hoa hồng.">
+    <x-slot:head>
+        @php
+            // Organization + WebSite cho công cụ tìm kiếm. Chỉ thông tin có thật trong cấu hình (không bịa địa chỉ, số điện thoại).
+            $company = array_filter(config('ezfin.company', []), 'filled');
+            $organization = array_filter([
+                '@type' => 'Organization',
+                '@id' => route('home').'#organization',
+                'name' => 'EzFin',
+                'legalName' => $company['name'] ?? null,
+                'url' => route('home'),
+                'logo' => asset('images/og-default.png'),
+                'email' => $company['email'] ?? null,
+                'telephone' => $company['phone'] ?? null,
+            ]);
+            $siteSchema = ['@context' => 'https://schema.org', '@graph' => [
+                $organization,
+                ['@type' => 'WebSite', '@id' => route('home').'#website', 'name' => 'EzFin', 'url' => route('home'), 'inLanguage' => 'vi-VN', 'publisher' => ['@id' => route('home').'#organization']],
+            ]];
+        @endphp
+        <script type="application/ld+json">{!! json_encode($siteSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    </x-slot:head>
     <section class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-white via-slate-50 to-primary-50">
         <div aria-hidden="true" class="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-highlight/50 blur-3xl"></div>
         <div class="relative mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-center lg:py-14">

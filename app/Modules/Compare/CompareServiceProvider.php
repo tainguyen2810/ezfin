@@ -2,6 +2,8 @@
 
 namespace App\Modules\Compare;
 
+use App\Modules\Compare\Actions\BestSavingsRates;
+use App\Modules\Compare\Actions\SavingsRateBoard;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
@@ -34,6 +36,12 @@ class CompareServiceProvider extends ModuleServiceProvider
         yield new SitemapUrl(route('compare.bank-accounts.index'));
         yield new SitemapUrl(route('compare.savings.table'));
         yield new SitemapUrl(route('compare.institutions.index'));
+
+        // Trang đích theo kỳ hạn: chỉ kỳ hạn đang có lãi suất (cùng điều kiện với SavingsController::term).
+        $board = app(SavingsRateBoard::class);
+        foreach (app(BestSavingsRates::class)->availableTerms() as $term) {
+            yield new SitemapUrl(route('compare.savings.term', $term), $board->lastPublishedAt($term));
+        }
 
         // Trang ngân hàng: cùng điều kiện với InstitutionController::show (còn hoạt động, có sản phẩm đã xuất bản).
         $institutions = FinancialInstitution::query()->active()

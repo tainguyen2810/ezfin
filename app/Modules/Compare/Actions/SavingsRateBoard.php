@@ -7,7 +7,9 @@ use App\Modules\Compare\Enums\SavingsChannel;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\SavingsRate;
 use App\Modules\Compare\Support\SavingsFilters;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -23,9 +25,9 @@ class SavingsRateBoard
      * @return Collection<int, array{institution: FinancialInstitution, rates: array<int, ?float>}>
      *                                                                                              xếp theo lãi 12 tháng giảm dần
      */
-    public function matrix(?SavingsChannel $channel): Collection
+    public function matrix(?SavingsChannel $channel, ?CarbonInterface $at = null): Collection
     {
-        return $this->current(null, $channel)
+        return $this->current(null, $channel, $at)
             ->groupBy(fn (SavingsRate $rate) => $rate->product->institution_id)
             ->map(fn (Collection $rates) => [
                 'institution' => $rates->first()->product->institution,
@@ -83,12 +85,25 @@ class SavingsRateBoard
         return ['dates' => $dates->all(), 'series' => $series, 'channel' => $channel];
     }
 
-    /** @return Collection<int, SavingsRate> lần công bố mới nhất đã hiệu lực, bậc số tiền thấp nhất */
-    private function current(?FinancialInstitution $institution, ?SavingsChannel $channel): Collection
+    /**
+     * Ngày công bố biểu lãi gần nhất đã có hiệu lực (của mọi ngân hàng), để ghi "cập nhật ngày" và lastmod sitemap.
+     */
+    public function lastPublishedAt(?int $term = null): ?Carbon
+    {
+        $date = $this->published(null)
+            ->when($term !== null, fn (Builder $query) => $query->where('term_months', $term))
+            ->whereDate('effective_from', '<=', today())
+            ->max('effective_from');
+
+        return $date ? Carbon::parse($date) : null;
+    }
+
+    /** @return Collection<int, SavingsRate> lần công bố mới nhất đã hiệu lực tại ngày $at (mặc định hôm nay), bậc số tiền thấp nhất */
+    private function current(?FinancialInstitution $institution, ?SavingsChannel $channel, ?CarbonInterface $at = null): Collection
     {
         return $this->published($institution)
             ->when($channel, fn (Builder $query) => $query->where('channel', $channel->value))
-            ->whereDate('effective_from', '<=', today())
+            ->whereDate('effective_from', '<=', ($at ?? today())->toDateString())
             ->with('product.institution')
             ->get()
             ->groupBy(fn (SavingsRate $rate) => $rate->product_id.'|'.$rate->channel->value.'|'.$rate->interest_payment->value)

@@ -50,7 +50,23 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | B2 | Giao dịch định kỳ, nhắc hạn thanh toán thẻ/khoản vay qua email | Tạo giao dịch đúng chu kỳ, không trùng khi chạy lại; email nhắc trước hạn; người A không thấy dữ liệu người B | Xong |
 | B3 | Nhập sao kê ngân hàng (CSV/Excel) vào app | Xem trước, chọn cột, báo dòng lỗi; không nhập trùng khi nhập lại | Xong |
 
+## Tăng trưởng: SEO, affiliate, email, pháp lý (đề xuất 13/11/2026, chủ dự án đồng ý)
+
+| # | Việc | Tiêu chí nghiệm thu | Trạng thái |
+| --- | --- | --- | --- |
+| C1 | SEO kỹ thuật: trang đích "Lãi suất tiết kiệm X tháng cao nhất tháng mm/yyyy", FAQ + schema (FAQPage, ItemList, Organization, WebSite), FAQ cho bài viết | Số liệu lấy từ biểu lãi đang hiệu lực, tự đổi theo tháng; kỳ hạn chưa có dữ liệu trả 404 và không vào sitemap; JSON-LD hợp lệ; có test | Xong |
+| C2 | Đo chuyển đổi affiliate + dashboard quản trị | Postback có khóa bí mật và nhập CSV đối soát theo mã click, không ghi trùng; dashboard click, chuyển đổi, hoa hồng theo ngân hàng, sản phẩm, trang nguồn, theo kỳ; có test | Chưa làm |
+| C3 | Thu email: báo lãi suất tăng, bản tin tuần | Xác nhận 2 bước (double opt-in), hủy 1 chạm + List-Unsubscribe; chống spam đăng ký; chỉ gửi khi lãi thật sự tăng, không gửi trùng; có test | Chưa làm |
+| C4 | Trang pháp lý: miễn trừ trách nhiệm, công bố liên kết, quyền riêng tư theo Luật Bảo vệ dữ liệu cá nhân 2025 | Nêu đúng dữ liệu đang thu (gồm email đăng ký, click, chuyển đổi), mục đích, căn cứ, thời hạn lưu, quyền của chủ thể; có trong footer và sitemap | Chưa làm |
+
 ## Nhật ký phiên
+
+### 13/11/2026 — C1: SEO kỹ thuật
+
+- Đã xong: trang đích `/lai-suat-tiet-kiem/{1,3,6,9,12,13,18,24,36}-thang` (`SavingsController::term`, Action công khai `Compare\Actions\BestSavingsRates` dùng lại cho bản tin): tiêu đề theo tháng hiện tại, xếp ngân hàng theo mức cao nhất (online, tại quầy), tiền lãi trên 100.000.000 đ, thay đổi so với 30 ngày trước, FAQ sinh từ số liệu, JSON-LD ItemList + FAQPage. Có link từ trang so sánh và bảng lãi suất; sitemap kèm lastmod = ngày công bố biểu lãi mới nhất. `SavingsRateBoard::matrix()` nhận thêm ngày `$at`.
+- Component `<x-ui.faq>` (có ở `/_ui`); bài viết có mục "Câu hỏi thường gặp" (cột `faq` ở `articles` và `article_revisions`, văn bản thuần). Trang chủ có JSON-LD Organization + WebSite (chỉ dùng thông tin công ty có trong cấu hình).
+- Test: `tests/Feature/Compare/SavingsTermLandingTest.php`, `tests/Feature/Seo/StructuredDataTest.php`; Pest toàn bộ xanh; xem ảnh 360/1280px.
+- Tiếp theo: C2.
 
 ### 31/10/2026 — B3: nhập sao kê ngân hàng
 
