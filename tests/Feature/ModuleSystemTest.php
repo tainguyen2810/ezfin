@@ -48,4 +48,4 @@ it('hides navigation items whose route does not exist', function () {
 
 it('keeps unreleased modules off by default', function (string $feature) {
     expect(Feature::active($feature))->toBeFalse();
-})->with(['markets', 'stocks', 'funds', 'personal', 'pro']);
+})->with(['stocks', 'funds', 'personal', 'pro']);

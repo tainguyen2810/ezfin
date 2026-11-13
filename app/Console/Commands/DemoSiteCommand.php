@@ -10,6 +10,8 @@ use App\Modules\Content\Models\ArticleCategory;
 use App\Modules\Content\Models\Author;
 use App\Modules\Core\Models\AuditLog;
 use App\Modules\Core\Models\SeoMeta;
+use App\Modules\Markets\Models\FxRate;
+use App\Modules\Markets\Models\GoldPrice;
 use App\Modules\Partner\Models\AffiliateConversion;
 use App\Modules\Partner\Models\OutboundLink;
 use App\Modules\Personal\Actions\DeleteAccount;
@@ -35,7 +37,7 @@ class DemoSiteCommand extends Command
     protected $description = 'Tạo (hoặc xóa) dữ liệu demo cho mọi chức năng của EzFin';
 
     /** Thứ tự xóa: bảng con trước bảng cha. */
-    private const PURGE_ORDER = [AffiliateConversion::class, OutboundLink::class, FinancialProduct::class, FinancialInstitution::class, Article::class, Author::class, ArticleCategory::class];
+    private const PURGE_ORDER = [FxRate::class, GoldPrice::class, AffiliateConversion::class, OutboundLink::class, FinancialProduct::class, FinancialInstitution::class, Article::class, Author::class, ArticleCategory::class];
 
     public function handle(): int
     {
@@ -72,7 +74,7 @@ class DemoSiteCommand extends Command
         $manifest->trackUser(DemoDataCommand::DEMO_EMAIL);
         $manifest->save();
 
-        foreach (['compare', 'planner', 'content', 'partner', 'personal'] as $feature) {
+        foreach (['compare', 'planner', 'content', 'partner', 'personal', 'markets'] as $feature) {
             Feature::activate($feature);
         }
 
@@ -83,10 +85,10 @@ class DemoSiteCommand extends Command
         Auth::forgetUser();
 
         $this->info('Đã tạo dữ liệu demo:');
-        $this->line("- {$catalog['institutions']} ngân hàng, công ty tài chính; {$catalog['savings']} sản phẩm tiết kiệm; {$catalog['cards']} thẻ tín dụng; {$catalog['accounts']} tài khoản thanh toán; {$catalog['loans']} khoản vay");
+        $this->line("- {$catalog['institutions']} ngân hàng, công ty tài chính; {$catalog['savings']} sản phẩm tiết kiệm; {$catalog['cards']} thẻ tín dụng; {$catalog['accounts']} tài khoản thanh toán; {$catalog['loans']} khoản vay; {$catalog['quotes']} dòng tỷ giá, giá vàng 30 ngày");
         $this->line("- {$catalog['links']} link đối tác kèm lượt bấm 60 ngày; $articles bài viết, 3 tác giả");
         $this->line('- '.$personal);
-        $this->line('Đã bật các mục: so sánh, công cụ tính, kiến thức, đối tác, app quản lý tiền.');
+        $this->line('Đã bật các mục: so sánh, công cụ tính, kiến thức, đối tác, app quản lý tiền, tỷ giá và giá vàng.');
         $this->line('Xóa sạch khi không cần: php artisan ezfin:demo --purge');
 
         return self::SUCCESS;

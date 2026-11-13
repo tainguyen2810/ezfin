@@ -66,9 +66,16 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | D1 | So sánh vay tiêu dùng, vay mua nhà, vay mua xe | Lọc theo loại vay, ngân hàng, số tiền, thời hạn; ước tính tiền trả tháng đầu theo lãi ưu đãi; ghi rõ lãi sau ưu đãi; chỉ xuất bản khi có nguồn và ngày xác minh; nút đối tác có công bố; quản trị, sitemap, JSON-LD; có test | Xong |
 | D2 | Biểu đồ lịch sử lãi suất theo kỳ hạn toàn thị trường | Trang đích kỳ hạn có biểu đồ mức cao nhất và trung bình theo tháng, kèm bảng số liệu; chỉ dùng các lần công bố biểu lãi đã lưu, không nội suy; có test | Xong |
 | D3 | Quiz gợi ý thẻ tín dụng | Form GET chạy khi tắt JS, không lưu dữ liệu người dùng; xếp thẻ theo điều kiện thu nhập, nhóm chi tiêu, ước tính hoàn tiền trừ phí năm, lãi nếu trả không đủ; giải thích lý do từng thẻ; không xét hoa hồng; có test | Xong |
-| D4 | Tỷ giá ngoại tệ và giá vàng hằng ngày | Nhập tay hoặc nhập file trong quản trị (chưa tự lấy từ nguồn ngoài cho tới khi chủ dự án xác nhận điều khoản); trang công khai ghi nguồn và giờ cập nhật, ẩn khi chưa có dữ liệu hoặc tắt flag; lịch sử theo ngày; có test | Chưa làm |
+| D4 | Tỷ giá ngoại tệ và giá vàng hằng ngày | Nhập tay hoặc nhập file trong quản trị (chưa tự lấy từ nguồn ngoài cho tới khi chủ dự án xác nhận điều khoản); trang công khai ghi nguồn và giờ cập nhật, ẩn khi chưa có dữ liệu hoặc tắt flag; lịch sử theo ngày; có test | Xong |
 
 ## Nhật ký phiên
+
+### 13/11/2026 — D4: tỷ giá và giá vàng
+
+- Đã xong: module mới `Markets` (flag `markets`, nay mặc định bật; trang tự 404 và không vào sitemap khi chưa có dữ liệu). Bảng `fx_rates`, `gold_prices` giữ mọi lần công bố (khóa nguồn + mã/loại vàng + thời điểm, nhập lại thì cập nhật). Theo quyết định của chủ dự án: nhập tay hoặc nhập CSV trong quản trị (Tỷ giá, Giá vàng; file mẫu tải được), chưa tự lấy từ nguồn ngoài. Trang `/ty-gia` (bảng theo từng nguồn, thay đổi so với hôm trước, đổi ngoại tệ sang đồng, biểu đồ 30 ngày) và `/gia-vang` (bảng theo nguồn, biểu đồ 30 ngày); ghi nguồn, giờ công bố, cảnh báo khi quá 3 ngày chưa cập nhật. Trang chủ có ô USD và giá vàng. `x-ui.line-chart` thêm `tickFormat` và bước trục cho số lớn. Demo thêm 30 ngày tỷ giá (Vietcombank) và giá vàng (SJC, PNJ).
+- Máy đang chạy: `php artisan migrate`; nếu flag `markets` đã lưu là tắt thì `php artisan ezfin:feature markets on`.
+- Test: `tests/Feature/Markets/MarketQuotesTest.php`, cập nhật `ModuleSystemTest`, `DemoSiteTest`; Pest toàn bộ xanh; ảnh ở `screenshots/d4-ty-gia-vang`.
+- Tiếp theo: khi chủ dự án xác nhận nguồn cho phép dùng lại số liệu, thêm lệnh tự lấy dữ liệu hằng ngày ghi qua `Markets\Actions\RecordQuote`.
 
 ### 13/11/2026 — D3: quiz gợi ý thẻ tín dụng
 

@@ -1,19 +1,29 @@
 {{-- Biểu đồ đường cho số liệu theo thời gian (vd. lãi suất %/năm). Đường vẽ bằng SVG, điểm và nhãn bằng HTML
      để không méo chữ; rê chuột hoặc Tab vào điểm để xem số. Luôn đi kèm bảng số liệu ở trang dùng nó.
      labels: nhãn trục ngang; series: [['label' => '12 tháng', 'tone' => 'primary|ink', 'values' => [số|null, ...]], ...];
-     format: hàm định dạng giá trị (mặc định Format::percent); caption: mô tả cho trình đọc màn hình. --}}
-@props(['labels', 'series', 'caption', 'format' => null, 'framed' => true])
+     format: hàm định dạng giá trị (mặc định Format::percent); tickFormat: nhãn trục dọc (mặc định 5,5%);
+     caption: mô tả cho trình đọc màn hình. --}}
+@props(['labels', 'series', 'caption', 'format' => null, 'tickFormat' => null, 'framed' => true])
 @php
     $tones = [
         'primary' => ['stroke' => 'stroke-primary-500', 'dot' => 'bg-primary-500'],
         'ink' => ['stroke' => 'stroke-navy-900', 'dot' => 'bg-navy-900'],
     ];
     $format ??= fn ($value) => Format::percent($value);
+    $tickFormat ??= fn ($tick) => Format::decimal($tick, 1).'%';
     $labels = array_values($labels);
     $count = count($labels);
     $values = collect($series)->flatMap(fn ($s) => $s['values'])->filter(fn ($v) => $v !== null);
-    // Trục dọc bắt đầu gần giá trị nhỏ nhất (lãi suất dao động hẹp), bước 0,5 hoặc 1.
-    $step = ($values->max() - $values->min()) > 3 ? 1 : 0.5;
+    // Trục dọc bắt đầu gần giá trị nhỏ nhất. Lãi suất dao động hẹp: bước 0,5 hoặc 1;
+    // số lớn (tỷ giá...): bước "tròn" 1, 2, 2,5 hoặc 5 × 10^n cho khoảng 5 vạch.
+    $spread = $values->max() - $values->min();
+    if ($spread > 10) {
+        $raw = $spread / 5;
+        $magnitude = 10 ** floor(log10($raw));
+        $step = collect([1, 2, 2.5, 5, 10])->map(fn ($m) => $m * $magnitude)->first(fn ($candidate) => $candidate >= $raw);
+    } else {
+        $step = $spread > 3 ? 1 : 0.5;
+    }
     $bottom = max(0, floor(($values->min() - $step / 2) / $step) * $step);
     $top = ceil(($values->max() + $step / 2) / $step) * $step;
     $ticks = range($bottom, $top, $step);
@@ -33,7 +43,7 @@
     <div class="relative mt-4 mr-3 h-52 pl-12 sm:h-60">
         @foreach ($ticks as $tick)
             <div class="absolute right-0 left-12 border-t border-slate-100" style="bottom: {{ $y($tick) }}%" aria-hidden="true">
-                <span class="num absolute -left-12 w-10 -translate-y-1/2 text-right text-[11px] leading-none text-slate-500">{{ Format::decimal($tick, 1) }}%</span>
+                <span class="num absolute -left-12 w-10 -translate-y-1/2 text-right text-[11px] leading-none text-slate-500">{{ $tickFormat($tick) }}</span>
             </div>
         @endforeach
 
@@ -61,7 +71,8 @@
     </div>
     <div class="relative mt-2 mr-3 ml-12 h-4 text-[11px] text-slate-500" aria-hidden="true">
         @foreach ($labels as $i => $label)
-            @if ($count <= 6 || $i === 0 || $i === $count - 1 || $i % (int) ceil($count / 5) === 0)
+            @php $every = (int) ceil($count / 4) @endphp
+            @if ($count <= 6 || $i === 0 || $i === $count - 1 || ($i % $every === 0 && $count - 1 - $i >= $every * 0.75))
                 <span @class(['num absolute whitespace-nowrap', '-translate-x-1/2' => $i > 0 && $i < $count - 1, '-translate-x-full' => $i === $count - 1 && $count > 1]) style="left: {{ $x($i) }}%">{{ $label }}</span>
             @endif
         @endforeach

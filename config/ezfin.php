@@ -3,6 +3,7 @@
 use App\Modules\Compare\CompareServiceProvider;
 use App\Modules\Content\ContentServiceProvider;
 use App\Modules\Core\CoreServiceProvider;
+use App\Modules\Markets\MarketsServiceProvider;
 use App\Modules\Newsletter\NewsletterServiceProvider;
 use App\Modules\Partner\PartnerServiceProvider;
 use App\Modules\Personal\PersonalServiceProvider;
@@ -63,6 +64,7 @@ return [
         PartnerServiceProvider::class,
         PersonalServiceProvider::class,
         NewsletterServiceProvider::class,
+        MarketsServiceProvider::class,
     ],
 
     /*
@@ -75,7 +77,7 @@ return [
         'planner' => true,
         'content' => true,
         'partner' => true,
-        'markets' => false,
+        'markets' => true,
         'stocks' => false,
         'funds' => false,
         'personal' => false,

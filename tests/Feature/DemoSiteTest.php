@@ -33,7 +33,7 @@ it('fills every section with demo data and shows the demo notice', function () {
         ->and(User::where('email', 'demo@ezfin.test')->exists())->toBeTrue()
         ->and(Storage::disk('public')->allFiles())->not->toBeEmpty();
 
-    foreach (['/', '/the-tin-dung', '/lai-suat-tiet-kiem', '/tai-khoan-ngan-hang', '/vay', '/kien-thuc'] as $path) {
+    foreach (['/', '/the-tin-dung', '/lai-suat-tiet-kiem', '/tai-khoan-ngan-hang', '/vay', '/ty-gia', '/gia-vang', '/kien-thuc'] as $path) {
         $this->get('http://ezfin.test'.$path)->assertOk()->assertSee('Bản demo');
     }
     $this->get('http://ezfin.test/the-tin-dung')->assertSee('VPBank StepUP');
