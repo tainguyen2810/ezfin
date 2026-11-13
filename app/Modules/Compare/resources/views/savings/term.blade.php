@@ -126,6 +126,29 @@
             <x-ui.button :href="route('compare.savings.table')" variant="outline">Xem bảng mọi kỳ hạn</x-ui.button>
         </div>
 
+        @if (count($history) >= 2)
+            <section class="mt-10" aria-labelledby="lich-su">
+                <h2 id="lich-su" class="text-lg font-bold text-navy-900">Lãi suất {{ $months }} tháng 12 tháng qua</h2>
+                <p class="mt-1 text-sm text-slate-600">Mức cao nhất và trung bình của các ngân hàng vào cuối mỗi tháng (tháng này: hôm nay), theo các lần ngân hàng công bố biểu lãi suất mà EzFin đã lưu.</p>
+                <x-ui.line-chart class="mt-3" :labels="array_column($history, 'month')" :caption="'Lãi suất tiết kiệm '.$months.' tháng cao nhất và trung bình theo tháng'"
+                    :series="[
+                        ['label' => 'Cao nhất', 'tone' => 'primary', 'values' => array_column($history, 'best')],
+                        ['label' => 'Trung bình', 'tone' => 'ink', 'values' => array_column($history, 'average')],
+                    ]" />
+                <details class="mt-2 text-sm">
+                    <summary class="cursor-pointer font-medium text-primary-700">Xem bảng số liệu</summary>
+                    <x-ui.table class="mt-2">
+                        <thead><tr><th scope="col">Tháng</th><th scope="col" class="text-right">Cao nhất</th><th scope="col" class="text-right">Trung bình</th><th scope="col" class="text-right">Số ngân hàng</th></tr></thead>
+                        <tbody>
+                            @foreach ($history as $point)
+                                <tr><td>{{ $point['month'] }}</td><td class="num text-right">{{ Format::percent($point['best']) }}</td><td class="num text-right">{{ Format::percent($point['average']) }}</td><td class="num text-right">{{ $point['banks'] }}</td></tr>
+                            @endforeach
+                        </tbody>
+                    </x-ui.table>
+                </details>
+            </section>
+        @endif
+
         @if (\Laravel\Pennant\Feature::active('newsletter'))
             @include('newsletter::signup', ['term' => $months])
         @endif

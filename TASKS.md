@@ -64,11 +64,17 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | # | Việc | Tiêu chí nghiệm thu | Trạng thái |
 | --- | --- | --- | --- |
 | D1 | So sánh vay tiêu dùng, vay mua nhà, vay mua xe | Lọc theo loại vay, ngân hàng, số tiền, thời hạn; ước tính tiền trả tháng đầu theo lãi ưu đãi; ghi rõ lãi sau ưu đãi; chỉ xuất bản khi có nguồn và ngày xác minh; nút đối tác có công bố; quản trị, sitemap, JSON-LD; có test | Xong |
-| D2 | Biểu đồ lịch sử lãi suất theo kỳ hạn toàn thị trường | Trang đích kỳ hạn có biểu đồ mức cao nhất và trung bình theo tháng, kèm bảng số liệu; chỉ dùng các lần công bố biểu lãi đã lưu, không nội suy; có test | Chưa làm |
+| D2 | Biểu đồ lịch sử lãi suất theo kỳ hạn toàn thị trường | Trang đích kỳ hạn có biểu đồ mức cao nhất và trung bình theo tháng, kèm bảng số liệu; chỉ dùng các lần công bố biểu lãi đã lưu, không nội suy; có test | Xong |
 | D3 | Quiz gợi ý thẻ tín dụng | Form GET chạy khi tắt JS, không lưu dữ liệu người dùng; xếp thẻ theo điều kiện thu nhập, nhóm chi tiêu, ước tính hoàn tiền trừ phí năm, lãi nếu trả không đủ; giải thích lý do từng thẻ; không xét hoa hồng; có test | Chưa làm |
 | D4 | Tỷ giá ngoại tệ và giá vàng hằng ngày | Nhập tay hoặc nhập file trong quản trị (chưa tự lấy từ nguồn ngoài cho tới khi chủ dự án xác nhận điều khoản); trang công khai ghi nguồn và giờ cập nhật, ẩn khi chưa có dữ liệu hoặc tắt flag; lịch sử theo ngày; có test | Chưa làm |
 
 ## Nhật ký phiên
+
+### 13/11/2026 — D2: lịch sử lãi suất toàn thị trường
+
+- Đã xong: `SavingsRateBoard::marketHistory($term)` lấy mức cao nhất và trung bình của các ngân hàng vào cuối mỗi tháng trong 12 tháng (tháng này: hôm nay), dùng cùng quy tắc với bảng lãi (lần công bố mới nhất đã hiệu lực, bậc tiền thấp nhất, mỗi ngân hàng lấy mức cao nhất mọi kênh); tháng chưa có dữ liệu bị bỏ, không nội suy. Trang đích `/lai-suat-tiet-kiem/{X}-thang` có biểu đồ (từ 2 tháng dữ liệu) và bảng số liệu kèm số ngân hàng. Tách `effectiveAt()` dùng chung với `current()`. Biểu đồ theo từng ngân hàng đã có từ B1.
+- Test: `tests/Feature/Compare/SavingsMarketHistoryTest.php`; Pest toàn bộ xanh; ảnh ở `screenshots/d2-lich-su`.
+- Tiếp theo: D3.
 
 ### 13/11/2026 — D1: so sánh khoản vay
 

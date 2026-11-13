@@ -86,6 +86,43 @@ class SavingsRateBoard
     }
 
     /**
+     * Lãi suất toàn thị trường của một kỳ hạn qua từng tháng: tại cuối mỗi tháng (tháng này: hôm nay), mức cao nhất
+     * và trung bình của các ngân hàng (mỗi ngân hàng lấy mức cao nhất mọi kênh, biểu lãi đang hiệu lực, bậc tiền thấp nhất).
+     * Chỉ dùng các lần công bố đã lưu; tháng chưa có ngân hàng nào có dữ liệu thì bỏ, không nội suy.
+     *
+     * @return list<array{month: string, date: string, best: float, average: float, banks: int}>
+     */
+    public function marketHistory(int $term, int $months = 12): array
+    {
+        // Nạp mọi kỳ hạn: lần công bố mới hơn không có kỳ hạn này thì kỳ hạn này coi như không còn (giống current()).
+        $rates = $this->published(null)
+            ->whereDate('effective_from', '<=', today())
+            ->with('product:id,institution_id')
+            ->get();
+
+        $points = [];
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $at = $i === 0 ? today() : today()->startOfMonth()->subMonths($i)->endOfMonth()->startOfDay();
+            $byBank = $this->effectiveAt($rates, $at)
+                ->where('term_months', $term)
+                ->groupBy(fn (SavingsRate $rate) => $rate->product->institution_id)
+                ->map(fn (Collection $bank) => $bank->max(fn (SavingsRate $rate) => (float) $rate->rate));
+
+            if ($byBank->isNotEmpty()) {
+                $points[] = [
+                    'month' => $at->format('m/Y'),
+                    'date' => $at->toDateString(),
+                    'best' => round($byBank->max(), 2),
+                    'average' => round($byBank->avg(), 2),
+                    'banks' => $byBank->count(),
+                ];
+            }
+        }
+
+        return $points;
+    }
+
+    /**
      * Ngày công bố biểu lãi gần nhất đã có hiệu lực (của mọi ngân hàng), để ghi "cập nhật ngày" và lastmod sitemap.
      */
     public function lastPublishedAt(?int $term = null): ?Carbon
@@ -101,11 +138,26 @@ class SavingsRateBoard
     /** @return Collection<int, SavingsRate> lần công bố mới nhất đã hiệu lực tại ngày $at (mặc định hôm nay), bậc số tiền thấp nhất */
     private function current(?FinancialInstitution $institution, ?SavingsChannel $channel, ?CarbonInterface $at = null): Collection
     {
-        return $this->published($institution)
+        $at ??= today();
+
+        return $this->effectiveAt($this->published($institution)
             ->when($channel, fn (Builder $query) => $query->where('channel', $channel->value))
-            ->whereDate('effective_from', '<=', ($at ?? today())->toDateString())
+            ->whereDate('effective_from', '<=', $at->toDateString())
             ->with('product.institution')
-            ->get()
+            ->get(), $at);
+    }
+
+    /**
+     * Trong các dòng lãi đã nạp: với mỗi sản phẩm, kênh, cách lĩnh lãi, giữ lần công bố mới nhất đã hiệu lực tại $at, bậc tiền thấp nhất.
+     *
+     * @param  Collection<int, SavingsRate>  $rates
+     * @return Collection<int, SavingsRate>
+     */
+    private function effectiveAt(Collection $rates, CarbonInterface $at): Collection
+    {
+        $day = $at->toDateString();
+
+        return $rates->filter(fn (SavingsRate $rate) => $rate->effective_from->toDateString() <= $day)
             ->groupBy(fn (SavingsRate $rate) => $rate->product_id.'|'.$rate->channel->value.'|'.$rate->interest_payment->value)
             ->flatMap(function (Collection $table) {
                 $latest = $table->max(fn (SavingsRate $rate) => $rate->effective_from->toDateString());
