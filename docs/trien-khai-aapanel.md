@@ -24,6 +24,8 @@ cp .env.example .env    # sửa APP_ENV=production, APP_DEBUG=false, APP_URL=htt
                         # EZFIN_PUBLIC_DOMAIN=ezfin.vn, EZFIN_APP_DOMAIN=app.ezfin.vn,
                         # EZFIN_ADMIN_PATH=<chuỗi khó đoán>, SESSION_DOMAIN=.ezfin.vn, SESSION_SECURE_COOKIE=true
                         # EZFIN_INDEXABLE=true (chỉ production; staging để false)
+                        # EZFIN_POSTBACK_TOKEN=<chuỗi ngẫu nhiên dài> nếu mạng affiliate gửi postback chuyển đổi
+                        # (URL khai báo ở mạng: https://ezfin.vn/postback/<tên-mạng>?token=...&click_id={sub_id}&transaction_id=...&status=...&commission=...)
 composer install --no-dev --optimize-autoloader
 php artisan key:generate
 php artisan migrate --force

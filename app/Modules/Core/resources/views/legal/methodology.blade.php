@@ -1,4 +1,4 @@
-<x-core::legal-page title="Phương pháp đánh giá" updated="29/10/2026"
+<x-core::legal-page title="Phương pháp đánh giá" updated="13/11/2026"
     description="Cách EzFin thu thập, xác minh và xếp hạng lãi suất tiết kiệm, thẻ tín dụng, tài khoản ngân hàng. Không chấm sao, không xếp theo hoa hồng.">
     <p>Trang này mô tả cách EzFin lấy dữ liệu, kiểm tra và sắp xếp sản phẩm. Mục tiêu là để bạn tự kiểm chứng được mọi con số trên website.</p>
 
@@ -15,6 +15,8 @@
         <li>Bạn nhập số tiền và kỳ hạn. EzFin lấy biểu lãi suất mới nhất đang có hiệu lực của từng ngân hàng, đúng kỳ hạn và đúng bậc số tiền bạn gửi.</li>
         <li>Danh sách xếp theo <strong>tiền lãi bạn thực nhận</strong> khi đáo hạn, tính theo lãi đơn: số tiền × lãi suất năm × số tháng ÷ 12, làm tròn đến đồng. Lãi suất bằng nhau thì tiền lãi bằng nhau.</li>
         <li>Mỗi dòng ghi kênh gửi (tại quầy hay trực tuyến), hình thức lĩnh lãi và ngày hiệu lực của biểu lãi suất.</li>
+        <li><strong>Bảng lãi suất các ngân hàng</strong> và trang <strong>"Lãi suất tiết kiệm X tháng cao nhất"</strong>: mỗi ngân hàng lấy mức cao nhất đang hiệu lực trong các sản phẩm đã xuất bản, ở bậc số tiền thấp nhất (mức ai cũng gửi được), kênh online và tại quầy ghi riêng. Ngân hàng xếp theo mức cao nhất của hai kênh, bằng nhau thì theo tên. Cột "so với 30 ngày trước" so với mức cao nhất của chính ngân hàng đó 30 ngày trước.</li>
+        <li>Email báo lãi suất tăng dùng cùng cách tính: chỉ gửi khi mức cao nhất thị trường của kỳ hạn bạn theo dõi tăng ít nhất 0,01 điểm phần trăm so với lần báo trước.</li>
     </ul>
 
     <h2>Thẻ tín dụng</h2>

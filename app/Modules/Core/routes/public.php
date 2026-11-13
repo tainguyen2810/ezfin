@@ -11,6 +11,7 @@ Route::get('/', HomeController::class)->name('home');
 Route::view('/gioi-thieu', 'core::legal.about')->name('legal.about');
 Route::view('/phuong-phap-danh-gia', 'core::legal.methodology')->name('legal.methodology');
 Route::view('/cong-bo-lien-ket', 'core::legal.disclosure')->name('legal.disclosure');
+Route::view('/mien-tru-trach-nhiem', 'core::legal.disclaimer')->name('legal.disclaimer');
 Route::view('/dieu-khoan', 'core::legal.terms')->name('legal.terms');
 Route::view('/quyen-rieng-tu', 'core::legal.privacy')->name('legal.privacy');
 Route::view('/lien-he', 'core::legal.contact')->name('legal.contact');
