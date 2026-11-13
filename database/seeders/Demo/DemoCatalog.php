@@ -7,9 +7,12 @@ use App\Modules\Compare\Enums\ProductStatus;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
+use App\Modules\Partner\Enums\ConversionStatus;
+use App\Modules\Partner\Models\AffiliateConversion;
 use App\Modules\Partner\Models\OutboundClick;
 use App\Modules\Partner\Models\OutboundLink;
 use App\Support\Demo\DemoManifest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -242,10 +245,21 @@ class DemoCatalog
             $rows = [];
             foreach (range(1, mt_rand(5, 90)) as $n) {
                 $rows[] = ['link_id' => $link->id, 'click_id' => Str::lower(Str::random(24)), 'ip_hash' => hash('sha256', Str::random(16)),
-                    'user_agent' => 'Mozilla/5.0 (demo)', 'referer_path' => $product->type === ProductType::CreditCard ? '/the-tin-dung' : '/lai-suat-tiet-kiem',
+                    'user_agent' => 'Mozilla/5.0 (demo)', 'referer_path' => $product->type === ProductType::CreditCard ? Arr::random(['/the-tin-dung', '/the-tin-dung/'.$product->slug, '/']) : Arr::random(['/lai-suat-tiet-kiem', '/lai-suat-tiet-kiem/12-thang', '/ngan-hang/'.$product->institution->slug]),
                     'created_at' => now()->subMinutes(mt_rand(1, 60 * 24 * 60))];
             }
             OutboundClick::insert($rows);
+
+            // Khoảng 5% click thành chuyển đổi (mạng "demo"), đủ trạng thái để dashboard hiệu quả đối tác có số liệu.
+            foreach (collect($rows)->shuffle()->take(intdiv(count($rows), 20) + ($i % 2)) as $click) {
+                $this->manifest->track(AffiliateConversion::create([
+                    'network' => 'demo', 'external_id' => 'DEMO-'.Str::upper(Str::random(10)), 'click_id' => $click['click_id'],
+                    'link_id' => $link->id, 'source_path' => $click['referer_path'],
+                    'status' => collect(ConversionStatus::cases())->random(),
+                    'commission' => $product->type === ProductType::CreditCard ? mt_rand(3, 12) * 50_000 : mt_rand(1, 4) * 20_000,
+                    'occurred_at' => $click['created_at']->copy()->addHours(mt_rand(1, 72))->min(now()),
+                ]));
+            }
             $count++;
         }
 

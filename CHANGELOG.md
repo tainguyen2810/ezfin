@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Đo chuyển đổi affiliate
+
+- Nhận chuyển đổi từ mạng affiliate qua postback có khóa bí mật, hoặc nhập file đối soát CSV; báo lại cùng mã giao dịch chỉ cập nhật trạng thái và hoa hồng.
+- Trang quản trị "Hiệu quả đối tác": click, chuyển đổi, tỷ lệ, hoa hồng theo ngân hàng, sản phẩm, trang nguồn và theo ngày.
+
 ### SEO: trang lãi suất cao nhất theo kỳ hạn
 
 - Trang "Lãi suất tiết kiệm 12 tháng cao nhất tháng 11/2026" cho các kỳ hạn 1–36 tháng (`/lai-suat-tiet-kiem/12-thang`...), tự cập nhật theo biểu lãi và tháng hiện tại; kèm tiền lãi trên 100 triệu, thay đổi 30 ngày, câu hỏi thường gặp.

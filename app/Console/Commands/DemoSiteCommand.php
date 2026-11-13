@@ -10,6 +10,7 @@ use App\Modules\Content\Models\ArticleCategory;
 use App\Modules\Content\Models\Author;
 use App\Modules\Core\Models\AuditLog;
 use App\Modules\Core\Models\SeoMeta;
+use App\Modules\Partner\Models\AffiliateConversion;
 use App\Modules\Partner\Models\OutboundLink;
 use App\Modules\Personal\Actions\DeleteAccount;
 use App\Modules\Personal\Console\DemoDataCommand;
@@ -34,7 +35,7 @@ class DemoSiteCommand extends Command
     protected $description = 'Tạo (hoặc xóa) dữ liệu demo cho mọi chức năng của EzFin';
 
     /** Thứ tự xóa: bảng con trước bảng cha. */
-    private const PURGE_ORDER = [OutboundLink::class, FinancialProduct::class, FinancialInstitution::class, Article::class, Author::class, ArticleCategory::class];
+    private const PURGE_ORDER = [AffiliateConversion::class, OutboundLink::class, FinancialProduct::class, FinancialInstitution::class, Article::class, Author::class, ArticleCategory::class];
 
     public function handle(): int
     {
