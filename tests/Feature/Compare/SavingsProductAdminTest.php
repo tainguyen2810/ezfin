@@ -20,7 +20,7 @@ use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
-const SAVINGS_URL = 'http://app.ezfin.test/quan-tri/tiet-kiem';
+const SAVINGS_URL = 'http://ezfin.test/quan-tri/tiet-kiem';
 
 beforeEach(function () {
     Filament::setCurrentPanel('admin');

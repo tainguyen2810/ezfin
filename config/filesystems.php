@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            // Đường dẫn tương đối: cùng một file phục vụ được cả ezfin.vn và app.ezfin.vn
+            // Đường dẫn tương đối: không phụ thuộc tên miền
             // (trang quản trị tải lại ảnh bằng fetch, khác tên miền sẽ bị chặn CORS).
             // Cần URL tuyệt đối (og:image, sitemap) thì bọc bằng url().
             'url' => env('FILESYSTEM_PUBLIC_URL', '/storage'),

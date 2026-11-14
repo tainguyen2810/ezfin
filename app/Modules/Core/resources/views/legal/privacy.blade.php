@@ -9,7 +9,7 @@
 @endphp
 <x-core::legal-page title="Quyền riêng tư" updated="13/11/2026"
     description="EzFin thu thập dữ liệu cá nhân gì, để làm gì, lưu bao lâu và quyền của bạn theo Luật Bảo vệ dữ liệu cá nhân 2025.">
-    <p>Chính sách này giải thích cách EzFin (ezfin.vn và app.ezfin.vn) xử lý dữ liệu cá nhân, theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 (hiệu lực từ 01/01/2026) và các văn bản hướng dẫn. Trang mô tả đúng những gì website đang thu thập ở thời điểm cập nhật; khi bổ sung tính năng thu thập dữ liệu mới, chúng tôi cập nhật trang này trước khi triển khai.</p>
+    <p>Chính sách này giải thích cách EzFin (ezfin.vn) xử lý dữ liệu cá nhân, theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 (hiệu lực từ 01/01/2026) và các văn bản hướng dẫn. Trang mô tả đúng những gì website đang thu thập ở thời điểm cập nhật; khi bổ sung tính năng thu thập dữ liệu mới, chúng tôi cập nhật trang này trước khi triển khai.</p>
 
     <h2>1. Bên kiểm soát và xử lý dữ liệu</h2>
     <p>

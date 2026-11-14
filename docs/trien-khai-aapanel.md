@@ -10,18 +10,18 @@ Môi trường: Ubuntu Server + aaPanel, Apache hoặc Nginx, PHP 8.3, MySQL 8. 
 
 ## 2. Tạo website
 
-1. Website → Add site `ezfin.vn`, thêm domain `www.ezfin.vn`, `app.ezfin.vn` vào cùng site. PHP 8.3. Tạo database `ezfin` (utf8mb4).
+1. Website → Add site `ezfin.vn`, thêm domain `www.ezfin.vn` (và `app.ezfin.vn` nếu từng dùng, để link cũ tự chuyển về ezfin.vn) vào cùng site. PHP 8.3. Tạo database `ezfin` (utf8mb4).
 2. Clone mã nguồn vào `/www/wwwroot/ezfin`, chủ sở hữu `www`.
 3. Site settings → Site directory: chọn **Running directory** = `/public`. Tắt "Anti-XSS attack (open_basedir)" hoặc đặt open_basedir bao cả `/www/wwwroot/ezfin/`.
 4. URL rewrite: chọn mẫu `laravel5`.
-5. SSL: Let's Encrypt cho `ezfin.vn`, `www.ezfin.vn`, `app.ezfin.vn`, bật Force HTTPS.
+5. SSL: Let's Encrypt cho `ezfin.vn`, `www.ezfin.vn` (thêm `app.ezfin.vn` nếu có), bật Force HTTPS.
 
 ## 3. Cài đặt lần đầu
 
 ```sh
 cd /www/wwwroot/ezfin
 cp .env.example .env    # sửa APP_ENV=production, APP_DEBUG=false, APP_URL=https://ezfin.vn, DB_*, MAIL_*
-                        # EZFIN_PUBLIC_DOMAIN=ezfin.vn, EZFIN_APP_DOMAIN=app.ezfin.vn,
+                        # EZFIN_PUBLIC_DOMAIN=ezfin.vn, EZFIN_APP_DOMAIN= (để trống; hoặc app.ezfin.vn nếu cần chuyển link cũ),
                         # EZFIN_ADMIN_PATH=<chuỗi khó đoán>, SESSION_DOMAIN=.ezfin.vn, SESSION_SECURE_COOKIE=true
                         # EZFIN_INDEXABLE=true (chỉ production; staging để false)
                         # EZFIN_POSTBACK_TOKEN=<chuỗi ngẫu nhiên dài> nếu mạng affiliate gửi postback chuyển đổi
@@ -68,9 +68,9 @@ Luôn sao lưu database trước bước `migrate`. Gắn tag git cho mỗi lầ
 
 Staging là bản sao production để thử trước mỗi lần phát hành và để chủ dự án duyệt. Dùng site, database và thư mục riêng, không dùng chung với production.
 
-- Tên miền: `staging.ezfin.vn` và `app.staging.ezfin.vn` (bản ghi DNS A trỏ về máy chủ), SSL Let's Encrypt cho cả hai.
+- Tên miền: `staging.ezfin.vn` (bản ghi DNS A trỏ về máy chủ), SSL Let's Encrypt.
 - Thư mục `/www/wwwroot/ezfin-staging`, database `ezfin_staging`, làm như mục 2 và 3 với `.env`:
-  `APP_ENV=staging`, `APP_DEBUG=false`, `APP_URL=https://staging.ezfin.vn`, `EZFIN_PUBLIC_DOMAIN=staging.ezfin.vn`, `EZFIN_APP_DOMAIN=app.staging.ezfin.vn`, `SESSION_DOMAIN=.staging.ezfin.vn`, `SESSION_SECURE_COOKIE=true`, `EZFIN_INDEXABLE=false`, `EZFIN_ADMIN_PATH` khác production.
+  `APP_ENV=staging`, `APP_DEBUG=false`, `APP_URL=https://staging.ezfin.vn`, `EZFIN_PUBLIC_DOMAIN=staging.ezfin.vn`, `EZFIN_APP_DOMAIN=`, `SESSION_DOMAIN=staging.ezfin.vn`, `SESSION_SECURE_COOKIE=true`, `EZFIN_INDEXABLE=false`, `EZFIN_ADMIN_PATH` khác production.
 - Cron và Supervisor riêng, trỏ tới thư mục staging (mục 4).
 - `EZFIN_INDEXABLE=false` làm `robots.txt` chặn toàn bộ và mọi trang có `noindex`. Muốn chặn người lạ xem, bật thêm Basic Auth trong aaPanel (Site → Directory protection) cho staging.
 - Email trên staging: dùng tài khoản SMTP thử hoặc `MAIL_MAILER=log` để không gửi nhầm cho người thật (`ezfin:check` sẽ cảnh báo, chấp nhận được trên staging).

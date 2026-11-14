@@ -10,7 +10,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const GOALS = 'http://app.ezfin.test/muc-tieu';
+const GOALS = 'http://ezfin.test/ung-dung/muc-tieu';
 
 beforeEach(function () {
     Feature::activate('personal');

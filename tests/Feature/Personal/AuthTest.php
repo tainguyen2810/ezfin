@@ -10,7 +10,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const APP = 'http://app.ezfin.test';
+const APP = 'http://ezfin.test';
 
 beforeEach(fn () => Feature::activate('personal'));
 
@@ -18,13 +18,13 @@ it('is hidden while the personal feature is off', function () {
     Feature::deactivate('personal');
 
     $this->get(APP.'/dang-ky')->assertNotFound();
-    $this->get(APP.'/')->assertRedirect(route('home'));
+    $this->get(APP.'/ung-dung')->assertNotFound();
     $this->get('http://ezfin.test/')->assertDontSee('Bắt đầu miễn phí');
 });
 
 it('links the public site to sign up when the feature is on', function () {
     $this->get('http://ezfin.test/')->assertSee('Bắt đầu miễn phí')->assertSee(route('personal.register'), false);
-    $this->get(APP.'/')->assertRedirect(route('personal.dashboard'));
+    $this->get(APP.'/ung-dung')->assertRedirect(route('personal.dashboard'));
 });
 
 it('registers a customer with consent and signs them in', function () {
@@ -53,14 +53,14 @@ it('requires accepting the terms and a decent password', function () {
 it('signs in, sends guests to the login page and signs out', function () {
     $user = User::factory()->create(['password' => 'matkhau123']);
 
-    $this->get(APP.'/tong-quan')->assertRedirect(route('personal.login'));
+    $this->get(APP.'/ung-dung/tong-quan')->assertRedirect(route('personal.login'));
 
     $this->post(APP.'/dang-nhap', ['email' => $user->email, 'password' => 'sai-mat-khau'])->assertSessionHasErrors('email');
     $this->assertGuest();
 
     $this->post(APP.'/dang-nhap', ['email' => $user->email, 'password' => 'matkhau123'])->assertRedirect(route('personal.dashboard'));
     $this->assertAuthenticatedAs($user);
-    $this->get(APP.'/tong-quan')->assertOk()->assertSee('Bắt đầu bằng ví đầu tiên');
+    $this->get(APP.'/ung-dung/tong-quan')->assertOk()->assertSee('Bắt đầu bằng ví đầu tiên');
 
     $this->post(APP.'/dang-xuat')->assertRedirect(route('personal.login'));
     $this->assertGuest();
@@ -111,7 +111,7 @@ it('emails a verification link after sign-up but lets the customer use the app r
     expect($user->hasVerifiedEmail())->toBeFalse();
     Notification::assertSentTo($user, VerifyEmail::class);
 
-    $this->get(APP.'/tong-quan')->assertOk()->assertSee('Hãy xác nhận email')->assertSee('Gửi lại thư');
+    $this->get(APP.'/ung-dung/tong-quan')->assertOk()->assertSee('Hãy xác nhận email')->assertSee('Gửi lại thư');
 });
 
 it('verifies the email from the signed link and hides the reminder', function () {
@@ -121,7 +121,7 @@ it('verifies the email from the signed link and hides the reminder', function ()
     $this->actingAs($user)->get($url)->assertRedirect(route('personal.dashboard'));
 
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $this->actingAs($user->fresh())->get(APP.'/tong-quan')->assertOk()->assertDontSee('Hãy xác nhận email');
+    $this->actingAs($user->fresh())->get(APP.'/ung-dung/tong-quan')->assertOk()->assertDontSee('Hãy xác nhận email');
 });
 
 it('rejects a tampered verification link or one for another account', function () {
@@ -141,7 +141,7 @@ it('resends the verification email on request', function () {
     Notification::fake();
     $user = User::factory()->unverified()->create();
 
-    $this->actingAs($user)->from(APP.'/tong-quan')->post(APP.'/xac-nhan-email/gui-lai')->assertRedirect(APP.'/tong-quan');
+    $this->actingAs($user)->from(APP.'/ung-dung/tong-quan')->post(APP.'/xac-nhan-email/gui-lai')->assertRedirect(APP.'/ung-dung/tong-quan');
 
     Notification::assertSentTo($user, VerifyEmail::class);
 });
@@ -150,7 +150,7 @@ it('asks to verify again after changing the email address', function () {
     Notification::fake();
     $user = User::factory()->create();
 
-    $this->actingAs($user)->put(APP.'/tai-khoan', ['name' => $user->name, 'email' => 'moi@example.com'])->assertRedirect();
+    $this->actingAs($user)->put(APP.'/ung-dung/tai-khoan', ['name' => $user->name, 'email' => 'moi@example.com'])->assertRedirect();
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
     Notification::assertSentTo($user, VerifyEmail::class);

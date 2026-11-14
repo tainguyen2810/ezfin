@@ -1,4 +1,4 @@
-{{-- Khung trang đăng nhập, đăng ký, quên mật khẩu của ứng dụng (app.ezfin.vn, noindex). --}}
+{{-- Khung trang đăng nhập, đăng ký, quên mật khẩu của khách hàng (noindex). --}}
 @props(['title', 'subtitle' => null])
 <!DOCTYPE html>
 <html lang="vi">

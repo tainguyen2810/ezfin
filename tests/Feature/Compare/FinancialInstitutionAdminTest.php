@@ -17,7 +17,7 @@ use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
-const INSTITUTIONS_URL = 'http://app.ezfin.test/quan-tri/to-chuc-tai-chinh';
+const INSTITUTIONS_URL = 'http://ezfin.test/quan-tri/to-chuc-tai-chinh';
 
 beforeEach(function () {
     Storage::fake('public');

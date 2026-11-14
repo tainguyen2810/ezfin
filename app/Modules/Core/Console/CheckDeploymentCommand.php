@@ -40,8 +40,8 @@ class CheckDeploymentCommand extends Command
         $this->check('APP_DEBUG tắt', ! config('app.debug') || ! $live, 'APP_DEBUG=true làm lộ thông tin lỗi');
         $this->check('APP_URL dùng https', str_starts_with((string) config('app.url'), 'https://') || ! $live, (string) config('app.url'), warn: true);
         $this->check('Cookie phiên chỉ qua HTTPS', (bool) config('session.secure') || ! $live, 'Đặt SESSION_SECURE_COOKIE=true', warn: true);
-        $this->check('Tên miền', collect([config('ezfin.domains.public'), config('ezfin.domains.app')])->every(fn ($domain) => ! Str::endsWith((string) $domain, ['.test', '.local'])) || ! $live,
-            config('ezfin.domains.public').' / '.config('ezfin.domains.app'));
+        $this->check('Tên miền', ! Str::endsWith((string) config('ezfin.domains.public'), ['.test', '.local']) || ! $live,
+            (string) config('ezfin.domains.public'));
 
         $indexable = (bool) config('ezfin.indexable');
         $this->check('Lập chỉ mục tìm kiếm', $indexable === app()->isProduction(),

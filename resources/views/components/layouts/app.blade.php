@@ -1,4 +1,4 @@
-{{-- Khung ứng dụng khách hàng (app.ezfin.vn): sidebar trên desktop, thanh điều hướng dưới + nút thêm trên mobile.
+{{-- Khung ứng dụng khách hàng (ezfin.vn/ung-dung): sidebar trên desktop, thanh điều hướng dưới + nút thêm trên mobile.
      $menu: [['label', 'icon', 'href', 'active']]; $bottom: tối đa 4 mục cho thanh dưới; $addUrl: nút + ở giữa; $userUrl: avatar dẫn tới trang tài khoản. --}}
 @props(['title', 'menu' => [], 'bottom' => [], 'addUrl' => null, 'addLabel' => 'Thêm giao dịch', 'user' => null, 'userUrl' => null])
 <!DOCTYPE html>

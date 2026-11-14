@@ -125,11 +125,11 @@ it('lets data operators enter rates in the admin and editors only view', functio
     Filament::setCurrentPanel('admin');
 
     $this->actingAs(User::factory()->admin(Role::Editor)->create());
-    $this->get('http://app.ezfin.test/quan-tri/ty-gia')->assertOk();
+    $this->get('http://ezfin.test/quan-tri/ty-gia')->assertOk();
     Livewire::test(ManageFxRates::class)->assertActionHidden(CreateAction::class);
 
     $this->actingAs(User::factory()->admin(Role::Finance)->create());
-    $this->get('http://app.ezfin.test/quan-tri/gia-vang')->assertForbidden();
+    $this->get('http://ezfin.test/quan-tri/gia-vang')->assertForbidden();
 
     $this->actingAs(User::factory()->admin(Role::DataOperator)->create());
     foreach (['25440', '25450'] as $sell) {

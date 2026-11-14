@@ -35,12 +35,12 @@ it('sends an old url that no longer exists to its new address and counts the hit
         ->last_hit_at->not->toBeNull();
 });
 
-it('never hides a page that exists, and ignores the app domain', function () {
+it('never hides a page that exists, and ignores other hosts', function () {
     Redirect::create(['from_path' => '/cong-cu', 'to_url' => '/the-tin-dung', 'status_code' => 302]);
-    Redirect::create(['from_path' => '/quan-tri-cu', 'to_url' => '/the-tin-dung']);
+    Redirect::create(['from_path' => '/cu', 'to_url' => '/the-tin-dung']);
 
     $this->get('http://ezfin.test/cong-cu')->assertOk();
-    $this->get('http://app.ezfin.test/quan-tri-cu')->assertNotFound();
+    $this->get('http://khac.test/cu')->assertNotFound();
 });
 
 it('rejects redirects that would loop or leave the site unsafely', function (array $data) {
@@ -104,7 +104,7 @@ it('lets editors and super admins manage redirects in the admin', function (Role
     Filament::setCurrentPanel('admin');
     $this->actingAs(User::factory()->admin($role)->create());
 
-    $this->get('http://app.ezfin.test/quan-tri/chuyen-huong')->assertStatus($status);
+    $this->get('http://ezfin.test/quan-tri/chuyen-huong')->assertStatus($status);
 })->with([
     'super admin' => [Role::SuperAdmin, 200],
     'editor' => [Role::Editor, 200],

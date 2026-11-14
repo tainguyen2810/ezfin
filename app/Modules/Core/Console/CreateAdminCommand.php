@@ -43,7 +43,7 @@ class CreateAdminCommand extends Command
 
         $this->info("Đã tạo tài khoản {$email} (".Role::from($role)->label().').'
             .(config('ezfin.admin_2fa') ? ' Lần đăng nhập đầu sẽ yêu cầu thiết lập xác thực 2 lớp.' : ''));
-        $this->line('Đăng nhập tại: '.(parse_url((string) config('app.url'), PHP_URL_SCHEME) ?: 'https').'://'.config('ezfin.domains.app').'/'.config('ezfin.admin_path'));
+        $this->line('Đăng nhập tại: '.(parse_url((string) config('app.url'), PHP_URL_SCHEME) ?: 'https').'://'.config('ezfin.domains.public').'/'.config('ezfin.admin_path'));
 
         return self::SUCCESS;
     }

@@ -18,7 +18,7 @@
         ->all();
     $footerLinks = collect(\App\Modules\Core\CoreServiceProvider::LEGAL_PAGES)->filter(fn ($label, $route) => Route::has($route));
     $company = array_filter(config('ezfin.company', []), 'filled');
-    // Nút vào ứng dụng quản lý tiền (app.ezfin.vn) khi tính năng đang bật.
+    // Nút vào ứng dụng quản lý tiền (/ung-dung) khi tính năng đang bật.
     $accountLinks = Route::has('personal.login') && \Laravel\Pennant\Feature::active('personal');
 @endphp
 <!DOCTYPE html>

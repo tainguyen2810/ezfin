@@ -14,7 +14,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const ACCOUNT = 'http://app.ezfin.test/tai-khoan';
+const ACCOUNT = 'http://ezfin.test/ung-dung/tai-khoan';
 
 beforeEach(function () {
     Feature::activate('personal');
@@ -105,5 +105,5 @@ it('does not let an admin delete their own account here', function () {
 });
 
 it('links the avatar to the account page', function () {
-    $this->get('http://app.ezfin.test/tong-quan')->assertSee('href="'.route('personal.settings.edit').'"', false);
+    $this->get('http://ezfin.test/ung-dung/tong-quan')->assertSee('href="'.route('personal.settings.edit').'"', false);
 });

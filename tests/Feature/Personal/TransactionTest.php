@@ -11,7 +11,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const TX = 'http://app.ezfin.test/giao-dich';
+const TX = 'http://ezfin.test/ung-dung/giao-dich';
 
 beforeEach(function () {
     Feature::activate('personal');
@@ -109,12 +109,12 @@ it('never uses or shows another user\'s wallets, categories or transactions', fu
     $this->get(TX.'?thang=2026-10')->assertDontSee('Bí mật');
     $this->get(TX.'/'.$theirTx->id.'/edit')->assertNotFound();
     $this->delete(TX.'/'.$theirTx->id)->assertNotFound();
-    $this->get('http://app.ezfin.test/danh-muc/'.$theirCategory->id.'/edit')->assertNotFound();
+    $this->get('http://ezfin.test/ung-dung/danh-muc/'.$theirCategory->id.'/edit')->assertNotFound();
 });
 
 it('asks for a wallet before the first transaction and creates default categories', function () {
     $fresh = User::factory()->create();
-    $this->actingAs($fresh)->get(TX.'/create')->assertRedirect('http://app.ezfin.test/vi/create');
+    $this->actingAs($fresh)->get(TX.'/create')->assertRedirect('http://ezfin.test/ung-dung/vi/create');
 
     Wallet::factory()->for($fresh)->create();
     $this->get(TX.'/create')->assertOk()->assertSee('Ăn uống');
@@ -122,15 +122,15 @@ it('asks for a wallet before the first transaction and creates default categorie
 });
 
 it('manages categories', function () {
-    $this->post('http://app.ezfin.test/danh-muc', ['type' => 'expense', 'name' => 'Thú cưng', 'icon' => 'heart', 'color' => 'pink'])->assertRedirect();
+    $this->post('http://ezfin.test/ung-dung/danh-muc', ['type' => 'expense', 'name' => 'Thú cưng', 'icon' => 'heart', 'color' => 'pink'])->assertRedirect();
     $pet = Category::where('name', 'Thú cưng')->sole();
 
-    $this->put('http://app.ezfin.test/danh-muc/'.$pet->id, ['name' => 'Chó mèo', 'icon' => 'face-smile', 'color' => 'amber'])->assertRedirect();
+    $this->put('http://ezfin.test/ung-dung/danh-muc/'.$pet->id, ['name' => 'Chó mèo', 'icon' => 'face-smile', 'color' => 'amber'])->assertRedirect();
     expect($pet->fresh()->name)->toBe('Chó mèo');
 
-    $this->post('http://app.ezfin.test/danh-muc', ['type' => 'expense', 'name' => 'X', 'icon' => '../etc', 'color' => 'pink'])->assertSessionHasErrors('icon');
+    $this->post('http://ezfin.test/ung-dung/danh-muc', ['type' => 'expense', 'name' => 'X', 'icon' => '../etc', 'color' => 'pink'])->assertSessionHasErrors('icon');
 
-    $this->delete('http://app.ezfin.test/danh-muc/'.$pet->id)->assertRedirect();
-    $this->get('http://app.ezfin.test/danh-muc')->assertSee('Đã ẩn danh mục'); // thông báo chỉ hiện một lần
+    $this->delete('http://ezfin.test/ung-dung/danh-muc/'.$pet->id)->assertRedirect();
+    $this->get('http://ezfin.test/ung-dung/danh-muc')->assertSee('Đã ẩn danh mục'); // thông báo chỉ hiện một lần
     $this->get(TX.'/create')->assertDontSee('Chó mèo');
 });

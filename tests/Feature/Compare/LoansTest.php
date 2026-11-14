@@ -17,7 +17,7 @@ use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
-const LOANS_ADMIN_URL = 'http://app.ezfin.test/quan-tri/khoan-vay';
+const LOANS_ADMIN_URL = 'http://ezfin.test/quan-tri/khoan-vay';
 
 /** Khoản vay đã xuất bản; $detail ghi đè thông số mặc định (vay mua nhà, ưu đãi 12 tháng). */
 function loanProduct(string $name, array $detail = [], array $product = []): FinancialProduct

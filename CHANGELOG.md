@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Một website, một tên miền
+
+- Bỏ tên miền phụ app.ezfin.vn. Đăng nhập, đăng ký ở ezfin.vn/dang-nhap, ezfin.vn/dang-ky; ứng dụng quản lý tiền ở ezfin.vn/ung-dung (chỉ khách hàng đã đăng nhập, không cho Google lập chỉ mục); trang quản trị ở ezfin.vn/<đường dẫn bí mật>.
+- Link cũ app.ezfin.vn/... chuyển 301 về địa chỉ mới khi đặt `EZFIN_APP_DOMAIN`.
+
 ### Miễn phí cho mọi người dùng
 
 - EzFin không có gói trả phí: ai đăng ký tài khoản là dùng được toàn bộ ứng dụng quản lý tiền. Ứng dụng bật sẵn cho bản cài mới.

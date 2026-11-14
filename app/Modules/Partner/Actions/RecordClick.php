@@ -49,7 +49,7 @@ class RecordClick
         $referer = (string) $request->headers->get('referer');
         $host = parse_url($referer, PHP_URL_HOST);
 
-        if (! $host || ! in_array($host, [config('ezfin.domains.public'), config('ezfin.domains.app')], true)) {
+        if (! $host || $host !== config('ezfin.domains.public')) {
             return null;
         }
 

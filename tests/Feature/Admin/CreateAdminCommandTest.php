@@ -9,7 +9,7 @@ uses(RefreshDatabase::class);
 it('creates a verified super admin', function () {
     $this->artisan('ezfin:admin', ['--name' => 'Quản trị', '--email' => 'admin@ezfin.vn'])
         ->expectsQuestion('Mật khẩu (tối thiểu 12 ký tự, có chữ hoa, chữ thường, số)', 'Strong-password-2026')
-        ->expectsOutputToContain('app.ezfin.test/quan-tri')
+        ->expectsOutputToContain('ezfin.test/quan-tri')
         ->assertSuccessful();
 
     $user = User::where('email', 'admin@ezfin.vn')->sole();

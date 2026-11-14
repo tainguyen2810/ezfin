@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 
-/** Ứng dụng quản lý tiền trên app.ezfin.vn: tài khoản khách hàng, ví, giao dịch, ngân sách, mục tiêu... */
+/** Ứng dụng quản lý tiền ở ezfin.vn/ung-dung (chỉ khách hàng đã đăng nhập): tài khoản khách hàng, ví, giao dịch, ngân sách, mục tiêu... */
 class PersonalServiceProvider extends ModuleServiceProvider
 {
     protected ?string $feature = 'personal';
