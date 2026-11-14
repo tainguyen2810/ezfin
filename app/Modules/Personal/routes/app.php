@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Personal\Http\Controllers\AccountController;
+use App\Modules\Personal\Http\Controllers\Auth\EmailVerificationController;
 use App\Modules\Personal\Http\Controllers\Auth\LoginController;
 use App\Modules\Personal\Http\Controllers\Auth\PasswordResetController;
 use App\Modules\Personal\Http\Controllers\Auth\RegisterController;
@@ -31,6 +32,12 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/dang-xuat', [LoginController::class, 'destroy'])->name('personal.logout');
     Route::get('/tong-quan', DashboardController::class)->name('personal.dashboard');
+
+    // Tên route verification.* do thông báo xác nhận email của Laravel dùng.
+    Route::get('/xac-nhan-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+        ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+    Route::post('/xac-nhan-email/gui-lai', [EmailVerificationController::class, 'send'])
+        ->middleware('throttle:6,1')->name('verification.send');
 
     Route::resource('vi', WalletController::class)->except('show')
         ->parameters(['vi' => 'wallet'])->names('personal.wallets');

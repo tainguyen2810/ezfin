@@ -80,9 +80,9 @@ return [
         'markets' => true,
         'stocks' => false,
         'funds' => false,
-        'personal' => false,
+        // Ứng dụng quản lý tiền: miễn phí cho mọi tài khoản đã đăng ký.
+        'personal' => true,
         'newsletter' => true,
-        'pro' => false,
     ],
 
 ];

@@ -22,5 +22,15 @@
         </form>
     </x-slot:sidebarFooter>
 
+    @unless (auth()->user()->hasVerifiedEmail())
+        <x-ui.alert variant="info" class="mb-4">
+            <form method="POST" action="{{ route('verification.send') }}" class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                @csrf
+                <span>Hãy xác nhận email {{ auth()->user()->email }} bằng link EzFin đã gửi, để lấy lại mật khẩu được khi cần.</span>
+                <button type="submit" class="font-semibold text-primary-700 hover:underline">Gửi lại thư</button>
+            </form>
+        </x-ui.alert>
+    @endunless
+
     {{ $slot }}
 </x-layouts.app>

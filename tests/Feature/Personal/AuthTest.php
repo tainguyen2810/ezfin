@@ -1,9 +1,11 @@
 <?php
 
 use App\Models\User;
+use App\Modules\Personal\Notifications\VerifyEmail;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\URL;
 use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
@@ -95,4 +97,69 @@ it('resets a forgotten password by email without revealing who is registered', f
     ])->assertRedirect(route('personal.login'));
 
     $this->post(APP.'/dang-nhap', ['email' => $user->email, 'password' => 'matkhaumoi1'])->assertRedirect(route('personal.dashboard'));
+});
+
+it('emails a verification link after sign-up but lets the customer use the app right away', function () {
+    Notification::fake();
+
+    $this->post(APP.'/dang-ky', [
+        'name' => 'Nguyễn Văn B', 'email' => 'b@example.com',
+        'password' => 'matkhau123', 'password_confirmation' => 'matkhau123', 'terms' => '1',
+    ])->assertRedirect(route('personal.dashboard'));
+
+    $user = User::firstWhere('email', 'b@example.com');
+    expect($user->hasVerifiedEmail())->toBeFalse();
+    Notification::assertSentTo($user, VerifyEmail::class);
+
+    $this->get(APP.'/tong-quan')->assertOk()->assertSee('Hãy xác nhận email')->assertSee('Gửi lại thư');
+});
+
+it('verifies the email from the signed link and hides the reminder', function () {
+    $user = User::factory()->unverified()->create();
+    $url = URL::temporarySignedRoute('verification.verify', now()->addHour(), ['id' => $user->id, 'hash' => sha1($user->email)]);
+
+    $this->actingAs($user)->get($url)->assertRedirect(route('personal.dashboard'));
+
+    expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
+    $this->actingAs($user->fresh())->get(APP.'/tong-quan')->assertOk()->assertDontSee('Hãy xác nhận email');
+});
+
+it('rejects a tampered verification link or one for another account', function () {
+    $user = User::factory()->unverified()->create();
+    $other = User::factory()->unverified()->create();
+
+    $this->actingAs($user)->get(APP.'/xac-nhan-email/'.$user->id.'/'.sha1($user->email))->assertForbidden();
+
+    $url = URL::temporarySignedRoute('verification.verify', now()->addHour(), ['id' => $other->id, 'hash' => sha1($other->email)]);
+    $this->actingAs($user)->get($url)->assertForbidden();
+
+    expect($user->fresh()->hasVerifiedEmail())->toBeFalse()
+        ->and($other->fresh()->hasVerifiedEmail())->toBeFalse();
+});
+
+it('resends the verification email on request', function () {
+    Notification::fake();
+    $user = User::factory()->unverified()->create();
+
+    $this->actingAs($user)->from(APP.'/tong-quan')->post(APP.'/xac-nhan-email/gui-lai')->assertRedirect(APP.'/tong-quan');
+
+    Notification::assertSentTo($user, VerifyEmail::class);
+});
+
+it('asks to verify again after changing the email address', function () {
+    Notification::fake();
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->put(APP.'/tai-khoan', ['name' => $user->name, 'email' => 'moi@example.com'])->assertRedirect();
+
+    expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
+    Notification::assertSentTo($user, VerifyEmail::class);
+});
+
+it('writes the password reset email in Vietnamese', function () {
+    $user = User::factory()->create();
+    $mail = (new ResetPassword('token'))->toMail($user);
+
+    expect($mail->subject)->toBe('Đặt lại mật khẩu EzFin')
+        ->and($mail->actionText)->toBe('Đặt lại mật khẩu');
 });
