@@ -88,8 +88,9 @@ abstract class ModuleServiceProvider extends ServiceProvider
                 ->group("$path/routes/public.php");
         }
 
+        // Trang khách hàng đăng nhập: cùng tên miền với website nhưng không cho lập chỉ mục.
         if (is_file("$path/routes/app.php")) {
-            Route::domain(config('ezfin.domains.app'))
+            Route::domain(config('ezfin.domains.public'))
                 ->middleware([...$middleware, 'noindex'])
                 ->group("$path/routes/app.php");
         }

@@ -31,7 +31,11 @@ php artisan migrate
 php artisan ezfin:admin
 ```
 
-Trang quản trị: `http://app.ezfin.test/quan-tri` (đổi bằng `EZFIN_ADMIN_PATH`).
+Cả website nằm trên một tên miền `ezfin.test`:
+
+- Trang chủ và trang cho khách xem: `http://ezfin.test`
+- Đăng nhập, đăng ký khách hàng: `http://ezfin.test/dang-nhap`; ứng dụng quản lý tiền: `http://ezfin.test/ung-dung`
+- Trang quản trị: `http://ezfin.test/quan-tri` (đổi bằng `EZFIN_ADMIN_PATH`).
 
 Xác thực 2 lớp (2FA): với `APP_ENV=local` không bắt buộc, có thể bật trong trang hồ sơ. Muốn thử như production thì đặt `EZFIN_ADMIN_2FA=true` trong `.env`; lần đăng nhập đầu sẽ cần quét mã QR bằng Google Authenticator hoặc ứng dụng tương tự và lưu lại mã khôi phục. Production luôn bắt buộc 2FA.
 
@@ -41,15 +45,15 @@ Thêm vào `C:\Windows\System32\drivers\etc\hosts` (mở Notepad bằng quyền 
 
 ```
 127.0.0.1 ezfin.test
-127.0.0.1 app.ezfin.test
 ```
+
+(Bản cài cũ có dòng `app.ezfin.test` thì giữ cũng được: link cũ tự chuyển về `ezfin.test` khi `.env` còn `EZFIN_APP_DOMAIN=app.ezfin.test`.)
 
 Thêm vào `C:\wamp64\bin\apache\apache2.4.x\conf\extra\httpd-vhosts.conf`:
 
 ```apache
 <VirtualHost *:80>
     ServerName ezfin.test
-    ServerAlias app.ezfin.test
     DocumentRoot "C:/wamp64/www/ezfin/public"
     <Directory "C:/wamp64/www/ezfin/public/">
         Options -Indexes +FollowSymLinks

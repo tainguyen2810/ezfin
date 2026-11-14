@@ -1,6 +1,6 @@
 <x-core::legal-page title="Điều khoản sử dụng" updated="13/11/2026"
     description="Điều khoản sử dụng website EzFin: phạm vi thông tin, trách nhiệm, sở hữu nội dung và liên kết bên ngoài.">
-    <p>Khi truy cập và sử dụng EzFin (ezfin.vn và app.ezfin.vn), bạn đồng ý với các điều khoản dưới đây. Nếu không đồng ý, vui lòng ngừng sử dụng website.</p>
+    <p>Khi truy cập và sử dụng EzFin (ezfin.vn), bạn đồng ý với các điều khoản dưới đây. Nếu không đồng ý, vui lòng ngừng sử dụng website.</p>
 
     <h2>1. Tính chất thông tin</h2>
     <ul>

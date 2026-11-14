@@ -23,7 +23,7 @@ use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
-const CONTENT_ADMIN_URL = 'http://app.ezfin.test/quan-tri/';
+const CONTENT_ADMIN_URL = 'http://ezfin.test/quan-tri/';
 
 beforeEach(function () {
     Filament::setCurrentPanel('admin');

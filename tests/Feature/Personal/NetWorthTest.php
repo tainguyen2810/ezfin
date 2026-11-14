@@ -10,7 +10,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const NET_WORTH = 'http://app.ezfin.test/tai-san-no';
+const NET_WORTH = 'http://ezfin.test/ung-dung/tai-san-no';
 
 beforeEach(function () {
     Feature::activate('personal');

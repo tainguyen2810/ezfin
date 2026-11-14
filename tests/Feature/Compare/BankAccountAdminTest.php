@@ -17,7 +17,7 @@ use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
-const BANK_ACCOUNTS_ADMIN_URL = 'http://app.ezfin.test/quan-tri/tai-khoan-ngan-hang';
+const BANK_ACCOUNTS_ADMIN_URL = 'http://ezfin.test/quan-tri/tai-khoan-ngan-hang';
 
 beforeEach(function () {
     Filament::setCurrentPanel('admin');

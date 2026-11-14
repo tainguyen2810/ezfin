@@ -12,14 +12,15 @@ beforeEach(function () {
     app('router')->getRoutes()->refreshNameLookups();
 });
 
-it('serves module routes on their own domain only', function () {
+it('serves public and customer routes on the main domain only', function () {
     $this->get('http://ezfin.test/demo')->assertOk()->assertSee('demo page');
-    $this->get('http://app.ezfin.test/demo')->assertOk()->assertSee('demo app page');
+    $this->get('http://ezfin.test/demo-app')->assertOk()->assertSee('demo app page');
+    $this->get('http://khac.test/demo')->assertNotFound();
     $this->get('http://ezfin.test/khong-ton-tai')->assertNotFound();
 });
 
-it('marks app domain routes as noindex', function () {
-    $this->get('http://app.ezfin.test/demo')->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+it('marks customer routes as noindex', function () {
+    $this->get('http://ezfin.test/demo-app')->assertHeader('X-Robots-Tag', 'noindex, nofollow');
     $this->get('http://ezfin.test/demo')->assertHeaderMissing('X-Robots-Tag');
 });
 
@@ -27,7 +28,7 @@ it('returns 404 for every route of a disabled module', function () {
     Feature::deactivate('demo');
 
     $this->get('http://ezfin.test/demo')->assertNotFound();
-    $this->get('http://app.ezfin.test/demo')->assertNotFound();
+    $this->get('http://ezfin.test/demo-app')->assertNotFound();
 });
 
 it('hides navigation items of a disabled module', function () {

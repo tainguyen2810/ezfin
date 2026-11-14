@@ -16,7 +16,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const DASHBOARD = 'http://app.ezfin.test/tong-quan';
+const DASHBOARD = 'http://ezfin.test/ung-dung/tong-quan';
 
 beforeEach(function () {
     Feature::activate('personal');

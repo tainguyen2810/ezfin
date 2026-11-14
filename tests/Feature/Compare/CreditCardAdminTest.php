@@ -20,7 +20,7 @@ use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
-const CARDS_URL = 'http://app.ezfin.test/quan-tri/the-tin-dung';
+const CARDS_URL = 'http://ezfin.test/quan-tri/the-tin-dung';
 
 beforeEach(function () {
     Storage::fake('public');

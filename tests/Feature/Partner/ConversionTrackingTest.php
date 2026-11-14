@@ -115,10 +115,10 @@ it('shows the performance dashboard to finance and super admins only', function 
     Filament::setCurrentPanel('admin');
     $this->actingAs(User::factory()->admin($role)->create());
 
-    $response = $this->get('http://app.ezfin.test/quan-tri/hieu-qua-doi-tac?ky=7')->assertStatus($status);
+    $response = $this->get('http://ezfin.test/quan-tri/hieu-qua-doi-tac?ky=7')->assertStatus($status);
     if ($status === 200) {
         $response->assertSee('Hoa hồng đã duyệt')->assertSee('Alpha');
-        $this->get('http://app.ezfin.test/quan-tri/chuyen-doi')->assertOk();
+        $this->get('http://ezfin.test/quan-tri/chuyen-doi')->assertOk();
     }
 })->with([
     'super admin' => [Role::SuperAdmin, 200],

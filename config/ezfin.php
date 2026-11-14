@@ -12,13 +12,18 @@ use App\Modules\Planner\PlannerServiceProvider;
 return [
 
     /*
-    | Tên miền. Một codebase phục vụ website công khai và ứng dụng khách hàng;
-    | trang quản trị nằm ở đường dẫn bí mật trên tên miền ứng dụng.
+    | Tên miền. Một website duy nhất: trang công khai, trang khách hàng (/dang-nhap,
+    | /ung-dung/...) và trang quản trị ở đường dẫn bí mật đều nằm trên tên miền chính.
+    | `legacy_app`: tên miền phụ cũ (app.ezfin.vn), mọi URL ở đó chuyển 301 về tên miền
+    | chính. Để trống nếu không cần.
     */
     'domains' => [
         'public' => env('EZFIN_PUBLIC_DOMAIN', 'ezfin.test'),
-        'app' => env('EZFIN_APP_DOMAIN', 'app.ezfin.test'),
+        'legacy_app' => env('EZFIN_APP_DOMAIN') ?: null,
     ],
+
+    /** Tiền tố đường dẫn của ứng dụng quản lý tiền (ví, giao dịch...). */
+    'app_prefix' => 'ung-dung',
 
     'admin_path' => env('EZFIN_ADMIN_PATH', 'quan-tri'),
 

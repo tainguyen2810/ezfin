@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 /**
- * Trang quản trị: app.ezfin.vn/<EZFIN_ADMIN_PATH>, chỉ tài khoản có vai trò nội bộ,
+ * Trang quản trị: ezfin.vn/<EZFIN_ADMIN_PATH>, chỉ tài khoản có vai trò nội bộ,
  * bắt buộc xác thực 2 lớp bằng ứng dụng, có mã khôi phục.
  */
 class AdminPanelProvider extends PanelProvider
@@ -35,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
         $panel = $panel
             ->default()
             ->id('admin')
-            ->domain(config('ezfin.domains.app'))
+            ->domain(config('ezfin.domains.public'))
             ->path(config('ezfin.admin_path'))
             ->login(Login::class)
             ->profile(isSimple: false)

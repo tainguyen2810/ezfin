@@ -10,7 +10,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const WALLETS = 'http://app.ezfin.test/vi';
+const WALLETS = 'http://ezfin.test/ung-dung/vi';
 
 beforeEach(function () {
     Feature::activate('personal');
@@ -31,7 +31,7 @@ it('creates a wallet for the signed-in user and shows the total', function () {
     Wallet::factory()->for($this->user)->create(['name' => 'Tiền giữ hộ', 'opening_balance' => 2_000_000, 'include_in_total' => false]);
 
     $this->get(WALLETS)->assertOk()->assertSee('Tài khoản lương')->assertSee('15.000.000 đ')->assertSee('Không tính vào tổng');
-    $this->get('http://app.ezfin.test/tong-quan')->assertOk()->assertSee('Tổng tài sản')->assertSee('15.000.000 đ');
+    $this->get('http://ezfin.test/ung-dung/tong-quan')->assertOk()->assertSee('Tổng tài sản')->assertSee('15.000.000 đ');
 });
 
 it('validates the wallet form', function () {

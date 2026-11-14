@@ -17,7 +17,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const RECURRING = 'http://app.ezfin.test/dinh-ky';
+const RECURRING = 'http://ezfin.test/ung-dung/dinh-ky';
 
 beforeEach(function () {
     $this->travelTo(Carbon::parse('2026-10-31 09:00'));
@@ -190,7 +190,7 @@ it('shows upcoming items on the dashboard', function () {
     recurring(['name' => 'Hạn thẻ', 'mode' => 'remind', 'starts_on' => '2026-11-03', 'wallet_id' => null, 'category_id' => null]);
     recurring(['name' => 'Xa lắm', 'starts_on' => '2026-12-20']);
 
-    $this->get('http://app.ezfin.test/tong-quan')->assertOk()->assertSee('Sắp đến hạn')->assertSee('Hạn thẻ')->assertDontSee('Xa lắm');
+    $this->get('http://ezfin.test/ung-dung/tong-quan')->assertOk()->assertSee('Sắp đến hạn')->assertSee('Hạn thẻ')->assertDontSee('Xa lắm');
 });
 
 it('does nothing when the personal app is switched off', function () {

@@ -10,7 +10,7 @@ uses(RefreshDatabase::class);
 
 function admin_url(string $path = ''): string
 {
-    return 'http://app.ezfin.test/quan-tri'.$path;
+    return 'http://ezfin.test/quan-tri'.$path;
 }
 
 it('seeds the four internal roles', function () {
@@ -18,13 +18,13 @@ it('seeds the four internal roles', function () {
         ->toBe(collect(Role::values())->sort()->values()->all());
 });
 
-it('shows the admin login page on the app domain only, with noindex', function () {
+it('shows the admin login page on the main domain only, with noindex', function () {
     $this->get(admin_url('/login'))
         ->assertOk()
         ->assertSee('Đăng nhập')
         ->assertHeader('X-Robots-Tag', 'noindex, nofollow');
 
-    $this->get('http://ezfin.test/quan-tri/login')->assertNotFound();
+    $this->get('http://khac.test/quan-tri/login')->assertNotFound();
 });
 
 it('redirects guests to the login page', function () {

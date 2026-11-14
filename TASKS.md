@@ -70,6 +70,14 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 14/11/2026 — Gộp về một tên miền
+
+- Xong: route `routes/app.php` của module chạy trên tên miền chính (noindex); ứng dụng quản lý tiền dưới tiền tố `config('ezfin.app_prefix')` = `ung-dung`; đăng nhập/đăng ký/quên mật khẩu/xác nhận email giữ đường dẫn ở gốc; Filament chuyển sang tên miền chính; tên miền phụ cũ (`EZFIN_APP_DOMAIN`, config `ezfin.domains.legacy_app`) chuyển 301 (`CoreServiceProvider::publicUrlFor`) và robots chặn toàn bộ; robots.txt chính thêm `Disallow: /ung-dung/`; sửa trang pháp lý, tài liệu WAMP và aaPanel.
+- Test đã chạy: `vendor/bin/pest` (613 test xanh), `vendor/bin/pint`.
+- Chưa giải quyết: link xác nhận email gửi trước khi đổi (ký theo tên miền cũ) sẽ không còn hợp lệ, khách bấm "Gửi lại thư". Máy WAMP của Tai: mở `http://ezfin.test/dang-nhap` và `http://ezfin.test/quan-tri`.
+- File quan trọng: `config/ezfin.php`, `app/Support/Modules/ModuleServiceProvider.php`, `app/Modules/Core/CoreServiceProvider.php`, `app/Modules/Personal/routes/app.php`, `app/Providers/Filament/AdminPanelProvider.php`.
+- Tiếp theo: Tai kiểm tra trên máy.
+
 ### 14/11/2026 — Bỏ mô hình trả phí
 
 - Xong: rà soát không thấy bảng giá, gói, thanh toán hay chặn tính năng theo gói; gỡ flag `pro` chưa dùng; flag `personal` mặc định bật; xác nhận email không bắt buộc (`verification.verify` `/xac-nhan-email/{id}/{hash}`, `verification.send`, dòng nhắc trong `x-personal::shell`, đổi email thì xác nhận lại); thư xác nhận và đặt lại mật khẩu tiếng Việt. Giữ app.ezfin.vn cho ứng dụng.

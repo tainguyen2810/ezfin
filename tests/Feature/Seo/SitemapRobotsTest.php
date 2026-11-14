@@ -60,7 +60,7 @@ it('lists only published, indexable public pages of active modules', function ()
         'http://ezfin.test/tac-gia/'.$article->author->slug,
     );
 
-    foreach (['the-noindex', 'the-nhap', 'the-ngan-hang-dong', 'bai-nhap', 'bai-hen-gio', 'tac-gia-chua-co-bai', '/_ui', '/di/', 'app.ezfin.test'] as $excluded) {
+    foreach (['the-noindex', 'the-nhap', 'the-ngan-hang-dong', 'bai-nhap', 'bai-hen-gio', 'tac-gia-chua-co-bai', '/_ui', '/di/', '/ung-dung', '/dang-nhap'] as $excluded) {
         expect(collect($locs)->contains(fn (string $loc) => str_contains($loc, $excluded)))->toBeFalse();
     }
 
@@ -92,9 +92,11 @@ it('points crawlers to the sitemap on the public site in production', function (
         ->assertDontSee("Disallow: /\n", false);
 });
 
-it('blocks crawlers on the app domain and outside production', function () {
-    $this->get('http://app.ezfin.test/robots.txt')->assertOk()->assertSee("Disallow: /\n", false);
+it('keeps the customer app out of search engines', function () {
+    $this->get('http://ezfin.test/robots.txt')->assertSee("Disallow: /ung-dung/\n", false);
+});
 
+it('blocks crawlers outside production', function () {
     config(['ezfin.indexable' => false]);
 
     $this->get('http://ezfin.test/robots.txt')->assertSee("Disallow: /\n", false)->assertDontSee('Sitemap:', false);

@@ -166,7 +166,7 @@ it('shows subscribers only to super admins', function (Role $role, int $status) 
     Filament::setCurrentPanel('admin');
     $this->actingAs(User::factory()->admin($role)->create());
 
-    $this->get('http://app.ezfin.test/quan-tri/nguoi-nhan-tin')->assertStatus($status);
+    $this->get('http://ezfin.test/quan-tri/nguoi-nhan-tin')->assertStatus($status);
 })->with([
     'super admin' => [Role::SuperAdmin, 200],
     'finance' => [Role::Finance, 403],

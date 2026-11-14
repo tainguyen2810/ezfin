@@ -57,7 +57,7 @@ class DemoDataCommand extends Command
 
         if (! $user) {
             if ($this->argument('email') !== null) {
-                $this->error("Không có tài khoản [$email]. Đăng ký ở app.ezfin.test trước, hoặc bỏ trống email để dùng ".self::DEMO_EMAIL.'.');
+                $this->error("Không có tài khoản [$email]. Đăng ký ở ezfin.test/dang-ky trước, hoặc bỏ trống email để dùng ".self::DEMO_EMAIL.'.');
 
                 return self::FAILURE;
             }
@@ -104,7 +104,7 @@ class DemoDataCommand extends Command
         $this->info("Đã tạo dữ liệu mẫu cho [$email]: ".Transaction::count().' giao dịch, '.Wallet::count().' ví, '
             .Budget::count().' ngân sách, '.Goal::count().' mục tiêu, '.NetWorthItem::count().' tài sản & nợ, '.RecurringTransaction::count().' khoản định kỳ.');
         if ($password !== null) {
-            $this->line("Đăng nhập app.ezfin.test với email $email, mật khẩu: $password");
+            $this->line("Đăng nhập ezfin.test/dang-nhap với email $email, mật khẩu: $password");
         }
 
         return self::SUCCESS;

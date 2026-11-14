@@ -19,7 +19,7 @@ use OpenSpout\Writer\XLSX\Writer;
 
 uses(RefreshDatabase::class);
 
-const IMPORT = 'http://app.ezfin.test/giao-dich/nhap-sao-ke';
+const IMPORT = 'http://ezfin.test/ung-dung/giao-dich/nhap-sao-ke';
 
 /** Sao kê kiểu ngân hàng Việt Nam: vài dòng thông tin, tiêu đề, cột ghi nợ/ghi có, dòng tổng cuối. */
 const STATEMENT_CSV = <<<'CSV'

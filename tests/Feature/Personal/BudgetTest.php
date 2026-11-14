@@ -12,7 +12,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const BUDGETS = 'http://app.ezfin.test/ngan-sach';
+const BUDGETS = 'http://ezfin.test/ung-dung/ngan-sach';
 
 beforeEach(function () {
     Feature::activate('personal');

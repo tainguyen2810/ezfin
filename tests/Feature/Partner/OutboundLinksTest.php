@@ -183,7 +183,7 @@ it('lets super admins and the finance role manage partner links', function (Role
     Filament::setCurrentPanel('admin');
     $this->actingAs(User::factory()->admin($role)->create());
 
-    $this->get('http://app.ezfin.test/quan-tri/lien-ket-doi-tac')->assertStatus($status);
+    $this->get('http://ezfin.test/quan-tri/lien-ket-doi-tac')->assertStatus($status);
 })->with([
     'super admin' => [Role::SuperAdmin, 200],
     'finance' => [Role::Finance, 200],

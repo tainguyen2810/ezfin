@@ -12,7 +12,7 @@ use Laravel\Pennant\Feature;
 
 uses(RefreshDatabase::class);
 
-const REPORTS = 'http://app.ezfin.test/bao-cao';
+const REPORTS = 'http://ezfin.test/ung-dung/bao-cao';
 
 beforeEach(function () {
     Feature::activate('personal');
