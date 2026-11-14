@@ -28,10 +28,10 @@ return [
     'admin_path' => env('EZFIN_ADMIN_PATH', 'quan-tri'),
 
     /*
-    | Bắt buộc xác thực 2 lớp khi vào trang quản trị. Production luôn bật, không tắt được.
-    | Máy dev (APP_ENV=local) mặc định tắt cho dễ thử; staging mặc định bật.
+    | Bắt buộc mọi quản trị viên dùng xác thực 2 lớp. Mặc định tắt ở mọi môi trường:
+    | 2FA là tùy chọn, mỗi người tự bật trong trang Hồ sơ. Đặt EZFIN_ADMIN_2FA=true để bắt buộc.
     */
-    'admin_2fa' => env('APP_ENV') === 'production' || (bool) env('EZFIN_ADMIN_2FA', env('APP_ENV', 'production') !== 'local'),
+    'admin_2fa' => (bool) env('EZFIN_ADMIN_2FA', false),
 
     /*
     | Cho phép công cụ tìm kiếm lập chỉ mục website công khai. Chỉ bật trên production;

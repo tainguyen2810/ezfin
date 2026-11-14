@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Xác thực 2 lớp tùy chọn
+
+- 2FA trang quản trị không còn bắt buộc trên production. Mỗi quản trị viên tự bật trong trang Hồ sơ khi cần. Muốn bắt buộc cho mọi người thì đặt `EZFIN_ADMIN_2FA=true`.
+
 ### Một website, một tên miền
 
 - Bỏ tên miền phụ app.ezfin.vn. Đăng nhập, đăng ký ở ezfin.vn/dang-nhap, ezfin.vn/dang-ky; ứng dụng quản lý tiền ở ezfin.vn/ung-dung (chỉ khách hàng đã đăng nhập, không cho Google lập chỉ mục); trang quản trị ở ezfin.vn/<đường dẫn bí mật>.

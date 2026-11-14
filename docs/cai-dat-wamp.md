@@ -37,7 +37,7 @@ Cả website nằm trên một tên miền `ezfin.test`:
 - Đăng nhập, đăng ký khách hàng: `http://ezfin.test/dang-nhap`; ứng dụng quản lý tiền: `http://ezfin.test/ung-dung`
 - Trang quản trị: `http://ezfin.test/quan-tri` (đổi bằng `EZFIN_ADMIN_PATH`).
 
-Xác thực 2 lớp (2FA): với `APP_ENV=local` không bắt buộc, có thể bật trong trang hồ sơ. Muốn thử như production thì đặt `EZFIN_ADMIN_2FA=true` trong `.env`; lần đăng nhập đầu sẽ cần quét mã QR bằng Google Authenticator hoặc ứng dụng tương tự và lưu lại mã khôi phục. Production luôn bắt buộc 2FA.
+Xác thực 2 lớp (2FA): không bắt buộc, mỗi người tự bật trong trang Hồ sơ (quét mã QR bằng Google Authenticator hoặc ứng dụng tương tự, lưu lại mã khôi phục). Muốn bắt buộc mọi quản trị viên thì đặt `EZFIN_ADMIN_2FA=true` trong `.env`.
 
 ## 3. Tên miền local
 

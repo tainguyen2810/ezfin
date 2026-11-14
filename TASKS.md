@@ -70,6 +70,13 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 14/11/2026 — 2FA quản trị tùy chọn
+
+- Xong: theo yêu cầu của Tai, 2FA trang quản trị không còn bắt buộc trên production; mỗi người tự bật trong Hồ sơ, `EZFIN_ADMIN_2FA=true` để bắt buộc. Cập nhật tài liệu WAMP, aaPanel, CLAUDE.md, CHANGELOG.
+- Test đã chạy: `vendor/bin/pest` (613 test xanh), `vendor/bin/pint --test`.
+- File quan trọng: `config/ezfin.php`, `tests/Feature/Admin/AdminAccessTest.php`, `tests/Feature/Core/InstallerTest.php`.
+- Tiếp theo: triển khai lên aaPanel.
+
 ### 14/11/2026 — Gộp về một tên miền
 
 - Xong: route `routes/app.php` của module chạy trên tên miền chính (noindex); ứng dụng quản lý tiền dưới tiền tố `config('ezfin.app_prefix')` = `ung-dung`; đăng nhập/đăng ký/quên mật khẩu/xác nhận email giữ đường dẫn ở gốc; Filament chuyển sang tên miền chính; tên miền phụ cũ (`EZFIN_APP_DOMAIN`, config `ezfin.domains.legacy_app`) chuyển 301 (`CoreServiceProvider::publicUrlFor`) và robots chặn toàn bộ; robots.txt chính thêm `Disallow: /ung-dung/`; sửa trang pháp lý, tài liệu WAMP và aaPanel.

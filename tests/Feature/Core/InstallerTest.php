@@ -153,7 +153,7 @@ it('updates, uncomments and quotes .env values', function () {
         ->and(substr_count(file_get_contents($path), 'DB_HOST'))->toBe(1);
 });
 
-it('requires admin 2FA everywhere except on a local machine', function () {
+it('keeps admin 2FA optional unless EZFIN_ADMIN_2FA enforces it', function () {
     $evaluate = function (string $appEnv, ?string $flag = null): bool {
         $backup = [$_SERVER['APP_ENV'] ?? null, $_SERVER['EZFIN_ADMIN_2FA'] ?? null];
         $_SERVER['APP_ENV'] = $appEnv;
@@ -173,10 +173,9 @@ it('requires admin 2FA everywhere except on a local machine', function () {
         }
     };
 
-    expect($evaluate('production'))->toBeTrue()
-        ->and($evaluate('production', 'false'))->toBeTrue()
-        ->and($evaluate('staging'))->toBeTrue()
+    expect($evaluate('production'))->toBeFalse()
+        ->and($evaluate('production', 'true'))->toBeTrue()
+        ->and($evaluate('staging'))->toBeFalse()
         ->and($evaluate('local'))->toBeFalse()
-        ->and($evaluate('local', 'true'))->toBeTrue()
-        ->and(config('ezfin.admin_2fa'))->toBeTrue();
+        ->and($evaluate('local', 'true'))->toBeTrue();
 });

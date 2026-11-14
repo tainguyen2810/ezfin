@@ -29,7 +29,7 @@ cp .env.example .env    # sửa APP_ENV=production, APP_DEBUG=false, APP_URL=htt
 composer install --no-dev --optimize-autoloader
 php artisan key:generate
 php artisan migrate --force
-php artisan ezfin:admin   # tạo tài khoản quản trị đầu tiên; lần đăng nhập đầu sẽ thiết lập 2FA
+php artisan ezfin:admin   # tạo tài khoản quản trị đầu tiên (hoặc mở https://ezfin.vn/cai-dat)
 npm ci && npm run build   # hoặc build trên máy khác rồi upload thư mục public/build
 php artisan storage:link
 php artisan optimize
@@ -37,6 +37,8 @@ chown -R www:www storage bootstrap/cache
 ```
 
 Sau khi thêm cron và Supervisor (mục 4), đợi 5 phút rồi chạy `php artisan ezfin:check`. Lệnh kiểm tra APP_KEY, APP_DEBUG, HTTPS, tên miền, database, migration, tài khoản quản trị, cache, quyền ghi thư mục, `public/storage`, asset đã build, cron, queue worker và email. Mục ✗ phải sửa trước khi mở site; mục ! là cảnh báo.
+
+Xác thực 2 lớp (2FA) cho trang quản trị là tùy chọn: vào Hồ sơ (góc phải trên) để bật. Muốn bắt buộc mọi quản trị viên thì thêm `EZFIN_ADMIN_2FA=true` vào `.env` rồi `php artisan optimize`.
 
 Email qua Brevo: `MAIL_MAILER=smtp`, `MAIL_HOST=smtp-relay.brevo.com`, `MAIL_PORT=587`, tài khoản SMTP lấy trong Brevo. Không commit `.env`.
 

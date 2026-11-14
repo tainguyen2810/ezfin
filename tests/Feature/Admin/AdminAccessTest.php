@@ -43,13 +43,13 @@ it('lets every internal role open the dashboard', function (Role $role) {
         ->assertOk();
 })->with(Role::cases());
 
-it('requires two-factor setup before using the panel', function () {
+it('lets admins without two-factor use the panel because 2FA is optional', function () {
     $user = User::factory()->create();
     $user->assignRole(Role::SuperAdmin->value);
 
     $this->actingAs($user)
         ->get(admin_url())
-        ->assertRedirect(admin_url('/multi-factor-authentication/set-up'));
+        ->assertOk();
 });
 
 it('limits user management to super admins', function (Role $role, int $status) {
