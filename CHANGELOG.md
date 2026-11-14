@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Miễn phí cho mọi người dùng
+
+- EzFin không có gói trả phí: ai đăng ký tài khoản là dùng được toàn bộ ứng dụng quản lý tiền. Ứng dụng bật sẵn cho bản cài mới.
+- Sau khi đăng ký, EzFin gửi thư xác nhận email. Khách vẫn dùng ngay, chỉ thấy dòng nhắc và nút gửi lại thư. Đổi email thì xác nhận lại.
+- Thư đặt lại mật khẩu viết bằng tiếng Việt.
+- Gỡ công tắc `pro` để dành cho gói trả phí (chưa từng dùng).
+
 ### Tỷ giá và giá vàng
 
 - Trang Tỷ giá ngoại tệ và Giá vàng: bảng theo nguồn công bố, giờ cập nhật, thay đổi so với hôm trước, biểu đồ 30 ngày, đổi ngoại tệ sang đồng. Số liệu nhập tay hoặc nhập file trong quản trị.

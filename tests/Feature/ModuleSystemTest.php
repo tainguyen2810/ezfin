@@ -48,4 +48,8 @@ it('hides navigation items whose route does not exist', function () {
 
 it('keeps unreleased modules off by default', function (string $feature) {
     expect(Feature::active($feature))->toBeFalse();
-})->with(['stocks', 'funds', 'personal', 'pro']);
+})->with(['stocks', 'funds']);
+
+it('turns the free money app on by default', function () {
+    expect(Feature::active('personal'))->toBeTrue();
+});

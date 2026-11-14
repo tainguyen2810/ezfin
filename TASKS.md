@@ -70,6 +70,14 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 14/11/2026 — Bỏ mô hình trả phí
+
+- Xong: rà soát không thấy bảng giá, gói, thanh toán hay chặn tính năng theo gói; gỡ flag `pro` chưa dùng; flag `personal` mặc định bật; xác nhận email không bắt buộc (`verification.verify` `/xac-nhan-email/{id}/{hash}`, `verification.send`, dòng nhắc trong `x-personal::shell`, đổi email thì xác nhận lại); thư xác nhận và đặt lại mật khẩu tiếng Việt. Giữ app.ezfin.vn cho ứng dụng.
+- Test đã chạy: `vendor/bin/pest` (605 test xanh), `vendor/bin/pint`.
+- Chưa giải quyết: máy đã cài trước đây lưu flag trong bảng `features`, cần `php artisan ezfin:feature personal on`. Thư gửi qua hàng đợi nên cần queue worker chạy (như thư bản tin).
+- File quan trọng: `app/Models/User.php`, `app/Modules/Personal/Notifications/VerifyEmail.php`, `app/Modules/Personal/Http/Controllers/Auth/EmailVerificationController.php`, `config/ezfin.php`, `lang/vi.json`.
+- Tiếp theo: Tai kiểm tra đăng ký trên máy, quyết định ngày mở ứng dụng trên production.
+
 ### 13/11/2026 — D4: tỷ giá và giá vàng
 
 - Đã xong: module mới `Markets` (flag `markets`, nay mặc định bật; trang tự 404 và không vào sitemap khi chưa có dữ liệu). Bảng `fx_rates`, `gold_prices` giữ mọi lần công bố (khóa nguồn + mã/loại vàng + thời điểm, nhập lại thì cập nhật). Theo quyết định của chủ dự án: nhập tay hoặc nhập CSV trong quản trị (Tỷ giá, Giá vàng; file mẫu tải được), chưa tự lấy từ nguồn ngoài. Trang `/ty-gia` (bảng theo từng nguồn, thay đổi so với hôm trước, đổi ngoại tệ sang đồng, biểu đồ 30 ngày) và `/gia-vang` (bảng theo nguồn, biểu đồ 30 ngày); ghi nguồn, giờ công bố, cảnh báo khi quá 3 ngày chưa cập nhật. Trang chủ có ô USD và giá vàng. `x-ui.line-chart` thêm `tickFormat` và bước trục cho số lớn. Demo thêm 30 ngày tỷ giá (Vietcombank) và giá vàng (SJC, PNJ).

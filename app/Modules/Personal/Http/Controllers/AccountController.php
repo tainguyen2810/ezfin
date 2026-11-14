@@ -32,11 +32,18 @@ class AccountController
         ], [], ['name' => 'họ tên', 'email' => 'email']);
 
         $marketing = $request->boolean('marketing');
+        $emailChanged = $data['email'] !== $user->email;
         $user->forceFill([
             ...$data,
             // Giữ thời điểm đồng ý cũ nếu vẫn đồng ý; bỏ chọn là rút lại đồng ý.
             'marketing_consent_at' => $marketing ? ($user->marketing_consent_at ?? now()) : null,
+            // Đổi email thì cần xác nhận lại địa chỉ mới.
+            ...($emailChanged ? ['email_verified_at' => null] : []),
         ])->save();
+
+        if ($emailChanged) {
+            $user->sendEmailVerificationNotification();
+        }
 
         return back()->with('toast', ['message' => 'Đã lưu thông tin tài khoản.', 'type' => 'success']);
     }
