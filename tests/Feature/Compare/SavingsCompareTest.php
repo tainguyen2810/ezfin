@@ -156,3 +156,27 @@ it('is in the menu and hidden together with the compare module', function () {
 
     $this->get(SAVINGS_PAGE)->assertNotFound();
 });
+
+it('sorts by highest rate, keeps only each bank\'s best rate, or lists banks A-Z', function () {
+    $bank = FinancialInstitution::factory()->create(['short_name' => 'Zeta Bank']);
+    savingsProduct('Zeta Online', [[12, SavingsChannel::Online, InterestPayment::EndOfTerm, 6.1, 0, null, 5]], institution: $bank);
+    savingsProduct('Zeta Tại Quầy', [[12, SavingsChannel::Counter, InterestPayment::EndOfTerm, 5.5, 0, null, 5]], institution: $bank);
+
+    $this->get(SAVINGS_PAGE)->assertOk()
+        ->assertSee('<strong class="text-navy-900">5</strong> sản phẩm', false)
+        ->assertSeeInOrder(['1. Zeta Online', 'Tiền lãi cao nhất', '2. Zeta Tại Quầy', '3. Tiết kiệm A'])
+        ->assertSee('name="sap_xep"', false)
+        ->assertSee('sm:grid-cols-2 lg:grid-cols-3', false);
+
+    $this->get(SAVINGS_PAGE.'?sap_xep=moi-ngan-hang')->assertOk()
+        ->assertSee('<strong class="text-navy-900">4</strong> ngân hàng', false)
+        ->assertSeeInOrder(['1. Zeta Online', '2. Tiết kiệm A'])
+        ->assertDontSee('Zeta Tại Quầy');
+
+    $this->get(SAVINGS_PAGE.'?sap_xep=ten-ngan-hang')->assertOk()
+        ->assertSee('xếp theo tên ngân hàng')
+        ->assertDontSee('1. Zeta Online')
+        ->assertSeeInOrder(['NH Tiết kiệm A', 'NH Tiết kiệm B', 'NH Tiết kiệm C', 'Zeta Bank']);
+
+    $this->get(SAVINGS_PAGE.'?sap_xep=khong-co')->assertRedirect(SAVINGS_PAGE);
+});
