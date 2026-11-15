@@ -3,6 +3,7 @@
 use App\Modules\Compare\CompareServiceProvider;
 use App\Modules\Content\ContentServiceProvider;
 use App\Modules\Core\CoreServiceProvider;
+use App\Modules\DataSync\DataSyncServiceProvider;
 use App\Modules\Markets\MarketsServiceProvider;
 use App\Modules\Newsletter\NewsletterServiceProvider;
 use App\Modules\Partner\PartnerServiceProvider;
@@ -59,6 +60,15 @@ return [
     ],
 
     /*
+    | Lấy dữ liệu tự động: thời gian chờ mỗi request (giây), khoảng nghỉ giữa hai lần gọi cùng một máy chủ (ms).
+    | User-agent cố định "EzFinBot/1.0 (+APP_URL)", không chứa thông tin cá nhân.
+    */
+    'data_sync' => [
+        'timeout' => (int) env('EZFIN_SYNC_TIMEOUT', 20),
+        'delay_ms' => (int) env('EZFIN_SYNC_DELAY_MS', 1500),
+    ],
+
+    /*
     | Module đang cài. Thứ tự là thứ tự đăng ký; Core luôn đứng đầu.
     */
     'modules' => [
@@ -70,6 +80,7 @@ return [
         PersonalServiceProvider::class,
         NewsletterServiceProvider::class,
         MarketsServiceProvider::class,
+        DataSyncServiceProvider::class,
     ],
 
     /*
@@ -88,6 +99,8 @@ return [
         // Ứng dụng quản lý tiền: miễn phí cho mọi tài khoản đã đăng ký.
         'personal' => true,
         'newsletter' => true,
+        // Lấy dữ liệu tự động (lãi suất...) từ trang chính thức, lưu bản nháp chờ duyệt.
+        'data_sync' => true,
     ],
 
 ];

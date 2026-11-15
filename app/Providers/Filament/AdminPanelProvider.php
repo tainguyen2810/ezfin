@@ -50,6 +50,9 @@ class AdminPanelProvider extends PanelProvider
             ->font("SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter Variable", provider: LocalFontProvider::class)
             ->renderHook(PanelsRenderHook::HEAD_END, fn () => Blade::render("@vite('resources/css/admin.css')"))
             ->sidebarCollapsibleOnDesktop()
+            // Chuông thông báo: cảnh báo dữ liệu tự động lỗi, dữ liệu mới chờ duyệt. Hoạt động cả khi chưa cấu hình email.
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('60s')
             ->pages([Dashboard::class])
             ->middleware([
                 EncryptCookies::class,
