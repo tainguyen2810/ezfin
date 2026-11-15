@@ -34,7 +34,7 @@ class FinancialInstitution extends Model
 
     public const LOGO_DIRECTORY = 'institutions';
 
-    protected $fillable = ['type', 'name', 'short_name', 'slug', 'logo_path', 'website', 'is_active'];
+    protected $fillable = ['type', 'name', 'short_name', 'search_aliases', 'slug', 'logo_path', 'website', 'is_active'];
 
     protected function casts(): array
     {

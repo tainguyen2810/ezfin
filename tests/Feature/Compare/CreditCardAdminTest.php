@@ -222,3 +222,25 @@ it('does not allow deleting an institution that still has products', function ()
 
     expect($admin->can('delete', $product->institution->fresh()))->toBeTrue();
 });
+
+it('finds cards by bank abbreviation and filters by network and tier', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    $vcb = FinancialInstitution::factory()->create(['short_name' => 'Vietcombank', 'slug' => 'vietcombank', 'search_aliases' => 'VCB, Ngoại thương']);
+    $visa = FinancialProduct::factory()->create(['name' => 'Vietcombank Visa Platinum', 'institution_id' => $vcb->id]);
+    $visa->creditCard()->create(['annual_fee' => 800_000]);
+    $jcb = FinancialProduct::factory()->create(['name' => 'Thẻ JCB Gold']);
+    $jcb->creditCard()->create(['annual_fee' => 300_000]);
+
+    Livewire::test(ListCreditCards::class)
+        ->searchTable('vcb')
+        ->assertCanSeeTableRecords([$visa])
+        ->assertCanNotSeeTableRecords([$jcb])
+        ->searchTable('')
+        ->filterTable('network', [CardNetwork::Jcb->value])
+        ->assertCanSeeTableRecords([$jcb])
+        ->assertCanNotSeeTableRecords([$visa])
+        ->resetTableFilters()
+        ->filterTable('tier', ['platinum'])
+        ->assertCanSeeTableRecords([$visa])
+        ->assertCanNotSeeTableRecords([$jcb]);
+});

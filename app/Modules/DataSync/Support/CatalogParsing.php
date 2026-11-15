@@ -65,17 +65,7 @@ class CatalogParsing
     /** Thương hiệu thẻ theo tên sản phẩm. */
     public static function network(string $name): ?string
     {
-        $name = mb_strtolower($name);
-
-        return match (true) {
-            str_contains($name, 'american express'), str_contains($name, 'amex') => CardNetwork::Amex->value,
-            str_contains($name, 'mastercard') => CardNetwork::Mastercard->value,
-            str_contains($name, 'jcb') => CardNetwork::Jcb->value,
-            str_contains($name, 'unionpay') => CardNetwork::UnionPay->value,
-            str_contains($name, 'napas') => CardNetwork::Napas->value,
-            str_contains($name, 'visa') => CardNetwork::Visa->value,
-            default => null,
-        };
+        return CardNetwork::fromName($name)?->value;
     }
 
     /**

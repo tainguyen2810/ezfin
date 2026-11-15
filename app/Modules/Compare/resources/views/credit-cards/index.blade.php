@@ -4,7 +4,7 @@
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         <x-ui.breadcrumb :items="['Trang chủ' => route('home'), 'Thẻ tín dụng' => null]" />
         <h1 class="mt-3 text-2xl font-bold sm:text-3xl">So sánh thẻ tín dụng</h1>
-        <p class="mt-1 max-w-3xl text-slate-600">Lọc theo ngân hàng, phí và nhu cầu chi tiêu, chọn tối đa 3 thẻ để so sánh chi tiết. Thông tin chỉ để tham khảo; điều kiện cấp thẻ và hạn mức do ngân hàng quyết định.</p>
+        <p class="mt-1 max-w-3xl text-slate-600">Lọc theo ngân hàng, loại thẻ (Visa, Mastercard, JCB), hạng thẻ, phí và nhu cầu chi tiêu, chọn tối đa 3 thẻ để so sánh chi tiết. Thông tin chỉ để tham khảo; điều kiện cấp thẻ và hạn mức do ngân hàng quyết định.</p>
         <a href="{{ route('compare.credit-cards.quiz') }}" class="mt-4 flex items-center gap-3 rounded-card border border-primary-200 bg-primary-50 p-4 text-navy-900 hover:border-primary-400 sm:inline-flex">
             <x-ui.icon name="sparkles" class="size-5 shrink-0 text-primary-700" />
             <span><strong>Chưa biết chọn thẻ nào?</strong> Trả lời 5 câu hỏi để xem thẻ hợp với cách bạn chi tiêu.</span>
@@ -13,7 +13,11 @@
 
         <div class="mt-6 grid gap-6 lg:grid-cols-[280px_1fr]">
             <x-ui.filter-panel :action="route('compare.credit-cards.index')" :active-count="$filters->activeCount()">
+                <x-ui.input name="tu_khoa" type="search" label="Tìm thẻ" placeholder="Ví dụ: vcb, tcb platinum" :value="$filters->keyword"
+                    hint="Gõ tên thẻ, tên ngân hàng hoặc mã viết tắt." />
                 <x-ui.select name="ngan_hang" label="Ngân hàng" placeholder="Tất cả ngân hàng" :options="$institutions" :value="$filters->institution" />
+                <x-ui.select name="loai_the" label="Loại thẻ" placeholder="Visa, Mastercard, JCB..." :options="$networks" :value="$filters->network?->value" />
+                <x-ui.select name="hang" label="Hạng thẻ" placeholder="Mọi hạng thẻ" :options="$tiers" :value="$filters->tier?->slug()" />
                 <x-ui.select name="phi" label="Phí thường niên" placeholder="Mọi mức phí" :options="$fees" :value="$filters->fee" />
                 <x-ui.select name="nhu_cau" label="Nhu cầu sử dụng" placeholder="Mọi nhu cầu" :options="$needs" :value="$filters->need?->slug()" />
                 <x-ui.money-input name="thu_nhap" label="Thu nhập hằng tháng của bạn" :value="$filters->income"
@@ -51,6 +55,7 @@
                             'Lãi suất' => Format::rate($detail?->interest_rate),
                             'Miễn lãi tối đa' => $detail?->interest_free_days ? $detail->interest_free_days.' ngày' : '—',
                             'Tổ chức thẻ' => $detail?->network?->getLabel() ?? '—',
+                            'Hạng thẻ' => $detail?->tier?->shortLabel() ?? '—',
                         ]">
                         <x-slot:footer>
                             <x-ui.data-freshness :verified-at="$card->verified_at" source="Trang chính thức của ngân hàng"

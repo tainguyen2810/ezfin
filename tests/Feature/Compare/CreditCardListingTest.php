@@ -1,6 +1,8 @@
 <?php
 
 use App\Modules\Compare\Actions\SearchCreditCards;
+use App\Modules\Compare\Enums\CardNetwork;
+use App\Modules\Compare\Enums\CardTier;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
 use App\Modules\Compare\Support\CreditCardFilters;
@@ -183,4 +185,42 @@ it('shows the card artwork instead of the bank logo when uploaded', function () 
 
     $this->get(LISTING_URL)->assertOk()
         ->assertSee('src="/storage/products/the-co-anh.png" alt="Thẻ Có Ảnh"', false);
+});
+
+it('fills tier and network from the card name but keeps what an admin chose', function () {
+    $guessed = publishedCard('Alpha Visa Platinum', [], $this->alpha)->creditCard;
+    $chosen = publishedCard('Alpha JCB Gold', ['tier' => 'premium', 'network' => 'visa'], $this->alpha)->creditCard;
+    $unknown = publishedCard('Alpha Express', [], $this->alpha)->creditCard;
+
+    expect($guessed->tier)->toBe(CardTier::Platinum)
+        ->and($guessed->network)->toBe(CardNetwork::Visa)
+        ->and($chosen->tier)->toBe(CardTier::Premium)
+        ->and($chosen->network)->toBe(CardNetwork::Visa)
+        ->and($unknown->tier)->toBeNull()
+        ->and(CardTier::fromName('Agribank JCB Ultimate'))->toBe(CardTier::Premium)
+        ->and(CardTier::fromName('Mastercard Titanium'))->toBe(CardTier::Platinum)
+        ->and(CardTier::fromName('Visa Classic'))->toBe(CardTier::Classic);
+});
+
+it('filters by card network and tier', function () {
+    publishedCard('Alpha Visa Gold', [], $this->alpha);
+    publishedCard('Alpha Mastercard Gold', [], $this->alpha);
+    publishedCard('Beta Visa Signature', [], $this->beta);
+
+    expect(search(['loai_the' => 'visa']))->toBe(['Alpha Visa Gold', 'Beta Visa Signature'])
+        ->and(search(['hang' => 'gold']))->toBe(['Alpha Mastercard Gold', 'Alpha Visa Gold'])
+        ->and(search(['loai_the' => 'visa', 'hang' => 'cao-cap']))->toBe(['Beta Visa Signature'])
+        ->and(search(['loai_the' => 'khong-co', 'hang' => 'abc']))->toHaveCount(7);
+});
+
+it('finds cards by bank abbreviation or stock code', function () {
+    $this->beta->update(['search_aliases' => 'VCB, Ngoại thương']);
+
+    expect(search(['tu_khoa' => 'vcb']))->toBe(['Thẻ Chưa Rõ Thu Nhập', 'Thẻ Dặm Bay'])
+        ->and(search(['tu_khoa' => 'VCB dặm']))->toBe(['Thẻ Dặm Bay'])
+        ->and(search(['tu_khoa' => 'hoàn tiền']))->toBe(['Thẻ Hoàn Tiền'])
+        ->and(search(['tu_khoa' => '100%_']))->toBe([]);
+
+    $this->get(LISTING_URL.'?tu_khoa=vcb&loai_the=visa&hang=gold')->assertOk()
+        ->assertSee('Loại thẻ')->assertSee('Hạng thẻ')->assertSee('value="vcb"', false);
 });

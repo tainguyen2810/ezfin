@@ -33,6 +33,9 @@ class FinancialInstitutionForm
                     }),
                 Select::make('type')->label('Loại')->options(InstitutionType::class)->required()
                     ->default(InstitutionType::Bank),
+                TextInput::make('search_aliases')->label('Tên gọi khác, mã cổ phiếu')->maxLength(255)->columnSpanFull()
+                    ->placeholder('Ví dụ: VCB, Ngoại thương')
+                    ->helperText('Cách nhau dấu phẩy. Dùng để tìm nhanh: gõ "vcb" trong ô tìm kiếm là ra ngân hàng và sản phẩm của ngân hàng này.'),
                 TextInput::make('name')->label('Tên đầy đủ')->required()->maxLength(255)->columnSpanFull()
                     ->helperText('Tên pháp lý theo giấy phép hoạt động.'),
                 TextInput::make('slug')->label('Đường dẫn (slug)')->required()->maxLength(120)

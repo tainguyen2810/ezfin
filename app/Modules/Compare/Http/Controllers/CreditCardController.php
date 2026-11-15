@@ -7,6 +7,8 @@ use App\Modules\Compare\Actions\FindSimilarCreditCards;
 use App\Modules\Compare\Actions\RecommendCreditCards;
 use App\Modules\Compare\Actions\SearchCreditCards;
 use App\Modules\Compare\Enums\CardBenefit;
+use App\Modules\Compare\Enums\CardNetwork;
+use App\Modules\Compare\Enums\CardTier;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
@@ -43,6 +45,8 @@ class CreditCardController
                 ->whereHas('products', fn (Builder $query) => $query->ofType(ProductType::CreditCard)->published())
                 ->orderBy('short_name')
                 ->pluck('short_name', 'slug'),
+            'networks' => collect(CardNetwork::cases())->mapWithKeys(fn (CardNetwork $network) => [$network->value => $network->getLabel()]),
+            'tiers' => collect(CardTier::cases())->mapWithKeys(fn (CardTier $tier) => [$tier->slug() => $tier->getLabel()]),
             'needs' => collect(CardBenefit::cases())->mapWithKeys(fn (CardBenefit $benefit) => [$benefit->slug() => $benefit->getLabel()]),
             'fees' => collect(CreditCardFilters::FEES)->map(fn (array $fee) => $fee['label']),
         ]);

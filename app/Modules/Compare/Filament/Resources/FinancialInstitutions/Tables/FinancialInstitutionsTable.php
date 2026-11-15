@@ -4,6 +4,7 @@ namespace App\Modules\Compare\Filament\Resources\FinancialInstitutions\Tables;
 
 use App\Modules\Compare\Enums\InstitutionType;
 use App\Modules\Compare\Models\FinancialInstitution;
+use App\Modules\Compare\Support\InstitutionAliases;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
@@ -12,6 +13,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class FinancialInstitutionsTable
 {
@@ -21,7 +23,7 @@ class FinancialInstitutionsTable
             ->columns([
                 ImageColumn::make('logo_path')->label('Logo')->disk(FinancialInstitution::LOGO_DISK)
                     ->imageSize(40)->extraImgAttributes(['class' => 'object-contain']),
-                TextColumn::make('short_name')->label('Tên')->searchable(['short_name', 'name'])->sortable()
+                TextColumn::make('short_name')->label('Tên')->searchable(query: fn (Builder $query, string $search) => InstitutionAliases::searchInstitutions($query, $search))->sortable()
                     ->description(fn (FinancialInstitution $record) => $record->name),
                 TextColumn::make('type')->label('Loại')->badge(),
                 TextColumn::make('slug')->label('Slug')->toggleable(isToggledHiddenByDefault: true),

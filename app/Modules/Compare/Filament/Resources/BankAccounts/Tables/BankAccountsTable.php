@@ -4,6 +4,7 @@ namespace App\Modules\Compare\Filament\Resources\BankAccounts\Tables;
 
 use App\Modules\Compare\Enums\ProductStatus;
 use App\Modules\Compare\Models\FinancialProduct;
+use App\Modules\Compare\Support\InstitutionAliases;
 use App\Support\Format;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -20,7 +21,8 @@ class BankAccountsTable
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['institution', 'bankAccount']))
             ->columns([
-                TextColumn::make('name')->label('Tài khoản')->searchable()->sortable()
+                TextColumn::make('name')->label('Tài khoản')->sortable()
+                    ->searchable(query: fn (Builder $query, string $search) => InstitutionAliases::searchProducts($query, $search))
                     ->description(fn (FinancialProduct $record) => $record->institution->short_name),
                 TextColumn::make('status')->label('Trạng thái')->badge(),
                 TextColumn::make('bankAccount.monthly_fee')->label('Phí quản lý/tháng')

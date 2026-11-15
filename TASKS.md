@@ -553,3 +553,8 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - `Content\Console\StarterContentCommand` (`ezfin:starter-content [--draft]`) + nội dung ở `Content\Support\StarterContent` (16 bài, 6 chuyên mục, tác giả "Ban biên tập EzFin" thay vì nhân vật giả lập; ảnh bìa dùng bộ ảnh minh họa trong `database/seeders/Demo/assets/covers`). Bỏ qua bài/chuyên mục/tác giả đã có theo slug.
 - Sửa bài demo: hạn mức bảo hiểm tiền gửi 350 triệu (từ 13/7/2026).
 - Test: `tests/Feature/Content/StarterContentTest.php`.
+
+### 15/11/2026 — Lọc thẻ theo loại/hạng, tìm theo mã viết tắt
+- `Compare\Enums\CardTier` (+ `fromName`), `CardNetwork::fromName`; cột `credit_card_details.tier`, `financial_institutions.search_aliases` (migration điền sẵn mã cho ngân hàng đã biết, `Compare\Support\InstitutionAliases::KNOWN`). `CreditCardDetail` tự điền hạng/loại còn trống khi lưu.
+- Trang `/the-tin-dung`: `tu_khoa`, `loai_the`, `hang`. Quản trị: cột + bộ lọc Loại thẻ, Hạng; ô tìm kiếm các bảng sản phẩm, ngân hàng dùng `InstitutionAliases::searchProducts/searchInstitutions`.
+- Test: CreditCardListingTest, CreditCardAdminTest.

@@ -3,6 +3,7 @@
 namespace App\Modules\Compare\Models;
 
 use App\Modules\Compare\Enums\CardNetwork;
+use App\Modules\Compare\Enums\CardTier;
 use App\Modules\Core\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $product_id
  * @property ?CardNetwork $network
+ * @property ?CardTier $tier
  * @property ?string $annual_fee
  * @property ?string $min_monthly_income
  * @property ?string $interest_rate
@@ -28,7 +30,7 @@ class CreditCardDetail extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'network', 'annual_fee', 'annual_fee_note', 'issuance_fee', 'min_monthly_income', 'interest_rate',
+        'network', 'tier', 'annual_fee', 'annual_fee_note', 'issuance_fee', 'min_monthly_income', 'interest_rate',
         'interest_free_days', 'cashback_rate', 'cashback_monthly_cap', 'foreign_transaction_fee', 'benefits',
     ];
 
@@ -36,6 +38,7 @@ class CreditCardDetail extends Model
     {
         return [
             'network' => CardNetwork::class,
+            'tier' => CardTier::class,
             'annual_fee' => 'decimal:2',
             'issuance_fee' => 'decimal:2',
             'min_monthly_income' => 'decimal:2',
@@ -46,6 +49,16 @@ class CreditCardDetail extends Model
             'interest_free_days' => 'integer',
             'benefits' => 'array',
         ];
+    }
+
+    /** Hạng, tổ chức thẻ còn trống thì đoán theo tên thẻ; giá trị người quản trị đã chọn được giữ nguyên. */
+    protected static function booted(): void
+    {
+        static::saving(function (self $detail) {
+            $name = (string) $detail->product?->name;
+            $detail->tier ??= CardTier::fromName($name);
+            $detail->network ??= CardNetwork::fromName($name);
+        });
     }
 
     public static function auditSubjectLabel(): string

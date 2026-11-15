@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Lọc thẻ theo loại, hạng và tìm theo mã viết tắt
+
+- Thẻ tín dụng có thêm trường Hạng thẻ (Phổ thông, Gold, Platinum, Cao cấp). Hạng và loại thẻ (Visa, Mastercard, JCB...) tự nhận theo tên thẻ khi để trống; giá trị người quản trị chọn được giữ.
+- Trang so sánh thẻ và danh sách thẻ trong quản trị lọc được theo loại thẻ và hạng thẻ.
+- Tìm nhanh theo tên viết tắt hoặc mã cổ phiếu ngân hàng: gõ "vcb", "tcb", "ctg"... trong ô tìm kiếm của trang so sánh thẻ và các danh sách sản phẩm, ngân hàng trong quản trị. Ngân hàng có trường "Tên gọi khác, mã cổ phiếu" để sửa danh sách này.
+
 ### Bài viết kiến thức khởi đầu
 
 - Lệnh `php artisan ezfin:starter-content [--draft]` nạp 16 bài viết kiến thức do Ban biên tập EzFin soạn (6 chuyên mục: tiết kiệm, thẻ tín dụng, vay, quản lý tiền, an toàn ngân hàng số, vàng và ngoại tệ), mỗi bài có câu hỏi thường gặp và nguồn chính thức. Chạy được trên production, chạy lại không ghi đè bài đã có.

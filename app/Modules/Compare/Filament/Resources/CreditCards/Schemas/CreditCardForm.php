@@ -4,6 +4,7 @@ namespace App\Modules\Compare\Filament\Resources\CreditCards\Schemas;
 
 use App\Modules\Compare\Enums\CardBenefit;
 use App\Modules\Compare\Enums\CardNetwork;
+use App\Modules\Compare\Enums\CardTier;
 use App\Modules\Compare\Filament\Resources\Shared\ProductFormComponents;
 use App\Modules\Core\Filament\Schemas\SeoFields;
 use Filament\Forms\Components\CheckboxList;
@@ -51,7 +52,10 @@ class CreditCardForm
             ->relationship('creditCard')
             ->columns(2)
             ->schema([
-                Select::make('network')->label('Tổ chức thẻ')->options(CardNetwork::class),
+                Select::make('network')->label('Tổ chức thẻ')->options(CardNetwork::class)
+                    ->helperText('Để trống thì tự nhận theo tên thẻ khi lưu.'),
+                Select::make('tier')->label('Hạng thẻ')->options(CardTier::class)
+                    ->helperText('Để trống thì tự nhận theo tên thẻ (Gold, Platinum...) khi lưu.'),
                 CheckboxList::make('benefits')->label('Nhóm lợi ích chính')->options(CardBenefit::class)->columns(3)
                     ->columnSpanFull()
                     ->helperText('Dùng cho bộ lọc theo nhu cầu trên trang so sánh.'),
