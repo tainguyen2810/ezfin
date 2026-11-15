@@ -79,6 +79,13 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 15/11/2026 — Màu chủ đạo xanh dương
+
+- Xong: token màu "Xanh dương" (navy `#0f2240`, primary `#2563eb`, highlight `#cfe3ff`, slate mặc định) thay "Bạc hà" theo phương án anh chọn trên ảnh trước/sau; minh họa SVG dùng biến token; Filament `Color::Blue`; 12 ảnh bìa mặc định mới; `ezfin:starter-content --refresh-covers` thay ảnh bìa cũ trên dữ liệu đã có.
+- Test đã chạy: `vendor/bin/pest` (toàn bộ xanh, thêm test `--refresh-covers`), `npm run build`, `vendor/bin/pint`.
+- File đổi: `resources/css/app.css`, `resources/views/components/ui/illustration.blade.php`, `app/Modules/Content/Console/StarterContentCommand.php`, `database/seeders/Demo/assets/covers/*`.
+- Deploy: sau `git pull` + `npm run build` chạy `php artisan ezfin:starter-content --refresh-covers`.
+
 ### 15/11/2026 — E1: lấy lãi suất tiết kiệm tự động
 
 - Xong: module `DataSync` (flag `data_sync`), trang quản trị "Dữ liệu tự động" (Nguồn dữ liệu, Chờ duyệt), widget bảng điều khiển, chuông thông báo Filament (bảng `notifications`), email cảnh báo, mục mới trong `ezfin:check`. Bộ lấy lãi suất: Vietcombank, BIDV, VietinBank, Agribank, MB, ACB, TPBank. Lịch: 06:20 và 14:20 hằng ngày.

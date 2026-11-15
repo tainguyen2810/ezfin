@@ -206,15 +206,15 @@
             <h2 id="cach-lam-viec" class="text-xl font-bold text-white">EzFin làm việc thế nào</h2>
             <ul class="mt-5 grid gap-5 md:grid-cols-3">
                 <li>
-                    <p class="flex items-center gap-2 font-semibold text-white"><x-ui.icon name="check-circle" class="size-5 text-green-400" />Có nguồn, có ngày xác minh</p>
+                    <p class="flex items-center gap-2 font-semibold text-white"><x-ui.icon name="check-circle" class="size-5 text-highlight" />Có nguồn, có ngày xác minh</p>
                     <p class="mt-1 text-sm">Mỗi sản phẩm ghi rõ nguồn chính thức và ngày kiểm tra gần nhất. Thiếu nguồn thì không đăng.</p>
                 </li>
                 <li>
-                    <p class="flex items-center gap-2 font-semibold text-white"><x-ui.icon name="scale" class="size-5 text-green-400" />Xếp hạng không theo hoa hồng</p>
+                    <p class="flex items-center gap-2 font-semibold text-white"><x-ui.icon name="scale" class="size-5 text-highlight" />Xếp hạng không theo hoa hồng</p>
                     <p class="mt-1 text-sm">Thứ tự dựa trên tiền lãi, phí và tiêu chí bạn chọn. Đối tác không trả tiền để được xếp cao hơn.</p>
                 </li>
                 <li>
-                    <p class="flex items-center gap-2 font-semibold text-white"><x-ui.icon name="information-circle" class="size-5 text-green-400" />Minh bạch cách kiếm tiền</p>
+                    <p class="flex items-center gap-2 font-semibold text-white"><x-ui.icon name="information-circle" class="size-5 text-highlight" />Minh bạch cách kiếm tiền</p>
                     <p class="mt-1 text-sm">EzFin có thể nhận hoa hồng khi bạn mở sản phẩm qua liên kết đối tác. Bạn không phải trả thêm phí.</p>
                 </li>
             </ul>

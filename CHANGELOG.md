@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Màu chủ đạo xanh dương
+
+- Thay hướng màu "Bạc hà" (xanh rêu/bạc hà/xanh chanh) bằng "Xanh dương": mực navy cho tiêu đề, nút chính, khối tối, footer; xanh dương cho link, viền chọn, nút phụ; xanh nhạt cho logo trên nền tối và chữ tô sáng. Xám về `slate` mặc định. Chỉ đổi token trong `resources/css/app.css`, view giữ nguyên tên lớp.
+- Xanh lá/đỏ giữ cho ý nghĩa tăng/giảm, thu/chi. Hình minh họa và avatar chữ cái đọc màu từ token; trang quản trị đổi sang `Color::Blue`.
+- Ảnh bìa bài viết mặc định vẽ lại theo màu mới. Bài đang dùng ảnh bìa mặc định cũ: `php artisan ezfin:starter-content --refresh-covers` (giữ ảnh biên tập viên tự tải lên).
+
 ### Trang Vay, Ngân hàng, Công cụ tính dạng lưới
 
 - Trang Vay hiện khoản vay dạng ô 3 ô/hàng (dùng `x-ui.product-tile`), bấm ô mở hộp Xem nhanh với đủ thông số (số tiền tối thiểu, tỷ lệ cho vay, thu nhập, phí hồ sơ, phí và điều kiện trả nợ trước hạn).
