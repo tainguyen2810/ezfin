@@ -29,6 +29,20 @@
             </div>
         </div>
 
+        <h2 class="mt-10 text-xl font-bold">Lưới sản phẩm (x-ui.product-tile)</h2>
+        <p class="mt-1 text-sm text-slate-600">3 ô/hàng trên desktop, bấm ô để xem nhanh. Dùng ở trang So sánh thẻ tín dụng.</p>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            @foreach ($cards as $card)
+                <x-ui.product-tile :id="'mau-'.$card['id']" :name="$card['name']" :institution="$card['institution']"
+                    :highlights="$card['highlights']" :facts="$card['facts']" :key-facts="array_slice($card['facts'], 0, 4, true)"
+                    :sponsored="$card['sponsored']" note="Miễn phí năm đầu khi chi tiêu đủ điều kiện." detail-url="#" partner-url="#">
+                    <x-slot:footer>
+                        <x-ui.data-freshness :verified-at="now()->subDays(2)" source="Biểu phí chính thức" source-url="#" />
+                    </x-slot:footer>
+                </x-ui.product-tile>
+            @endforeach
+        </div>
+
         <h2 class="mt-10 text-xl font-bold">Bảng so sánh (x-ui.compare-table)</h2>
         <x-ui.compare-table class="mt-4 max-w-4xl"
             :products="[
