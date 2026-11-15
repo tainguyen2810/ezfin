@@ -4,6 +4,10 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Sửa đăng nhập quản trị trên aaPanel
+
+- `composer install` tự xuất file JS của Livewire ra `public/vendor/livewire`. Trên aaPanel, Nginx chặn route JS động của Livewire nên form đăng nhập quản trị không gửi được.
+
 ### Xác thực 2 lớp tùy chọn
 
 - 2FA trang quản trị không còn bắt buộc trên production. Mỗi quản trị viên tự bật trong trang Hồ sơ khi cần. Muốn bắt buộc cho mọi người thì đặt `EZFIN_ADMIN_2FA=true`.

@@ -70,6 +70,13 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 15/11/2026 — Triển khai production trên aaPanel
+
+- Xong: site ezfin.vn chạy trên aaPanel (git clone, DB `ezfin_vn`, chạy từ `/public`, cron mỗi phút cho schedule + queue). `ezfin:check` đạt, còn cảnh báo email (chưa có Brevo) và EZFIN_INDEXABLE=false.
+- Lỗi đã sửa: đăng nhập quản trị không gửi được vì Nginx của aaPanel coi `/livewire-*/livewire.min.js` là file tĩnh (404). Sửa: `livewire:publish --assets` chạy trong `post-autoload-dump`.
+- Test đã chạy: `vendor/bin/pest`.
+- Tiếp theo: Tai gửi SMTP Brevo, thông tin công ty; bật lập chỉ mục khi có nội dung thật.
+
 ### 14/11/2026 — 2FA quản trị tùy chọn
 
 - Xong: theo yêu cầu của Tai, 2FA trang quản trị không còn bắt buộc trên production; mỗi người tự bật trong Hồ sơ, `EZFIN_ADMIN_2FA=true` để bắt buộc. Cập nhật tài liệu WAMP, aaPanel, CLAUDE.md, CHANGELOG.
