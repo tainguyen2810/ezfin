@@ -27,6 +27,7 @@ Homestead.yaml
 Thumbs.db
 /public/css/filament
 /public/js/filament
+/public/vendor/livewire
 /public/fonts/filament
 
 # File SQLite tạo nhầm khi DB_CONNECTION=sqlite mà DB_DATABASE là tên database MySQL.
