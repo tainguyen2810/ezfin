@@ -4,11 +4,13 @@ namespace App\Modules\DataSync\Support;
 
 use App\Modules\DataSync\Contracts\Scraper;
 use App\Modules\DataSync\Models\SyncSource;
+use App\Modules\DataSync\Scrapers\Institutions\BankProfile;
 use App\Modules\DataSync\Scrapers\Markets;
 use App\Modules\DataSync\Scrapers\Savings;
 
 /**
  * Danh sách bộ lấy dữ liệu. Thêm nguồn mới: tạo class trong Scrapers/<Loại> và thêm vào SCRAPERS.
+ * Mỗi ngân hàng trong Banks::ALL tự có một nguồn hồ sơ (tên, website, logo).
  * sync() tạo/cập nhật bản ghi sync_sources tương ứng (giữ nguyên lựa chọn bật/tắt, tự duyệt của quản trị viên).
  */
 class SourceRegistry
@@ -34,6 +36,7 @@ class SourceRegistry
     {
         return $this->scrapers ??= collect(self::SCRAPERS)
             ->map(fn (string $class) => app($class))
+            ->merge(collect(Banks::ALL)->map(fn (array $bank) => new BankProfile($bank)))
             ->keyBy(fn (Scraper $scraper) => $scraper->key())
             ->all();
     }

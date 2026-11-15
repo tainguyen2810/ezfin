@@ -8,6 +8,7 @@ use App\Modules\Compare\Enums\SavingsChannel;
 use App\Modules\DataSync\Contracts\Scraper;
 use App\Modules\DataSync\Enums\SyncKind;
 use App\Modules\DataSync\Models\SyncDraft;
+use App\Modules\DataSync\Support\Banks;
 use App\Modules\DataSync\Support\Fetcher;
 use App\Modules\DataSync\Support\ScrapeException;
 use App\Modules\DataSync\Support\ScrapeResult;
@@ -40,7 +41,10 @@ abstract class SavingsScraper implements Scraper
      *
      * @return array{slug: string, name: string, short_name: string, website: string}
      */
-    abstract public function institution(): array;
+    public function institution(): array
+    {
+        return Banks::get($this->bank());
+    }
 
     abstract protected function read(Fetcher $http): ?Carbon;
 

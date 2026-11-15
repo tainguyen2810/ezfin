@@ -22,11 +22,6 @@ class Acb extends SavingsScraper
         return 'acb';
     }
 
-    public function institution(): array
-    {
-        return ['slug' => 'acb', 'name' => 'Ngân hàng TMCP Á Châu', 'short_name' => 'ACB', 'website' => 'https://acb.com.vn'];
-    }
-
     public function url(): string
     {
         return 'https://acb.com.vn/lai-suat-tien-gui';

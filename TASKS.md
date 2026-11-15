@@ -74,7 +74,7 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | --- | --- | --- | --- |
 | E1 | Khung lấy dữ liệu tự động + lãi suất tiết kiệm | Lệnh `ezfin:sync` chạy theo lịch; tôn trọng robots.txt, giãn cách, user-agent chung; dữ liệu lấy về là bản nháp chờ duyệt (tùy chọn tự duyệt theo nguồn); kiểm tra số vô lý, cảnh báo thay đổi lớn; nguồn lỗi/quá hạn hiện trong quản trị (lần thành công, lỗi gần nhất) và báo qua chuông + email; duyệt = lần công bố mới, giữ lịch sử; có test | Xong |
 | E2 | Tỷ giá, giá vàng tự động | Cùng cơ chế nháp/cảnh báo; nguồn chính thức (tỷ giá Vietcombank, giá vàng SJC); tự duyệt khi hợp lệ, thay đổi bất thường chờ duyệt; trang công khai ghi nguồn và giờ công bố; có test | Xong |
-| E3 | Ngân hàng + logo, thẻ tín dụng (ảnh thẻ), khoản vay, tài khoản thanh toán | Lấy từ trang chính thức, lưu nháp kèm nguồn | Chưa làm |
+| E3 | Hồ sơ ngân hàng + logo, trường ảnh cho mọi sản phẩm | Hồ sơ 10 ngân hàng (tên, website, logo gốc tải từ trang chủ chính thức, không vẽ lại) lấy hằng tuần, chờ duyệt kèm xem trước logo; logo kiểm tra đúng ảnh PNG/JPG/WebP ≤1 MB; form thẻ, vay, tài khoản, tiết kiệm có trường ảnh; có test | Xong |
 
 ## Nhật ký phiên
 
@@ -87,6 +87,12 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - File quan trọng: `app/Modules/DataSync/**`, `app/Modules/Compare/Actions/PublishSavingsRates.php`, `routes/console.php`.
 - E2 cùng PR: tỷ giá Vietcombank (`input#currentDataExchange`), giá vàng SJC (`PriceService.ashx`), chạy mỗi giờ 07:00–19:00, mặc định tự duyệt (USD đổi >3%, vàng đổi >8% thì chờ duyệt).
 - Tiếp theo: E3 dữ liệu sản phẩm (ngân hàng + logo, thẻ, vay, tài khoản).
+
+### 15/11/2026 — E3: hồ sơ ngân hàng + logo, trường ảnh sản phẩm
+- `DataSync\Support\Banks` (10 ngân hàng), nguồn `institution.<slug>` (`Scrapers/Institutions/BankProfile`) chạy thứ Hai 05:30; duyệt → `Compare\Actions\UpdateInstitutionProfile` tải logo gốc về ổ public. Bộ lấy lãi suất dùng chung `Banks`.
+- `ProductFormComponents::imageSection()` cho form thẻ, vay, tài khoản, tiết kiệm. Trang Nguồn dữ liệu xếp theo loại, 50 dòng/trang.
+- Test: `tests/Feature/DataSync/InstitutionSyncTest.php`; toàn bộ Pest xanh.
+- Tiếp theo: thẻ tín dụng, vay, tài khoản (danh sách sản phẩm + ảnh từ trang ngân hàng, phí/lãi kiểm tra tay).
 
 ### 15/11/2026 — Quản trị viên đăng nhập từ /dang-nhap
 

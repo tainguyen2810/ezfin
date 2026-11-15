@@ -21,7 +21,7 @@ use Laravel\Pennant\Feature;
  */
 class SyncCommand extends Command
 {
-    protected $signature = 'ezfin:sync {source? : Mã nguồn, ví dụ savings.vietcombank} {--kind= : Loại nguồn (savings, fx, gold)} {--list : Chỉ liệt kê nguồn và tình trạng}';
+    protected $signature = 'ezfin:sync {source? : Mã nguồn, ví dụ savings.vietcombank} {--kind= : Loại nguồn (savings, fx, gold, institution)} {--list : Chỉ liệt kê nguồn và tình trạng}';
 
     protected $description = 'Lấy dữ liệu tự động (lãi suất, tỷ giá, giá vàng) từ nguồn chính thức, lưu bản nháp chờ duyệt';
 

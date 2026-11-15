@@ -5,6 +5,7 @@ namespace App\Modules\Compare\Filament\Resources\Shared;
 use App\Modules\Compare\Enums\ProductStatus;
 use App\Modules\Compare\Models\FinancialProduct;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -113,5 +114,20 @@ class ProductFormComponents
         return TextInput::make($name)->label($label)
             ->numeric()->minValue(0)->maxValue($max)->step('0.01')
             ->suffix($suffix);
+    }
+
+    /** Ảnh minh họa sản phẩm (ảnh thẻ, banner sản phẩm) lấy từ trang chính thức của ngân hàng. Không nhận SVG. */
+    public static function imageSection(string $title = 'Ảnh sản phẩm', string $help = 'Ảnh từ trang chính thức của ngân hàng. PNG, JPG hoặc WebP, tối đa 1 MB.'): Section
+    {
+        return Section::make($title)->schema([
+            FileUpload::make('image_path')->hiddenLabel()
+                ->image()
+                ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/webp'])
+                ->maxSize(1024)
+                ->disk('public')
+                ->directory(FinancialProduct::IMAGE_DIRECTORY)
+                ->visibility('public')
+                ->helperText($help),
+        ]);
     }
 }

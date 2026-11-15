@@ -20,11 +20,6 @@ class Vietinbank extends SavingsScraper
         return 'vietinbank';
     }
 
-    public function institution(): array
-    {
-        return ['slug' => 'vietinbank', 'name' => 'Ngân hàng TMCP Công Thương Việt Nam', 'short_name' => 'VietinBank', 'website' => 'https://www.vietinbank.vn'];
-    }
-
     public function url(): string
     {
         return 'https://www.vietinbank.vn/ca-nhan/cong-cu-tien-ich/lai-suat-khcn';

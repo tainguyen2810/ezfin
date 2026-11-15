@@ -21,11 +21,6 @@ class Bidv extends SavingsScraper
         return 'bidv';
     }
 
-    public function institution(): array
-    {
-        return ['slug' => 'bidv', 'name' => 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam', 'short_name' => 'BIDV', 'website' => 'https://bidv.com.vn'];
-    }
-
     public function url(): string
     {
         return 'https://bidv.com.vn/vn/tra-cuu-lai-suat';

@@ -22,11 +22,6 @@ class Agribank extends SavingsScraper
         return 'agribank';
     }
 
-    public function institution(): array
-    {
-        return ['slug' => 'agribank', 'name' => 'Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam', 'short_name' => 'Agribank', 'website' => self::BASE];
-    }
-
     public function url(): string
     {
         return self::BASE.'/vn/lai-suat-tien-gui';
