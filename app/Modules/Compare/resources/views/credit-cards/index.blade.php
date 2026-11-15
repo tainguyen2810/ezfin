@@ -35,6 +35,7 @@
                 </p>
 
                 @if ($partnerLinks->isNotEmpty())<x-ui.disclosure />@endif
+                <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 @forelse ($cards as $card)
                     @php
                         $detail = $card->creditCard;
@@ -42,11 +43,16 @@
                         $highlights = collect($detail?->benefits ?? [])
                             ->map(fn ($benefit) => \App\Modules\Compare\Enums\CardBenefit::tryFrom($benefit)?->getLabel())
                             ->filter()->take(3)
-                            ->when($detail?->annual_fee_note, fn ($items) => $items->prepend($detail->annual_fee_note))
                             ->all();
                     @endphp
-                    <x-ui.product-card :id="$card->slug" :name="$card->name" :institution="$card->institution->short_name"
-                        :logo="$card->institution->logoUrl()" :image="$card->imageUrl()" :highlights="$highlights"
+                    <x-ui.product-tile :id="$card->slug" :name="$card->name" :institution="$card->institution->short_name"
+                        :logo="$card->institution->logoUrl()" :image="$card->imageUrl()" :highlights="$highlights" :note="$detail?->annual_fee_note"
+                        :key-facts="[
+                            'Phí thường niên' => $fee,
+                            'Hoàn tiền tối đa' => Format::percent($detail?->cashback_rate),
+                            'Miễn lãi tối đa' => $detail?->interest_free_days ? $detail->interest_free_days.' ngày' : '—',
+                            'Thu nhập tối thiểu' => Format::money($detail?->min_monthly_income),
+                        ]"
                         :detail-url="route('compare.credit-cards.show', $card->slug)" :partner-url="$partnerLinks->get($card->id)?->url()" :partner-label="$partnerLinks->get($card->id)?->cta_label ?? ''"
                         :facts="[
                             'Phí thường niên' => $fee,
@@ -61,9 +67,9 @@
                             <x-ui.data-freshness :verified-at="$card->verified_at" source="Trang chính thức của ngân hàng"
                                 :source-url="$card->source_url" :stale="$card->isDueForReview()" />
                         </x-slot:footer>
-                    </x-ui.product-card>
+                    </x-ui.product-tile>
                 @empty
-                    <x-ui.card>
+                    <x-ui.card class="sm:col-span-2 xl:col-span-3">
                         <x-ui.empty-state icon="credit-card" title="Chưa có thẻ phù hợp"
                             :description="$filters->activeCount() > 0 ? 'Thử bỏ bớt điều kiện lọc để xem thêm thẻ.' : 'Dữ liệu thẻ tín dụng đang được cập nhật và xác minh.'">
                             @if ($filters->activeCount() > 0)
@@ -72,6 +78,7 @@
                         </x-ui.empty-state>
                     </x-ui.card>
                 @endforelse
+                </div>
 
                 {{ $cards->links('pagination::tailwind') }}
 

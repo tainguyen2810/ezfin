@@ -224,3 +224,21 @@ it('finds cards by bank abbreviation or stock code', function () {
     $this->get(LISTING_URL.'?tu_khoa=vcb&loai_the=visa&hang=gold')->assertOk()
         ->assertSee('Loại thẻ')->assertSee('Hạng thẻ')->assertSee('value="vcb"', false);
 });
+
+it('shows cards as grid tiles that open a quick view with every fact, keeping long fee notes off the tile', function () {
+    $note = 'Miễn phí năm đầu khi chi tiêu đủ điều kiện trong 30 ngày';
+    FinancialProduct::where('name', 'Thẻ Hoàn Tiền')->first()->creditCard->update(['annual_fee_note' => $note, 'interest_free_days' => 55]);
+
+    $html = $this->get(LISTING_URL)->assertOk()
+        ->assertSee('sm:grid-cols-2 xl:grid-cols-3', false)
+        ->assertSee('Xem nhanh')
+        ->assertSee("open-modal', 'tile-the-hoan-tien'", false)
+        ->assertSee('href="'.route('compare.credit-cards.show', 'the-hoan-tien').'"', false)
+        ->assertSee('Xem trang chi tiết')
+        ->getContent();
+
+    // Ô chỉ có nhãn ngắn; ghi chú phí nằm trong hộp xem nhanh, hộp có đủ thông số.
+    $modal = str($html)->after('id="tile-the-hoan-tien-title"')->before('role="dialog"')->toString();
+    expect(substr_count($html, $note))->toBe(1)
+        ->and($modal)->toContain($note)->toContain('Lãi suất')->toContain('Tổ chức thẻ')->toContain('55 ngày');
+});

@@ -573,3 +573,10 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Đã deploy main 651aa56 qua tác vụ Cron tạm trên aaPanel (đã xóa sau khi chạy): npm ci + build, migrate (cột hạng thẻ + tên gọi khác của ngân hàng), `ezfin:starter-content` tạo 15 bài đã xuất bản, optimize.
 - Lần chạy đầu lỗi migration trên MariaDB (UPDATE rỗng khi tên thẻ không nêu hạng/loại, cột đã thêm dở) → PR #63 sửa migration chạy lại được; lần hai thành công.
 - Đã kiểm tra trên production: `/the-tin-dung?tu_khoa=vcb` ra 12 thẻ Vietcombank, `/kien-thuc` có bài mới, trình soạn TinyMCE hiện ở form bài viết, trang Nguồn dữ liệu có ô chọn và lọc.
+
+### 15/11/2026 (tối) — Danh sách thẻ tín dụng dạng lưới
+
+- Xong: `/the-tin-dung` đổi sang lưới 3 ô/hàng + hộp Xem nhanh (theo mockup Tai duyệt). Component `resources/views/components/ui/product-tile.blade.php`, view `Compare/resources/views/credit-cards/index.blade.php`, mẫu ở `/_ui/so-sanh`.
+- Test: `vendor/bin/pest` 687 xanh; `npm run test:ui` (BASE_URL máy thử) không tràn ngang, không lỗi JS.
+- Chưa giải quyết: ghi chú phí lấy tự động vẫn còn lộn xộn ở nguồn; nên làm gọn ở bước DataSync nếu Tai muốn.
+- Tiếp theo: deploy lên ezfin.vn khi Tai đồng ý.

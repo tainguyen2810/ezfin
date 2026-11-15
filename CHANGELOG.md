@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Danh sách thẻ tín dụng dạng lưới
+
+- Trang So sánh thẻ tín dụng hiện thẻ dạng ô: 3 ô/hàng trên desktop, 2 trên tablet, 1 trên mobile. Mỗi ô có ảnh thẻ, ngân hàng, tối đa 3 nhãn và 4 thông số chính (phí thường niên, hoàn tiền, miễn lãi, thu nhập tối thiểu), giữ ô So sánh.
+- Bấm ô mở hộp Xem nhanh: đủ thông số, ghi chú phí, ngày cập nhật và nguồn, nút Xem trang chi tiết và nút đối tác (nếu có). Tắt JS thì ô dẫn thẳng tới trang chi tiết.
+- Ghi chú phí dài (văn bản lấy tự động) không còn hiện trên ô, chỉ hiện rút gọn trong hộp Xem nhanh. Component mới `x-ui.product-tile` (có ở trang mẫu `/_ui/so-sanh`).
+
 ### Trình soạn bài viết TinyMCE, thao tác hàng loạt cho Nguồn dữ liệu
 
 - Nội dung bài viết soạn bằng TinyMCE (giao diện tiếng Việt, đủ nút như TinyMCE Advanced của WordPress): tiêu đề H2–H4, cỡ chữ, gạch chân, gạch ngang, màu chữ, tô nền, căn lề, thụt lề, danh sách, liên kết (mở tab mới, nofollow/sponsored), neo, chèn ảnh (kéo thả, dán, chọn tệp; có chú thích), bảng, trích dẫn, đường kẻ, ký tự đặc biệt, chỉ số trên/dưới, xóa định dạng, tìm và thay thế, xem mã HTML, xem trước, toàn màn hình, đếm từ.
