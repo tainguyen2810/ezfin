@@ -6,7 +6,7 @@
 <x-layouts.public title="So sánh lãi suất tiết kiệm"
     description="So sánh lãi suất gửi tiết kiệm các ngân hàng theo số tiền và kỳ hạn, xếp theo tiền lãi nhận được. Dữ liệu có nguồn và ngày xác minh."
     :noindex="! $filters->isDefault()" :canonical="$filters->isDefault() ? route('compare.savings.index') : null">
-    <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         <x-ui.breadcrumb :items="['Trang chủ' => route('home'), 'Lãi suất tiết kiệm' => null]" />
         <h1 class="mt-3 text-2xl font-bold sm:text-3xl">So sánh lãi suất tiết kiệm</h1>
         <p class="mt-1 max-w-3xl text-slate-600">Nhập số tiền và kỳ hạn để xem ngân hàng nào trả nhiều tiền lãi nhất theo biểu lãi suất đã công bố.</p>
@@ -37,6 +37,7 @@
 
             @if ($partnerLinks->isNotEmpty())<x-ui.disclosure />@endif
 
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             @forelse ($results as $index => $result)
                 @php
                     $rate = $result['rate'];
@@ -45,10 +46,17 @@
                         ? ((float) $rate->min_amount > 0 ? 'Từ '.Format::money($rate->min_amount) : '').($rate->max_amount !== null ? ((float) $rate->min_amount > 0 ? ' đến dưới ' : 'Dưới ').Format::money($rate->max_amount) : '')
                         : 'Mọi mức tiền';
                 @endphp
-                <x-ui.product-card :id="$product->slug" :name="($index + 1).'. '.$product->name" :institution="$product->institution->short_name"
+                <x-ui.product-tile :id="$product->slug.'-'.($index + 1)" :name="($index + 1).'. '.$product->name" :institution="$product->institution->short_name"
                     :logo="$product->institution->logoUrl()" :comparable="false"
+                    :detail-url="route('compare.institutions.show', $product->institution->slug)" :detail-label="'Lãi suất '.$product->institution->short_name"
                     :partner-url="$partnerLinks->get($product->id)?->url()" :partner-label="$partnerLinks->get($product->id)?->cta_label ?? ''"
                     :highlights="$index === 0 && $leader ? ['Tiền lãi cao nhất'] : []"
+                    :key-facts="[
+                        'Tiền lãi' => Format::money($result['interest']),
+                        'Lãi suất' => Format::rate($rate->rate),
+                        'Tổng nhận cuối kỳ' => Format::money($result['total']),
+                        'Kênh' => $rate->channel->getLabel(),
+                    ]"
                     :facts="[
                         'Tiền lãi' => Format::money($result['interest']),
                         'Lãi suất' => Format::rate($rate->rate),
@@ -62,9 +70,9 @@
                             :source-url="$product->source_url" :stale="$product->isDueForReview()" />
                         <p class="mt-1 text-xs text-slate-500">Lãi suất hiệu lực từ {{ Format::date($rate->effective_from) }}</p>
                     </x-slot:footer>
-                </x-ui.product-card>
+                </x-ui.product-tile>
             @empty
-                <x-ui.card>
+                <x-ui.card class="sm:col-span-2 lg:col-span-3">
                     <x-ui.empty-state icon="banknotes" title="Chưa có lãi suất phù hợp"
                         :description="$filters->isDefault() ? 'Dữ liệu lãi suất đang được cập nhật và xác minh.' : 'Thử kỳ hạn khác, hoặc chọn mọi kênh và mọi hình thức lĩnh lãi.'">
                         @unless ($filters->isDefault())
@@ -73,6 +81,7 @@
                     </x-ui.empty-state>
                 </x-ui.card>
             @endforelse
+            </div>
 
             <x-ui.alert title="Cách tính">
                 Tiền lãi = số tiền × lãi suất (%/năm) × số tháng ÷ 12, làm tròn đến đồng. Ngân hàng có thể tính theo số ngày gửi thực tế

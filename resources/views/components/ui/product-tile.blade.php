@@ -1,7 +1,7 @@
 {{-- Ô sản phẩm dạng lưới (3 ô/hàng trên desktop). Bấm ô mở hộp thông tin nhanh; tắt JS thì đi tới trang chi tiết.
      keyFacts: 2-4 thông số chính hiện trên ô; facts: toàn bộ thông số trong hộp. note: ghi chú (vd. điều kiện phí), chỉ hiện trong hộp. --}}
 @props([
-    'id', 'name', 'institution', 'logo' => null, 'image' => null, 'keyFacts' => [], 'facts' => [], 'highlights' => [], 'note' => null, 'noteLabel' => 'Phí',
+    'id', 'name', 'institution', 'logo' => null, 'image' => null, 'keyFacts' => [], 'facts' => [], 'highlights' => [], 'note' => null, 'noteLabel' => 'Phí', 'detailLabel' => 'Xem trang chi tiết',
     'detailUrl' => null, 'partnerUrl' => null, 'partnerLabel' => 'Đăng ký', 'sponsored' => false, 'comparable' => true,
 ])
 @php $modal = 'tile-'.$id; @endphp
@@ -82,7 +82,7 @@
     @if ($note)<p class="mt-3 text-sm text-slate-600"><span class="font-medium text-navy-900">{{ $noteLabel }}:</span> {{ Str::limit($note, 180) }}</p>@endif
     @isset($footer)<div class="mt-3">{{ $footer }}</div>@endisset
     <x-slot:footer>
-        @if ($detailUrl)<x-ui.button :href="$detailUrl" :variant="$partnerUrl ? 'outline' : 'primary'">Xem trang chi tiết</x-ui.button>@endif
+        @if ($detailUrl)<x-ui.button :href="$detailUrl" :variant="$partnerUrl ? 'outline' : 'primary'">{{ $detailLabel }}</x-ui.button>@endif
         @if ($partnerUrl)<x-ui.button :href="$partnerUrl" icon="arrow-top-right-on-square" rel="sponsored nofollow noopener" target="_blank">{{ $partnerLabel }}</x-ui.button>@endif
     </x-slot:footer>
 </x-ui.modal>
