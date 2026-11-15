@@ -75,6 +75,27 @@ it('auto-approves PNJ gold prices (SJC bars sold at PNJ and jewelry) converted f
     $this->get('http://ezfin.test/gia-vang')->assertOk()->assertSee('PNJ')->assertSee('137.500.000');
 });
 
+it('auto-approves Bao Tin Minh Chau gold prices converted from thousand dong per chi', function () {
+    $result = app(RunSource::class)->handle(SyncSource::where('key', 'gold.btmc')->sole());
+
+    expect($result['status'])->toBe('approved')
+        ->and(GoldPrice::where('source', 'Bảo Tín Minh Châu')->pluck('product')->all())->toEqualCanonicalizing([
+            'Vàng Miếng VRTL Bảo Tín Minh Châu', 'Nhẫn Tròn Trơn Bảo Tín Minh Châu', 'Quà Mừng Bản Vị Vàng Bảo Tín Minh Châu',
+            'Vàng Miếng SJC', 'Trang Sức Vàng Rồng Thăng Long 999.9', 'Trang Sức Vàng Rồng Thăng Long 99.9',
+        ])
+        ->and(GoldPrice::where('source', 'Bảo Tín Minh Châu')->where('product', 'Vàng Miếng SJC')->value('sell'))->toBe('137500000.00')
+        ->and(GoldPrice::where('source', 'Bảo Tín Minh Châu')->where('product', 'Vàng Miếng SJC')->value('buy'))->toBe('133800000.00')
+        ->and(GoldPrice::where('source', 'Bảo Tín Minh Châu')->first()->quoted_at->format('d/m/Y H:i'))->toBe('14/11/2026 08:57');
+});
+
+it('fails the Bao Tin Minh Chau source when the price unit changes', function () {
+    $html = str_replace('ĐVT 1 = 1.000 VNĐ', 'ĐVT: triệu đồng/lượng', file_get_contents(base_path('tests/Fixtures/DataSync/btmc.html')));
+    fakeBankSites(['btmc.vn' => Http::response($html), 'btmc.vn/' => Http::response($html)]);
+
+    expect(app(RunSource::class)->handle(SyncSource::where('key', 'gold.btmc')->sole())['status'])->toBe('failed')
+        ->and(SyncSource::where('key', 'gold.btmc')->value('last_error'))->toContain('đơn vị');
+});
+
 it('fails the PNJ source when the SJC bar price is missing', function () {
     fakeBankSites(['edge-cf-api.pnj.io/*' => Http::response(['updated_text' => 'Giá vàng ngày: 14/11/2026 09:10:06', 'locations' => [['name' => 'TPHCM', 'gold_type' => [['name' => 'PNJ', 'gia_mua' => '132.700', 'gia_ban' => '136.900']]]]])]);
 

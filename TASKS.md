@@ -538,3 +538,7 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Chủ dự án không thấy dữ liệu: các bản nháp nằm ở Chờ duyệt (nhóm menu cuối). Nhóm "Dữ liệu tự động" đưa lên đầu menu (`AdminPanelProvider::navigationGroups`).
 - Chờ duyệt: ô chọn + "Duyệt các bản đã chọn", nút "Duyệt tất cả (N)" (`ApproveDraft::handleMany`: hồ sơ ngân hàng trước, bản lỗi giữ chờ duyệt và được liệt kê). Danh sách sản phẩm trống chỉ tới Chờ duyệt.
 - Test: DataSyncTest (3 test mới); toàn bộ Pest xanh (665).
+
+### 15/11/2026 — Giá vàng Bảo Tín Minh Châu
+- DOJI (banggia.doji.vn) mã hóa dữ liệu bảng giá: cố ý chặn lấy tự động, không dùng. Thêm `gold.btmc` (`Markets\BtmcGold`): bảng HTML trên trang chủ btmc.vn (robots.txt cho phép), nghìn đồng/chỉ → đồng/lượng; báo lỗi nếu đơn vị đổi. Bỏ đồng xu 0.1 chỉ và dòng "Liên hệ".
+- Test: MarketsSyncTest; toàn bộ Pest xanh (667).

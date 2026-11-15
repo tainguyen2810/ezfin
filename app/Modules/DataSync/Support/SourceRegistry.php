@@ -28,6 +28,7 @@ class SourceRegistry
         Markets\VietcombankFx::class,
         Markets\SjcGold::class,
         Markets\PnjGold::class,
+        Markets\BtmcGold::class,
         Catalog\VietcombankCards::class,
         Catalog\VietcombankLoans::class,
         Catalog\TechcombankCards::class,
