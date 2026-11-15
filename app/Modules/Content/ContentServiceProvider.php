@@ -2,6 +2,7 @@
 
 namespace App\Modules\Content;
 
+use App\Modules\Content\Console\StarterContentCommand;
 use App\Modules\Content\Models\Article;
 use App\Modules\Content\Models\ArticleCategory;
 use App\Modules\Content\Models\Author;
@@ -62,5 +63,9 @@ class ContentServiceProvider extends ModuleServiceProvider
         Gate::policy(Article::class, ArticlePolicy::class);
         Gate::policy(ArticleCategory::class, ContentTaxonomyPolicy::class);
         Gate::policy(Author::class, ContentTaxonomyPolicy::class);
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([StarterContentCommand::class]);
+        }
     }
 }

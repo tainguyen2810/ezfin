@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Bài viết kiến thức khởi đầu
+
+- Lệnh `php artisan ezfin:starter-content [--draft]` nạp 16 bài viết kiến thức do Ban biên tập EzFin soạn (6 chuyên mục: tiết kiệm, thẻ tín dụng, vay, quản lý tiền, an toàn ngân hàng số, vàng và ngoại tệ), mỗi bài có câu hỏi thường gặp và nguồn chính thức. Chạy được trên production, chạy lại không ghi đè bài đã có.
+- Số liệu cập nhật: hạn mức bảo hiểm tiền gửi 350 triệu đồng từ 13/7/2026 (Thông tư 05/2026/TT-NHNN).
+
 ### Lãi suất tiết kiệm tự động
 
 - Hệ thống tự lấy lãi suất tiết kiệm từ trang chính thức của Vietcombank, BIDV, VietinBank, Agribank, MB, ACB, TPBank hai lần mỗi ngày. Số liệu mới vào mục quản trị "Chờ duyệt", có so sánh với lần trước; duyệt xong mới hiện trên website (lần công bố cũ giữ làm lịch sử).
