@@ -16,7 +16,12 @@ class InstitutionController
     {
         $institutions = FinancialInstitution::query()->active()
             ->whereHas('products', fn (Builder $query) => $query->published())
-            ->withCount(['products' => fn (Builder $query) => $query->published()])
+            ->withCount([
+                'products' => fn (Builder $query) => $query->published(),
+                ...collect(ProductType::cases())->mapWithKeys(fn (ProductType $type) => [
+                    'products as '.$type->value.'_count' => fn (Builder $query) => $query->published()->where('type', $type),
+                ])->all(),
+            ])
             ->orderBy('short_name')->orderBy('name')
             ->get();
         $best = $board->matrix(null)->mapWithKeys(fn (array $row) => [$row['institution']->id => $row['rates'][12]]);

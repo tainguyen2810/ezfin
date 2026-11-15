@@ -56,11 +56,14 @@
                 </p>
 
                 @if ($partnerLinks->isNotEmpty())<x-ui.disclosure />@endif
+                <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 @forelse ($loans as $loan)
                     @php
                         $facts = LoanFacts::for($loan);
+                        $allFacts = LoanFacts::full($loan);
                         if ($filters->canEstimate() && ($payment = LoanFacts::firstPayment($loan, $filters->amount, $filters->term)) !== null) {
                             $facts = ['Trả tháng đầu (ước tính)' => Format::money($payment)] + array_slice($facts, 0, 3, true);
+                            $allFacts = ['Trả tháng đầu (ước tính)' => Format::money($payment)] + $allFacts;
                         }
                         $highlights = array_values(array_filter([
                             $filters->kind ? null : $loan->loan->kind->getLabel(),
@@ -68,16 +71,17 @@
                             $loan->loan->prepayment_fee !== null && (float) $loan->loan->prepayment_fee === 0.0 ? 'Miễn phí trả nợ trước hạn' : null,
                         ]));
                     @endphp
-                    <x-ui.product-card :id="$loan->slug" :name="$loan->name" :institution="$loan->institution->short_name"
-                        :logo="$loan->institution->logoUrl()" :highlights="$highlights" :facts="$facts" :comparable="false"
+                    <x-ui.product-tile :id="$loan->slug" :name="$loan->name" :institution="$loan->institution->short_name"
+                        :logo="$loan->institution->logoUrl()" :highlights="$highlights" :key-facts="$facts" :facts="$allFacts" :comparable="false"
+                        :note="$loan->loan->prepayment_note" note-label="Trả nợ trước hạn"
                         :detail-url="route('compare.loans.show', $loan->slug)" :partner-url="$partnerLinks->get($loan->id)?->url()" :partner-label="$partnerLinks->get($loan->id)?->cta_label ?? ''">
                         <x-slot:footer>
                             <x-ui.data-freshness :verified-at="$loan->verified_at" source="Biểu lãi suất cho vay chính thức của ngân hàng"
                                 :source-url="$loan->source_url" :stale="$loan->isDueForReview()" />
                         </x-slot:footer>
-                    </x-ui.product-card>
+                    </x-ui.product-tile>
                 @empty
-                    <x-ui.card>
+                    <x-ui.card class="sm:col-span-2 xl:col-span-3">
                         <x-ui.empty-state icon="home" title="Chưa có khoản vay phù hợp"
                             :description="$filters->activeCount() > 0 ? 'Thử bỏ bớt điều kiện lọc, giảm số tiền hoặc thời hạn vay.' : 'Dữ liệu khoản vay đang được cập nhật và xác minh.'">
                             @if ($filters->activeCount() > 0)
@@ -86,6 +90,7 @@
                         </x-ui.empty-state>
                     </x-ui.card>
                 @endforelse
+                </div>
 
                 {{ $loans->links('pagination::tailwind') }}
 
