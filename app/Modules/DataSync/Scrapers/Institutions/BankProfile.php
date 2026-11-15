@@ -14,13 +14,26 @@ use DOMElement;
 
 /**
  * Hồ sơ ngân hàng từ trang chủ chính thức: tên, website và logo. Logo chọn theo thứ tự: ảnh PNG/JPG/WebP có chữ "logo"
- * (ưu tiên alt là tên ngân hàng, bỏ logo ứng dụng/chứng nhận/bản trắng), rồi apple-touch-icon, rồi icon PNG.
- * Không nhận SVG. Người duyệt xem ảnh trước khi ghi; logo được tải về ổ public lúc duyệt.
+ * (ưu tiên alt là tên ngân hàng, bỏ logo ứng dụng/chứng nhận/bản trắng); nếu trang chỉ có logo SVG thì dùng bản PNG
+ * chính ngân hàng đặt cạnh (cùng tên .png, hoặc bản PNG do hệ thống quản lý ảnh AEM sinh ra từ file SVG); rồi ảnh logo
+ * gốc đã biết trên website ngân hàng (FALLBACK); cuối cùng apple-touch-icon / icon PNG. Ảnh dự phòng được tải thử, chỉ
+ * nhận khi đúng là ảnh PNG/JPG/WebP. Không nhận SVG. Người duyệt xem ảnh trước khi ghi; logo được tải về ổ public lúc duyệt.
  */
 class BankProfile implements Scraper
 {
     /** Ảnh có các chữ này trong đường dẫn/alt không phải logo chính. */
     private const SKIP = ['google', 'apple', 'app-store', 'appstore', 'play', 'store', 'bhtg', 'bao-hiem', 'premier', 'private', 'priority', 'white', 'footer', 'partner', 'napas', 'visa', 'master', 'jcb', 'qr'];
+
+    /**
+     * Logo gốc trên chính website ngân hàng, dùng khi trang chủ chỉ có bản trắng (đặt trên nền màu) hoặc ảnh nền CSS.
+     * Kiểm tra lại khi ngân hàng đổi giao diện.
+     */
+    public const FALLBACK = [
+        'agribank' => 'https://www.agribank.com.vn/contenthandler/dav/themelist/custom.portal.theme.AGBank3/assets/images/logo-color.png',
+    ];
+
+    /** Bản PNG do AEM (Adobe Experience Manager) sinh từ ảnh SVG trong kho /content/dam/. */
+    private const AEM_RENDITION = '/jcr:content/renditions/cq5dam.thumbnail.319.319.png';
 
     /** @param  array{slug: string, name: string, short_name: string, website: string}  $bank */
     public function __construct(private readonly array $bank) {}
@@ -47,7 +60,20 @@ class BankProfile implements Scraper
 
     public function scrape(Fetcher $http): ScrapeResult
     {
-        $logo = $this->findLogo($http->html($this->url()));
+        $html = $http->html($this->url());
+        [$priority, $logo] = $this->bestCandidate($html) ?? [null, null];
+
+        // Chỉ có icon (hoặc không có gì): thử bản PNG của logo SVG, rồi logo gốc đã biết, trước khi lấy icon.
+        if ($priority === null || $priority >= 2) {
+            $fallbacks = [...$this->svgLogoRasters($html), ...(isset(self::FALLBACK[$this->bank['slug']]) ? [self::FALLBACK[$this->bank['slug']]] : [])];
+            foreach ($fallbacks as $url) {
+                if ($this->isImage($http, $url)) {
+                    $logo = $url;
+                    break;
+                }
+            }
+        }
+
         if ($logo === null) {
             throw ScrapeException::layoutChanged('không tìm thấy logo dạng PNG/JPG/WebP trên trang chủ.');
         }
@@ -62,6 +88,54 @@ class BankProfile implements Scraper
     }
 
     public function findLogo(string $html): ?string
+    {
+        return $this->bestCandidate($html)[1] ?? null;
+    }
+
+    /**
+     * Đường dẫn PNG ứng với các logo SVG trên trang (thẻ img hoặc chuỗi trong CSS/script), chỉ trên website ngân hàng.
+     *
+     * @return list<string>
+     */
+    public function svgLogoRasters(string $html): array
+    {
+        $sources = [];
+        foreach (HtmlTable::document($html)->getElementsByTagName('img') as $img) {
+            /** @var DOMElement $img */
+            $src = trim($img->getAttribute('src') ?: $img->getAttribute('data-src'));
+            $hint = mb_strtolower($src.' '.$img->getAttribute('alt').' '.$img->getAttribute('class').' '.$img->getAttribute('itemprop'));
+            if (str_contains($hint, 'logo') || mb_strtolower(trim($img->getAttribute('alt'))) === mb_strtolower($this->bank['short_name'])) {
+                $sources[] = $src;
+            }
+        }
+        preg_match_all('#[^"\'()\s\\\\]*logo[^"\'()\s\\\\]*\.svg#i', $html, $matches);
+        $sources = [...$sources, ...$matches[0]];
+
+        $site = preg_replace('/^www\./', '', (string) parse_url($this->bank['website'], PHP_URL_HOST));
+
+        return collect($sources)
+            ->map(fn (string $src) => html_entity_decode(trim($src)))
+            ->filter(fn (string $src) => (bool) preg_match('/\.svg$/i', (string) parse_url($src, PHP_URL_PATH)) && ! $this->skipped($src))
+            ->map(fn (string $src) => $this->absolute(strtok($src, '?#')))
+            ->filter(fn (string $url) => str_ends_with((string) parse_url($url, PHP_URL_HOST), $site))
+            ->map(fn (string $url) => str_contains($url, '/content/dam/') ? $url.self::AEM_RENDITION : preg_replace('/\.svg$/i', '.png', $url))
+            ->unique()->values()->all();
+    }
+
+    private function isImage(Fetcher $http, string $url): bool
+    {
+        try {
+            $bytes = $http->get($url)->body();
+        } catch (ScrapeException) {
+            return false;
+        }
+        $info = @getimagesizefromstring($bytes);
+
+        return $info !== false && in_array($info['mime'], ['image/png', 'image/jpeg', 'image/webp'], true) && strlen($bytes) <= 1024 * 1024;
+    }
+
+    /** @return array{0: int, 1: string}|null [độ ưu tiên (0-1 logo, 2-3 icon), đường dẫn tuyệt đối] */
+    private function bestCandidate(string $html): ?array
     {
         $document = HtmlTable::document($html);
         $candidates = [];
@@ -92,7 +166,7 @@ class BankProfile implements Scraper
 
         usort($candidates, fn ($a, $b) => $a[0] <=> $b[0]);
 
-        return $this->absolute(html_entity_decode($candidates[0][1]));
+        return [$candidates[0][0], $this->absolute(html_entity_decode($candidates[0][1]))];
     }
 
     private function isRaster(string $url): bool

@@ -526,3 +526,10 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Thêm `AgribankCards` (khối .item2, mã thẻ lấy từ tham số urile).
 - Chưa tự động được: MB (trang dựng bằng JS qua API có Akamai), TPBank (danh sách dựng bằng JS), VPBank (chặn bot).
 
+
+### 15/11/2026 — Sửa nguồn lỗi sau lần chạy đầu trên máy chủ
+- Lần chạy đầu trên ezfin.vn: lãi suất TPBank lỗi vì trang ghi chữ có dấu bằng ký tự tổ hợp (NFD), "điện tử" không khớp. `Fetcher::nfc` chuẩn hóa NFC cho HTML/JSON và `HtmlTable::text`; mẫu `tpbank-component.html` đổi sang NFD như trang thật.
+- Logo: `BankProfile` thử bản PNG cạnh logo SVG (VietinBank `/images/logo.png`), bản PNG AEM sinh từ SVG (Techcombank `…svg/jcr:content/renditions/cq5dam.thumbnail.319.319.png`), rồi logo gốc đã biết (`BankProfile::FALLBACK`, Agribank `logo-color.png`) trước khi dùng icon; ảnh dự phòng được tải thử.
+- Giá vàng: sjc.com.vn trả 403 cho máy chủ. Thêm nguồn `gold.pnj` (`Markets\PnjGold`, API công khai của giavang.pnj.com.vn, nghìn đồng/lượng): vàng miếng SJC tại PNJ + vàng nữ trang. Nguồn SJC vẫn giữ (có thể tắt trong quản trị nếu tiếp tục bị chặn).
+- MB (lãi suất, logo) trả 403 từ Akamai cho bot: không vượt chặn, nhập tay.
+- Test: InstitutionSyncTest, MarketsSyncTest, ScrapersTest; toàn bộ Pest xanh (662).

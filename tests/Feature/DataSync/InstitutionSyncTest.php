@@ -13,6 +13,7 @@ use App\Modules\DataSync\Enums\DraftStatus;
 use App\Modules\DataSync\Models\SyncSource;
 use App\Modules\DataSync\Scrapers\Institutions\BankProfile;
 use App\Modules\DataSync\Support\Banks;
+use App\Modules\DataSync\Support\Fetcher;
 use App\Modules\DataSync\Support\SourceRegistry;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -63,6 +64,32 @@ it('picks the main raster logo, skipping app badges, white versions, SVG and ins
     expect($profile->findLogo(BIDV_HOME))->toBe('https://bidv.com.vn/wps/wcm/connect/images/logo-bidv.png?v=2')
         ->and($profile->findLogo('<link rel="apple-touch-icon" href="//cdn.bidv.com.vn/touch.png">'))->toBe('https://cdn.bidv.com.vn/touch.png')
         ->and($profile->findLogo('<img src="/logo.svg" alt="BIDV">'))->toBeNull();
+});
+
+it('derives PNG versions of SVG-only logos on the bank site', function () {
+    $techcombank = new BankProfile(Banks::get('techcombank'));
+    $vietinbank = new BankProfile(Banks::get('vietinbank'));
+
+    expect($techcombank->svgLogoRasters('<img src="/content/dam/techcombank/public-site/seo/techcombank_logo_svg_86201e50d1.svg" itemprop="logo" alt=" Techcombank"><img src="https://cdn.other.com/logo.svg">'))
+        ->toBe(['https://techcombank.com/content/dam/techcombank/public-site/seo/techcombank_logo_svg_86201e50d1.svg/jcr:content/renditions/cq5dam.thumbnail.319.319.png'])
+        ->and($vietinbank->svgLogoRasters('<div class="logo"></div><script>{"logo":"/images/logo.svg\\"}</script><style>.logo{background:url(/images/logo.svg)}</style><img src="/images/app-store-logo.svg">'))
+        ->toBe(['https://www.vietinbank.vn/images/logo.png']);
+});
+
+it('uses the PNG beside an SVG logo, then the known original logo, before falling back to icons', function () {
+    $fetch = fn (string $slug) => app(BankProfile::class, ['bank' => Banks::get($slug)])->scrape(app(Fetcher::class))->payload['logo_url'];
+    fakeBankSites([
+        'www.vietinbank.vn/images/logo.png' => Http::response(tinyPng(), 200, ['Content-Type' => 'image/png']),
+        'www.vietinbank.vn' => Http::response('<link rel="icon" href="/icon.png"><style>.logo{background:url("/images/logo.svg")}</style>'),
+        'www.agribank.com.vn/contenthandler/dav/themelist/*/logo-color.png' => Http::response(tinyPng(), 200, ['Content-Type' => 'image/png']),
+        'www.agribank.com.vn' => Http::response('<img src="/contenthandler/dav/themelist/custom.portal.theme.AGBank3/assets/images/logo-white.png">'),
+        'techcombank.com/content/dam/*' => Http::response('<html>not found</html>', 200),
+        'techcombank.com' => Http::response('<link rel="apple-touch-icon" href="/touch.png"><img src="/content/dam/tcb/logo.svg" alt="Techcombank">'),
+    ]);
+
+    expect($fetch('vietinbank'))->toBe('https://www.vietinbank.vn/images/logo.png')
+        ->and($fetch('agribank'))->toBe(BankProfile::FALLBACK['agribank'])
+        ->and($fetch('techcombank'))->toBe('https://techcombank.com/touch.png');
 });
 
 it('drafts the bank profile, and approving it stores the logo and creates the institution', function () {

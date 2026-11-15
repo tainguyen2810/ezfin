@@ -34,6 +34,7 @@ function fakeBankSites(array $override = []): void
         'www.agribank.com.vn/vn/ca-nhan/san-pham/the/dtl*the-agribank-visa-gold' => Http::response($fixture('agribank-card-gold.html')),
         'www.agribank.com.vn/vn/ca-nhan/san-pham/the/dtl*the-agribank-visa-standard' => Http::response($fixture('agribank-card-standard.html')),
         'sjc.com.vn/GoldPrice/Services/PriceService.ashx' => Http::response($fixture('sjc-gold.json')),
+        'edge-cf-api.pnj.io/ecom-frontend/v3/get-gold-price' => Http::response($fixture('pnj-gold.json'), 200, ['Content-Type' => 'application/json']),
         'bidv.com.vn/ServicesBIDV/InterestDetailServlet' => Http::response($fixture('bidv.json'), 200, ['Content-Type' => 'application/json']),
         'www.vietinbank.vn/ca-nhan/*' => Http::response($fixture('vietinbank.html')),
         'www.agribank.com.vn/vn/lai-suat-tien-gui' => Http::response($fixture('agribank-page.html')),
