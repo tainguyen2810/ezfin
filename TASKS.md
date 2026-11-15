@@ -587,3 +587,10 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Test: `vendor/bin/pest` 687 xanh; `npm run test:ui` (BASE_URL máy thử) không tràn ngang, không lỗi JS.
 - Chưa giải quyết: ghi chú phí lấy tự động vẫn còn lộn xộn ở nguồn; nên làm gọn ở bước DataSync nếu Tai muốn.
 - Tiếp theo: deploy lên ezfin.vn khi Tai đồng ý.
+
+### 15/11/2026 (khuya) — Vay, Ngân hàng, Công cụ tính dạng lưới
+
+- Xong: 3 trang đổi sang lưới 3 ô/hàng theo mockup Tai duyệt; Vay dùng `x-ui.product-tile` (thêm `noteLabel`, logo lớn khi không có ảnh, tên thay logo khi thiếu); Ngân hàng đếm sản phẩm theo loại (`InstitutionController::index`).
+- Test: `vendor/bin/pest` 688 xanh; `test:ui` thêm /vay, /ngan-hang, không tràn ngang, không lỗi JS.
+- Chưa giải quyết: khoản vay Vietcombank trên production thiếu lãi suất và hạn mức (bộ thu thập chỉ lấy tên, loại, thời hạn).
+- Tiếp theo: deploy khi Tai đồng ý.

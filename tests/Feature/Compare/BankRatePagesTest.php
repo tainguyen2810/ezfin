@@ -95,7 +95,8 @@ it('shows a bank page with its rates by channel and the history chart', function
         ->assertSee('Lịch sử lãi suất')
         ->assertSee(Format::date(today()->subDays(180)));
 
-    $this->get('http://ezfin.test/ngan-hang')->assertOk()->assertSee('Alpha')->assertSee('Beta');
+    $this->get('http://ezfin.test/ngan-hang')->assertOk()->assertSee('Alpha')->assertSee('Beta')
+        ->assertSee('lg:grid-cols-3', false)->assertSee('Tiết kiệm 12 tháng')->assertSee('Xem lãi suất và sản phẩm');
 });
 
 it('hides banks that are inactive or have nothing published', function () {
