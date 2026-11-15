@@ -4,6 +4,7 @@ namespace App\Modules\Compare\Actions;
 
 use App\Modules\Compare\Enums\InstitutionType;
 use App\Modules\Compare\Models\FinancialInstitution;
+use App\Modules\Compare\Support\InstitutionAliases;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -26,6 +27,7 @@ class UpdateInstitutionProfile
             ]);
         }
         $institution->website = $profile['website'];
+        $institution->search_aliases ??= InstitutionAliases::KNOWN[$profile['slug']] ?? null;
 
         if ($logo !== null) {
             $path = FinancialInstitution::LOGO_DIRECTORY.'/'.$profile['slug'].'-'.substr(sha1($logo), 0, 10).'.'.$extension;

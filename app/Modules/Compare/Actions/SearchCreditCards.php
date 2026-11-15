@@ -5,6 +5,7 @@ namespace App\Modules\Compare\Actions;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Models\FinancialProduct;
 use App\Modules\Compare\Support\CreditCardFilters;
+use App\Modules\Compare\Support\InstitutionAliases;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -28,6 +29,18 @@ class SearchCreditCards
 
         if ($filters->institution !== null) {
             $query->whereHas('institution', fn (Builder $query) => $query->where('slug', $filters->institution));
+        }
+
+        if ($filters->network !== null) {
+            $query->where('card.network', $filters->network->value);
+        }
+
+        if ($filters->tier !== null) {
+            $query->where('card.tier', $filters->tier->value);
+        }
+
+        if ($filters->keyword !== null) {
+            InstitutionAliases::searchProducts($query, $filters->keyword, 'financial_products.name');
         }
 
         if (($maxFee = $filters->maxAnnualFee()) !== null) {

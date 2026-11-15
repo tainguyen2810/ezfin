@@ -3,6 +3,8 @@
 namespace App\Modules\Compare\Support;
 
 use App\Modules\Compare\Enums\CardBenefit;
+use App\Modules\Compare\Enums\CardNetwork;
+use App\Modules\Compare\Enums\CardTier;
 use Illuminate\Http\Request;
 
 /**
@@ -27,13 +29,16 @@ final readonly class CreditCardFilters
 
     public const DEFAULT_SORT = 'phi-thap';
 
-    public const QUERY_KEYS = ['ngan_hang', 'phi', 'nhu_cau', 'thu_nhap', 'sap_xep'];
+    public const QUERY_KEYS = ['tu_khoa', 'ngan_hang', 'loai_the', 'hang', 'phi', 'nhu_cau', 'thu_nhap', 'sap_xep'];
 
     /** Chặn số quá lớn trên URL: 1.000 tỷ đồng/tháng. */
     private const MAX_INCOME = 1_000_000_000_000;
 
     public function __construct(
         public ?string $institution = null,
+        public ?CardNetwork $network = null,
+        public ?CardTier $tier = null,
+        public ?string $keyword = null,
         public ?string $fee = null,
         public ?CardBenefit $need = null,
         public ?int $income = null,
@@ -47,11 +52,15 @@ final readonly class CreditCardFilters
 
         $institution = $text('ngan_hang');
         $fee = $text('phi');
+        $keyword = trim(preg_replace('/\s+/u', ' ', strip_tags($text('tu_khoa'))) ?? '');
         $income = preg_replace('/\D/', '', $text('thu_nhap'));
         $sort = $text('sap_xep');
 
         return new self(
             institution: preg_match('/^[a-z0-9-]{1,120}$/', $institution) ? $institution : null,
+            network: CardNetwork::tryFrom($text('loai_the')),
+            tier: CardTier::fromSlug($text('hang')),
+            keyword: $keyword !== '' ? mb_substr($keyword, 0, 60) : null,
             fee: array_key_exists($fee, self::FEES) ? $fee : null,
             need: CardBenefit::fromSlug($text('nhu_cau')),
             income: $income !== '' && strlen($income) <= 13 && (int) $income > 0 ? min((int) $income, self::MAX_INCOME) : null,
@@ -67,7 +76,7 @@ final readonly class CreditCardFilters
     /** Số bộ lọc đang bật (không tính sắp xếp). */
     public function activeCount(): int
     {
-        return count(array_filter([$this->institution, $this->fee, $this->need, $this->income], fn ($value) => $value !== null));
+        return count(array_filter([$this->keyword, $this->institution, $this->network, $this->tier, $this->fee, $this->need, $this->income], fn ($value) => $value !== null));
     }
 
     /**
@@ -78,7 +87,10 @@ final readonly class CreditCardFilters
     public function toQuery(): array
     {
         return array_filter([
+            'tu_khoa' => $this->keyword,
             'ngan_hang' => $this->institution,
+            'loai_the' => $this->network?->value,
+            'hang' => $this->tier?->slug(),
             'phi' => $this->fee,
             'nhu_cau' => $this->need?->slug(),
             'thu_nhap' => $this->income,

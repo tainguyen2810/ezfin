@@ -4,6 +4,7 @@ namespace App\Modules\Compare\Filament\Resources\SavingsProducts\Tables;
 
 use App\Modules\Compare\Enums\ProductStatus;
 use App\Modules\Compare\Models\FinancialProduct;
+use App\Modules\Compare\Support\InstitutionAliases;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -21,7 +22,8 @@ class SavingsProductsTable
                 ->withCount('savingsRates')
                 ->withMax('savingsRates', 'effective_from'))
             ->columns([
-                TextColumn::make('name')->label('Sản phẩm')->searchable()->sortable()
+                TextColumn::make('name')->label('Sản phẩm')->sortable()
+                    ->searchable(query: fn (Builder $query, string $search) => InstitutionAliases::searchProducts($query, $search))
                     ->description(fn (FinancialProduct $record) => $record->institution->short_name),
                 TextColumn::make('status')->label('Trạng thái')->badge(),
                 TextColumn::make('savings_rates_count')->label('Số dòng lãi suất')->numeric(),
