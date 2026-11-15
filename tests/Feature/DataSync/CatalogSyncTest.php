@@ -62,7 +62,9 @@ it('reads money, terms and kinds the way Vietnamese bank pages write them', func
         ->and(CatalogParsing::loanKind('An tâm kinh doanh'))->toBeNull()
         ->and(CatalogParsing::network('Vietcombank Cashplus Platinum American Express®'))->toBe('amex')
         ->and(CatalogParsing::imageUrl('/-/media/a b.png?h=32&amp;w=32', 'https://x.vn', original: true))->toBe('https://x.vn/-/media/a%20b.png')
-        ->and(CatalogParsing::imageUrl('/icon.svg', 'https://x.vn'))->toBeNull();
+        ->and(CatalogParsing::imageUrl('/icon.svg', 'https://x.vn'))->toBeNull()
+        ->and(CatalogParsing::cardTerms('Ưu đãi phí thường niên (miễn phí năm đầu khi chi tiêu từ 2 triệu đồng)')['annual_fee'])->toBeNull()
+        ->and(CatalogParsing::cardTerms('Phí thường niên: 1.200.000 VND')['annual_fee'])->toBe(1200000);
 });
 
 it('drafts Vietcombank credit cards with fees from each card page, and approval publishes them with the bank image', function () {
@@ -169,6 +171,39 @@ it('reads Techcombank and BIDV cards from their listing pages and the fee wordin
         ->and($bidv['the-bidv-visa-infinite']['details']['annual_fee_note'])->toContain('15.000.000')
         ->and($bidv['the-bidv-visa-cashback-online']['details'])->toMatchArray(['annual_fee' => 1000000, 'interest_free_days' => 45])
         ->and($bidv['the-bidv-visa-cashback-online']['details']['benefits'])->toContain('cashback', 'shopping');
+});
+
+it('lists VietinBank cards without inventing a fee the card page does not state, skipping discontinued cards', function () {
+    $items = app(RunSource::class)->handle(SyncSource::where('key', 'credit_card.vietinbank')->sole())['draft']->payload['items'];
+
+    expect($items)->toHaveCount(1)
+        ->and($items[0]['name'])->toBe('VietinBank Visa Platinum')
+        ->and($items[0]['image_url'])->toBe('https://vietinbank.vn/assets/4a042b7e-59f0-4b8a-9279-ac3a721148eb')
+        ->and($items[0]['details'])->toMatchArray(['annual_fee' => null, 'issuance_fee' => 0, 'network' => 'visa']);
+});
+
+it('reads ACB credit cards from the website content API, skipping debit and business cards', function () {
+    $items = app(RunSource::class)->handle(SyncSource::where('key', 'credit_card.acb')->sole())['draft']->payload['items'];
+
+    expect($items)->toHaveCount(1)
+        ->and($items[0])->toMatchArray(['key' => 'the-acb-visa-platinum', 'name' => 'ACB Visa Platinum', 'url' => 'https://acb.com.vn/the/the-acb-visa-platinum'])
+        ->and($items[0]['summary'])->toStartWith('Ưu đãi mỗi ngày, tiện ích mọi chi tiêu; Tích 5%')
+        ->and($items[0]['details'])->toMatchArray(['annual_fee' => 899000, 'interest_free_days' => 55, 'network' => 'visa'])
+        ->and($items[0]['details']['benefits'])->toContain('shopping', 'dining');
+});
+
+it('reads Sacombank cards with the annual fee from the card listing data', function () {
+    $items = collect(app(RunSource::class)->handle(SyncSource::where('key', 'credit_card.sacombank')->sole())['draft']->payload['items'])->keyBy('key');
+
+    expect($items['the-tin-dung-sacombank-visa-infinite'])->toMatchArray([
+        'name' => 'Sacombank Visa Infinite',
+        'url' => 'https://www.sacombank.com.vn/ca-nhan/the/the-tin-dung/the-tin-dung-sacombank-visa-infinite.html',
+        'image_url' => 'https://www.sacombank.com.vn/content/dam/sacombank/images/the-new/the-tin-dung/Visa%20Infinite_contactless-01.png',
+    ])
+        ->and($items['the-tin-dung-sacombank-visa-infinite']['details'])->toMatchArray(['annual_fee' => 29999000, 'network' => 'visa'])
+        ->and($items['the-tin-dung-sacombank-visa-infinite']['details']['benefits'])->toContain('travel')
+        ->and($items['the-tin-dung-sacombank-visa-platinum-cashback']['details']['annual_fee'])->toBe(599000)
+        ->and($items['the-tin-dung-sacombank-visa-platinum-cashback']['details']['benefits'])->toContain('cashback', 'shopping');
 });
 
 it('fails with an alert when the card listing comes back empty', function () {

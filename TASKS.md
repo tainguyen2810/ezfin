@@ -520,3 +520,8 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Test: `tests/Feature/DataSync/CatalogSyncTest.php`; toàn bộ Pest xanh.
 - Tiếp theo: thẻ/vay các ngân hàng còn lại (VietinBank, MB, ACB, TPBank, VPBank, Sacombank, Agribank), tài khoản thanh toán.
 
+### 15/11/2026 — E4 (phần 2): thêm thẻ VietinBank, ACB, Sacombank
+- `VietinbankCards` (trang Next.js lọc ?the=the_tin_dung, ảnh gốc từ /_next/image?url=), `AcbCards` (API /api/front/v1/posts), `SacombankCards` (JSON cardlisting.sacom.listing.json có phí thường niên). Bỏ thẻ "dừng phát hành", thẻ doanh nghiệp.
+- `CatalogParsing::cardTerms`: không lấy số tiền điều kiện miễn phí ("chi tiêu từ 2 triệu") làm phí thường niên; ưu tiên "miễn lãi ... N ngày".
+- Chưa tự động được: MB (trang dựng bằng JS qua API có Akamai), TPBank (danh sách dựng bằng JS), VPBank (chặn bot), Agribank.
+

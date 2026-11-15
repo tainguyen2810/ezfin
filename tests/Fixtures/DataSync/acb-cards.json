@@ -1,0 +1,89 @@
+{
+ "data": [
+  {
+   "id": 1,
+   "slug": "the-acb-visa-platinum",
+   "is_active": 1,
+   "title": "Thẻ ACB Visa Platinum",
+   "type": "the",
+   "short_description": "Ưu đãi mỗi ngày, tiện ích mọi chi tiêu​\n- Tích 5% điểm ACB rewards cho chi tiêu ẩm thực, mua sắm online\n- Trả góp mọi giao dịch từ 1 triệu đồng",
+   "featured_image": {
+    "id": 1,
+    "filename": "x.png",
+    "path": "https://acb.com.vn/acbwebsite/media/uVuVjg3orUQ7eBqgvRBx6ZkEQ8HtzE782aHIulMM.png"
+   },
+   "featured_image_1": null,
+   "categories": [
+    {
+     "id": 742,
+     "slug": "the-tin-dung"
+    }
+   ],
+   "_seoPaths": {
+    "path": "vi/the/the-acb-visa-platinum",
+    "paths": {
+     "en": "en/personal-cards/x",
+     "vi": "vi/the/the-acb-visa-platinum"
+    }
+   }
+  },
+  {
+   "id": 1,
+   "slug": "the-acb-visa-debit",
+   "is_active": 1,
+   "title": "Thẻ ACB Visa Debit",
+   "type": "the",
+   "short_description": "",
+   "featured_image": {
+    "id": 1,
+    "filename": "x.png",
+    "path": "https://acb.com.vn/acbwebsite/media/debit.png"
+   },
+   "featured_image_1": null,
+   "categories": [
+    {
+     "id": 742,
+     "slug": "the-ghi-no"
+    }
+   ],
+   "_seoPaths": {
+    "path": "vi/the/the-acb-visa-debit",
+    "paths": {
+     "en": "en/personal-cards/x",
+     "vi": "vi/the/the-acb-visa-debit"
+    }
+   }
+  },
+  {
+   "id": 1,
+   "slug": "the-acb-visa-business-hhb",
+   "is_active": 1,
+   "title": "Thẻ ACB Visa Business HHB",
+   "type": "the",
+   "short_description": "",
+   "featured_image": {
+    "id": 1,
+    "filename": "x.png",
+    "path": "https://acb.com.vn/acbwebsite/media/biz.png"
+   },
+   "featured_image_1": null,
+   "categories": [
+    {
+     "id": 742,
+     "slug": "the-tin-dung"
+    }
+   ],
+   "_seoPaths": {
+    "path": "vi/the/the-acb-visa-business-hhb",
+    "paths": {
+     "en": "en/personal-cards/x",
+     "vi": "vi/the/the-acb-visa-business-hhb"
+    }
+   }
+  }
+ ],
+ "meta": {
+  "current_page": 1,
+  "last_page": 1
+ }
+}
