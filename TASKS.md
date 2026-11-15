@@ -548,3 +548,8 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Sửa: `trustProxies(at: TRUSTED_PROXIES, mặc định *)` trong `bootstrap/app.php`; `URL::forceScheme('https')` khi APP_URL là https (`AppServiceProvider`). `fallback_locale` mặc định `en` để khóa Filament chưa có bản tiếng Việt không hiện tên khóa.
 - Production cần `APP_URL=https://ezfin.vn` trong .env.
 - Test: `tests/Feature/Core/HttpsUrlsTest.php`; toàn bộ Pest xanh (669).
+
+### 15/11/2026 — Bài viết kiến thức khởi đầu
+- `Content\Console\StarterContentCommand` (`ezfin:starter-content [--draft]`) + nội dung ở `Content\Support\StarterContent` (16 bài, 6 chuyên mục, tác giả "Ban biên tập EzFin" thay vì nhân vật giả lập; ảnh bìa dùng bộ ảnh minh họa trong `database/seeders/Demo/assets/covers`). Bỏ qua bài/chuyên mục/tác giả đã có theo slug.
+- Sửa bài demo: hạn mức bảo hiểm tiền gửi 350 triệu (từ 13/7/2026).
+- Test: `tests/Feature/Content/StarterContentTest.php`.

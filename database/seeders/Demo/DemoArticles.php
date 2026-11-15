@@ -89,7 +89,7 @@ class DemoArticles
                 'Tiền gửi online được ghi nhận như gửi tại quầy và được bảo hiểm tiền gửi theo cùng quy định. Điều cần cẩn thận là bảo mật tài khoản của bạn.',
                 '<p>Sổ tiết kiệm online là hợp đồng tiền gửi giữa bạn và ngân hàng, chỉ khác ở chỗ được mở trên ứng dụng thay vì tại quầy. Ngân hàng vẫn có nghĩa vụ trả gốc và lãi như tiền gửi thông thường.</p>
 <h2>Bảo hiểm tiền gửi</h2>
-<p>Tiền gửi bằng đồng Việt Nam của cá nhân tại ngân hàng tham gia bảo hiểm tiền gửi được chi trả tối đa <strong>125 triệu đồng</strong> cho mỗi người tại mỗi tổ chức tín dụng nếu tổ chức đó mất khả năng chi trả.</p>
+<p>Tiền gửi bằng đồng Việt Nam của cá nhân tại ngân hàng tham gia bảo hiểm tiền gửi được chi trả tối đa <strong>350 triệu đồng</strong> (từ 13/7/2026) cho mỗi người tại mỗi tổ chức tín dụng nếu tổ chức đó mất khả năng chi trả.</p>
 <h2>Rủi ro thật nằm ở đâu</h2>
 <ul><li>Lộ mật khẩu, mã OTP cho người lạ.</li><li>Cài ứng dụng giả mạo ngân hàng.</li><li>Bấm vào đường link lạ gửi qua tin nhắn.</li></ul>
 <p>Hãy bật xác thực sinh trắc học, không chia sẻ OTP và kiểm tra sổ trên ứng dụng ngay sau khi mở.</p>',
