@@ -299,3 +299,12 @@ it('does not delete a category or author that still has articles', function () {
     expect(auth()->user()->can('delete', $article->author))->toBeFalse()
         ->and(auth()->user()->can('delete', Author::factory()->create()))->toBeTrue();
 });
+
+it('uses the TinyMCE editor for the article body, loaded only on the article form', function () {
+    $this->actingAs(User::factory()->admin(Role::Editor)->create());
+
+    $this->get(CONTENT_ADMIN_URL.'bai-viet/create')->assertOk()
+        ->assertSee('data-tiny-editor="data.body"', false)
+        ->assertSee('tinymce-editor', false);
+    $this->get(CONTENT_ADMIN_URL.'bai-viet')->assertOk()->assertDontSee('tinymce-editor', false);
+});

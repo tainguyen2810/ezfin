@@ -58,18 +58,27 @@ final class ArticleHtml
             ->allowRelativeLinks()
             ->allowMediaSchemes(['https'])
             ->allowRelativeMedias()
-            ->allowElement('a', ['href', 'title'])
-            ->allowElement('img', ['src', 'alt', 'title', 'width', 'height', 'data-id'])
-            ->allowElement('ol', ['start'])
-            ->allowElement('th', ['colspan', 'rowspan'])
-            ->allowElement('td', ['colspan', 'rowspan'])
+            ->allowElement('a', ['href', 'title', 'target', 'rel', 'id', 'name'])
+            ->allowElement('img', ['src', 'alt', 'title', 'width', 'height', 'data-id', 'style'])
+            ->allowElement('ol', ['start', 'style'])
+            ->allowElement('ul', ['style'])
+            ->allowElement('th', ['colspan', 'rowspan', 'scope', 'style'])
+            ->allowElement('td', ['colspan', 'rowspan', 'style'])
+            ->allowElement('table', ['border', 'cellpadding', 'cellspacing', 'style'])
+            ->allowElement('col', ['span', 'style'])
+            ->allowElement('pre', ['class'])
+            ->allowElement('figure', ['class', 'style'])
+            ->withAttributeSanitizer(new StyleAttributeSanitizer)
             ->withMaxInputLength(2_000_000);
 
+        // Thẻ định dạng của TinyMCE; style được StyleAttributeSanitizer lọc theo danh sách thuộc tính an toàn.
         foreach ([
-            'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'sub', 'sup', 'h2', 'h3', 'h4', 'ul', 'li',
-            'blockquote', 'code', 'pre', 'hr', 'figure', 'figcaption',
-            'table', 'colgroup', 'col', 'thead', 'tbody', 'tr',
+            'p', 'h2', 'h3', 'h4', 'li', 'span', 'div', 'blockquote', 'tr', 'thead', 'tbody', 'tfoot', 'caption', 'colgroup',
         ] as $element) {
+            $config = $config->allowElement($element, ['style']);
+        }
+
+        foreach (['br', 'strong', 'b', 'em', 'i', 'u', 's', 'sub', 'sup', 'code', 'hr', 'figcaption', 'mark', 'small'] as $element) {
             $config = $config->allowElement($element);
         }
 

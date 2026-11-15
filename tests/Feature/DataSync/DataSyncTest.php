@@ -14,7 +14,9 @@ use App\Modules\DataSync\Enums\DraftStatus;
 use App\Modules\DataSync\Enums\SourceHealth;
 use App\Modules\DataSync\Filament\Resources\SyncDrafts\Pages\ListSyncDrafts;
 use App\Modules\DataSync\Filament\Resources\SyncDrafts\Pages\ViewSyncDraft;
+use App\Modules\DataSync\Filament\Resources\SyncDrafts\SyncDraftResource;
 use App\Modules\DataSync\Filament\Resources\SyncSources\Pages\ListSyncSources;
+use App\Modules\DataSync\Jobs\RunSourceJob;
 use App\Modules\DataSync\Models\SyncDraft;
 use App\Modules\DataSync\Models\SyncSource;
 use App\Modules\DataSync\Notifications\SourceAlert;
@@ -25,6 +27,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Pennant\Feature;
 use Livewire\Livewire;
@@ -271,4 +274,50 @@ it('shows the automatic data group first in the admin menu', function () {
 
     $groups = collect(Filament::getCurrentPanel()->getNavigation())->map(fn ($group) => $group->getLabel())->filter()->values();
     expect($groups->first())->toBe('Dữ liệu tự động');
+});
+
+it('runs, switches on/off and toggles auto-approve for selected sources in bulk; filters by state', function () {
+    Queue::fake();
+    $operator = User::factory()->admin(Role::DataOperator)->create();
+    $vcb = source('savings.vietcombank');
+    $bidv = source('savings.bidv');
+    $bidv->forceFill(['consecutive_failures' => 2, 'last_error' => 'Bị chặn'])->save();
+
+    $this->actingAs(User::factory()->admin(Role::Editor)->create());
+    Livewire::test(ListSyncSources::class)->assertTableBulkActionHidden('runSelected');
+
+    $this->actingAs($operator);
+    Livewire::test(ListSyncSources::class)
+        ->callTableBulkAction('runSelected', [$vcb, $bidv])
+        ->assertNotified('Đã xếp 2 nguồn vào hàng chờ');
+    Queue::assertPushed(RunSourceJob::class, 2);
+
+    Livewire::test(ListSyncSources::class)->callTableBulkAction('disable', [$vcb, $bidv]);
+    expect($vcb->fresh()->is_enabled)->toBeFalse()->and($bidv->fresh()->is_enabled)->toBeFalse();
+    Livewire::test(ListSyncSources::class)->callTableBulkAction('autoOn', [$vcb]);
+    expect($vcb->fresh()->auto_approve)->toBeTrue();
+
+    Livewire::test(ListSyncSources::class)
+        ->filterTable('state', 'failing')
+        ->assertCanSeeTableRecords([$bidv])
+        ->assertCanNotSeeTableRecords([$vcb]);
+
+    // Job chạy nguồn như nút "Chạy ngay".
+    (new RunSourceJob(source('savings.agribank')->id))->handle(app(RunSource::class));
+    expect(source('savings.agribank')->pendingDrafts()->count())->toBe(1);
+});
+
+it('links the pending count to the drafts of that source', function () {
+    $this->actingAs(User::factory()->admin(Role::DataOperator)->create());
+    $run = app(RunSource::class);
+    $vcb = $run->handle(source('savings.vietcombank'))['draft'];
+    $bidv = $run->handle(source('savings.bidv'))['draft'];
+
+    $url = SyncDraftResource::getUrl('index', ['filters' => ['source' => ['value' => $vcb->source_id]]]);
+    $this->get(SOURCES_URL)->assertOk()->assertSee(str_replace('&', '&amp;', $url), false);
+
+    Livewire::withQueryParams(['filters' => ['source' => ['value' => $vcb->source_id]]])
+        ->test(ListSyncDrafts::class)
+        ->assertCanSeeTableRecords([$vcb])
+        ->assertCanNotSeeTableRecords([$bidv]);
 });
