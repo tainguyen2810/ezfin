@@ -70,6 +70,13 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 15/11/2026 — Quản trị viên đăng nhập từ /dang-nhap
+
+- Xong: `/dang-nhap` nhận ra tài khoản có vai trò nội bộ sau khi mật khẩu đúng và chuyển vào trang quản trị (`Core\Actions\AdminSignIn`). Tài khoản đã bật 2FA thì không đăng nhập mà chuyển sang form quản trị (điền sẵn email) để qua bước nhập mã. Đóng lỗ hổng cũ: đăng nhập ở `/dang-nhap` rồi mở đường dẫn quản trị là bỏ qua 2FA.
+- Test đã chạy: `vendor/bin/pest` (toàn bộ xanh, thêm `tests/Feature/Admin/PublicLoginForAdminsTest.php`), `vendor/bin/pint`.
+- File đổi: `Personal/Http/Controllers/Auth/LoginController.php`, `Core/Filament/Pages/Login.php`, `Core/Actions/AdminSignIn.php`.
+- Tiếp theo: deploy lên aaPanel (git pull + optimize).
+
 ### 15/11/2026 — Triển khai production trên aaPanel
 
 - Xong: site ezfin.vn chạy trên aaPanel (git clone, DB `ezfin_vn`, chạy từ `/public`, cron mỗi phút cho schedule + queue). `ezfin:check` đạt, còn cảnh báo email (chưa có Brevo) và EZFIN_INDEXABLE=false.
