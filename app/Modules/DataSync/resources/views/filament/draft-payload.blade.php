@@ -14,7 +14,21 @@
     $cells = $rows->keyBy(fn ($row) => $key($row).'|'.$row['term']);
 @endphp
 
-@if ($kind !== \App\Modules\DataSync\Enums\SyncKind::Savings)
+@if ($kind === \App\Modules\DataSync\Enums\SyncKind::Institution)
+    @php($before = $draft->previousApproved()?->payload)
+    <dl class="grid gap-2 text-sm sm:grid-cols-2">
+        <div><dt class="font-medium">Tên</dt><dd>{{ $draft->payload['name'] }} ({{ $draft->payload['short_name'] }})</dd></div>
+        <div><dt class="font-medium">Website</dt><dd>{{ $draft->payload['website'] }}</dd></div>
+        <div class="sm:col-span-2">
+            <dt class="font-medium">Logo lấy từ trang chủ</dt>
+            <dd class="mt-1"><img src="{{ $draft->payload['logo_url'] }}" alt="Logo {{ $draft->payload['short_name'] }}" style="max-height: 64px; max-width: 240px" referrerpolicy="no-referrer"></dd>
+            <dd class="mt-1 break-all text-gray-500">{{ $draft->payload['logo_url'] }}</dd>
+            @if ($before && $before['logo_url'] !== $draft->payload['logo_url'])
+                <dd class="mt-1 text-gray-500">Logo đã duyệt trước: {{ $before['logo_url'] }}</dd>
+            @endif
+        </div>
+    </dl>
+@elseif ($kind !== \App\Modules\DataSync\Enums\SyncKind::Savings)
     @php
         $nameKey = $kind === \App\Modules\DataSync\Enums\SyncKind::Fx ? 'currency' : 'product';
         $old = collect($draft->previousApproved()?->rows() ?? [])->keyBy($nameKey);

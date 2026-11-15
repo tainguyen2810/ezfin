@@ -76,7 +76,9 @@ class SyncSourceResource extends Resource
                     ->tooltip('Ghi thẳng vào dữ liệu sản phẩm khi dữ liệu hợp lệ và không có cảnh báo thay đổi lớn')
                     ->disabled(fn (SyncSource $record) => ! static::canEdit($record)),
             ])
-            ->defaultSort('name')
+            ->defaultSort(fn (Builder $query) => $query->orderBy('kind')->orderBy('name'))
+            ->paginated([25, 50, 100])
+            ->defaultPaginationPageOption(50)
             ->filters([
                 SelectFilter::make('kind')->label('Loại')->options(SyncKind::class),
             ])

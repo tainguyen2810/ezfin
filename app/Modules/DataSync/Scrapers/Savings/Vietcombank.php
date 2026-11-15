@@ -21,11 +21,6 @@ class Vietcombank extends SavingsScraper
         return 'vietcombank';
     }
 
-    public function institution(): array
-    {
-        return ['slug' => 'vietcombank', 'name' => 'Ngân hàng TMCP Ngoại thương Việt Nam', 'short_name' => 'Vietcombank', 'website' => 'https://www.vietcombank.com.vn'];
-    }
-
     public function url(): string
     {
         return 'https://www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-tien-ich/KHCN---Lai-suat';

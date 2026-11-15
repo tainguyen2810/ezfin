@@ -27,11 +27,6 @@ class MbBank extends SavingsScraper
         return 'mb';
     }
 
-    public function institution(): array
-    {
-        return ['slug' => 'mb', 'name' => 'Ngân hàng TMCP Quân đội', 'short_name' => 'MB', 'website' => 'https://www.mbbank.com.vn'];
-    }
-
     public function url(): string
     {
         return 'https://www.mbbank.com.vn/ho-tro/bieu-lai-suat';

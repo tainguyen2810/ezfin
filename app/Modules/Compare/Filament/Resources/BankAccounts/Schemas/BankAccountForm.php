@@ -46,6 +46,7 @@ class BankAccountForm
             ]),
             Grid::make(1)->columnSpan(['lg' => 1])->schema([
                 ProductFormComponents::publishingSection(),
+                ProductFormComponents::imageSection(),
                 SeoFields::section(),
             ]),
         ]);

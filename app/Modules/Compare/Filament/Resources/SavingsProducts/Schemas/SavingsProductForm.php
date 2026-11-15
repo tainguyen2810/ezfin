@@ -34,6 +34,7 @@ class SavingsProductForm
             ]),
             Grid::make(1)->columnSpan(['lg' => 1])->schema([
                 ProductFormComponents::publishingSection(),
+                ProductFormComponents::imageSection(),
             ]),
             self::ratesSection()->columnSpanFull(),
         ]);

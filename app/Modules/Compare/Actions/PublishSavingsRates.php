@@ -2,7 +2,6 @@
 
 namespace App\Modules\Compare\Actions;
 
-use App\Modules\Compare\Enums\InstitutionType;
 use App\Modules\Compare\Enums\ProductStatus;
 use App\Modules\Compare\Enums\ProductType;
 use App\Modules\Compare\Enums\SavingsChannel;
@@ -30,13 +29,8 @@ class PublishSavingsRates
     public function handle(array $institution, string $sourceUrl, array $rows, ?Carbon $effectiveFrom = null): array
     {
         return DB::transaction(function () use ($institution, $sourceUrl, $rows, $effectiveFrom) {
-            $bank = FinancialInstitution::query()->firstOrCreate(['slug' => $institution['slug']], [
-                'type' => InstitutionType::Bank,
-                'name' => $institution['name'],
-                'short_name' => $institution['short_name'],
-                'website' => $institution['website'],
-                'is_active' => true,
-            ]);
+            $bank = FinancialInstitution::query()->where('slug', $institution['slug'])->first()
+                ?? app(UpdateInstitutionProfile::class)->handle($institution);
 
             $count = 0;
             $date = null;

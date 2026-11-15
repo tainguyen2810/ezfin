@@ -22,11 +22,6 @@ class Tpbank extends SavingsScraper
         return 'tpbank';
     }
 
-    public function institution(): array
-    {
-        return ['slug' => 'tpbank', 'name' => 'Ngân hàng TMCP Tiên Phong', 'short_name' => 'TPBank', 'website' => self::BASE];
-    }
-
     public function url(): string
     {
         return self::BASE.'/cong-cu-tinh-toan/lai-suat';

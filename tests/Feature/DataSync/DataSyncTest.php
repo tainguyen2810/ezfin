@@ -56,7 +56,8 @@ it('registers every bank source and runs them all from the scheduled command', f
     $this->artisan('ezfin:sync', ['--kind' => 'savings'])->assertSuccessful();
 
     $savings = SyncSource::where('kind', 'savings')->get();
-    expect(SyncSource::count())->toBe(count(SourceRegistry::SCRAPERS))
+    expect(SyncSource::count())->toBe(count(app(SourceRegistry::class)->all()))
+        ->and(SyncSource::where('kind', 'institution')->count())->toBe(10)
         ->and($savings)->toHaveCount(7)
         ->and(SyncDraft::where('status', DraftStatus::Pending)->count())->toBe(7)
         ->and($savings->every(fn (SyncSource $source) => $source->health() === SourceHealth::Ok && ! $source->auto_approve))->toBeTrue()

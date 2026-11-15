@@ -5,10 +5,8 @@ namespace App\Modules\Compare\Filament\Resources\CreditCards\Schemas;
 use App\Modules\Compare\Enums\CardBenefit;
 use App\Modules\Compare\Enums\CardNetwork;
 use App\Modules\Compare\Filament\Resources\Shared\ProductFormComponents;
-use App\Modules\Compare\Models\FinancialProduct;
 use App\Modules\Core\Filament\Schemas\SeoFields;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -28,16 +26,7 @@ class CreditCardForm
             ]),
             Grid::make(1)->columnSpan(['lg' => 1])->schema([
                 ProductFormComponents::publishingSection(),
-                Section::make('Ảnh thẻ')->schema([
-                    FileUpload::make('image_path')->hiddenLabel()
-                        ->image()
-                        ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/webp'])
-                        ->maxSize(1024)
-                        ->disk('public')
-                        ->directory(FinancialProduct::IMAGE_DIRECTORY)
-                        ->visibility('public')
-                        ->helperText('Ảnh mặt trước thẻ từ trang chính thức. PNG, JPG hoặc WebP, tối đa 1 MB.'),
-                ]),
+                ProductFormComponents::imageSection('Ảnh thẻ', 'Ảnh mặt trước thẻ từ trang chính thức. PNG, JPG hoặc WebP, tối đa 1 MB.'),
                 SeoFields::section(),
             ]),
         ]);

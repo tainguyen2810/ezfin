@@ -31,3 +31,5 @@ Schedule::command('ezfin:sync', ['--kind' => 'savings'])->twiceDailyAt(6, 14, 20
 // Tỷ giá, giá vàng: mỗi giờ trong ngày (nguồn cập nhật nhiều lần/ngày), tự duyệt khi hợp lệ.
 Schedule::command('ezfin:sync', ['--kind' => 'fx'])->hourlyAt(5)->between('7:00', '19:00')->withoutOverlapping(30)->onOneServer();
 Schedule::command('ezfin:sync', ['--kind' => 'gold'])->hourlyAt(10)->between('7:00', '19:00')->withoutOverlapping(30)->onOneServer();
+// Hồ sơ ngân hàng (website, logo): mỗi tuần, chờ duyệt.
+Schedule::command('ezfin:sync', ['--kind' => 'institution'])->weeklyOn(1, '05:30')->withoutOverlapping(30)->onOneServer();
