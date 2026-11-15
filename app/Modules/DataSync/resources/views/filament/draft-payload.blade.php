@@ -15,7 +15,9 @@
 @endphp
 
 @if ($kind === \App\Modules\DataSync\Enums\SyncKind::Institution)
-    @php($before = $draft->previousApproved()?->payload)
+    @php
+        $before = $draft->previousApproved()?->payload;
+    @endphp
     <dl class="grid gap-2 text-sm sm:grid-cols-2">
         <div><dt class="font-medium">Tên</dt><dd>{{ $draft->payload['name'] }} ({{ $draft->payload['short_name'] }})</dd></div>
         <div><dt class="font-medium">Website</dt><dd>{{ $draft->payload['website'] }}</dd></div>
@@ -28,6 +30,62 @@
             @endif
         </div>
     </dl>
+@elseif ($kind->isCatalog())
+    @php
+        $before = collect($draft->previousApproved()?->payload['items'] ?? [])->keyBy('key');
+        $labels = [
+            'network' => 'Thương hiệu', 'annual_fee' => 'Phí thường niên', 'annual_fee_note' => 'Ghi chú phí', 'issuance_fee' => 'Phí phát hành',
+            'interest_free_days' => 'Miễn lãi tối đa (ngày)', 'benefits' => 'Nhóm ưu đãi', 'kind' => 'Loại vay', 'max_ltv' => 'Cho vay tối đa (% giá trị)',
+            'max_amount' => 'Số tiền vay tối đa', 'max_term_months' => 'Thời hạn tối đa (tháng)', 'promo_rate' => 'Lãi ưu đãi (%/năm)',
+            'monthly_fee' => 'Phí quản lý/tháng', 'features' => 'Tính năng',
+        ];
+    @endphp
+    <p class="mb-2 text-sm">{{ count($draft->payload['items']) }} sản phẩm. Ảnh là ảnh gốc trên trang ngân hàng; số liệu trống là trang không ghi (giữ nguyên số liệu đã nhập tay).</p>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr>
+                    <th class="px-2 py-1 text-start">Ảnh</th>
+                    <th class="px-2 py-1 text-start">Sản phẩm</th>
+                    <th class="px-2 py-1 text-start">Thông số đọc được</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($draft->payload['items'] as $item)
+                    @php
+                        $old = $before->get($item['key']);
+                    @endphp
+                    <tr class="border-t border-gray-200 align-top dark:border-white/10">
+                        <td class="px-2 py-1">
+                            @if ($item['image_url'])
+                                <img src="{{ $item['image_url'] }}" alt="{{ $item['name'] }}" style="max-height: 56px; max-width: 96px" referrerpolicy="no-referrer">
+                            @endif
+                        </td>
+                        <td class="px-2 py-1">
+                            <a href="{{ $item['url'] }}" target="_blank" rel="noopener noreferrer" class="font-medium underline">{{ $item['name'] }}</a>
+                            @if ($before->isNotEmpty() && ! $old)
+                                <span class="ms-1 text-xs font-medium text-success-600">mới</span>
+                            @endif
+                            @if ($item['summary'])
+                                <div class="text-gray-500">{{ $item['summary'] }}</div>
+                            @endif
+                        </td>
+                        <td class="px-2 py-1">
+                            @foreach (collect($item['details'])->reject(fn ($value) => $value === null || $value === []) as $field => $value)
+                                <div>
+                                    <span class="text-gray-500">{{ $labels[$field] ?? $field }}:</span>
+                                    {{ is_array($value) ? implode(', ', $value) : (is_int($value) && $value >= 1000 ? Format::money($value) : $value) }}
+                                    @if ($old && ($old['details'][$field] ?? null) !== null && $old['details'][$field] !== $value)
+                                        <span class="text-gray-500">(trước: {{ is_array($old['details'][$field]) ? implode(', ', $old['details'][$field]) : $old['details'][$field] }})</span>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @elseif ($kind !== \App\Modules\DataSync\Enums\SyncKind::Savings)
     @php
         $nameKey = $kind === \App\Modules\DataSync\Enums\SyncKind::Fx ? 'currency' : 'product';

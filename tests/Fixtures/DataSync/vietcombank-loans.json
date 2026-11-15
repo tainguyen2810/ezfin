@@ -1,0 +1,49 @@
+{
+ "TotalTime": 12,
+ "QueryTime": 3,
+ "Signature": "",
+ "Index": "x",
+ "Count": 4,
+ "Results": [
+  {
+   "Id": "x",
+   "Language": "vi-VN",
+   "Path": "/sitecore/content/x",
+   "Url": "/vi-VN/KHCN/SPDV/Vay/Vay-tin-chap-doi-voi-nguoi-lao-dong",
+   "Name": null,
+   "Html": "<div class=\"card-item\" data-type=\"\">\r\n <a href=\"/vi-VN/KHCN/SPDV/Vay/Vay-tin-chap-doi-voi-nguoi-lao-dong\" class=\"card-img ratio ratio--card\"><img src=\"/-/media/Project/VCB-Sites/VCB/KHCN/San-pham-Dich-vu/Vay/Danh-sach-vay/1.jpg?h=32&amp;w=32&amp;ts=20230505082513\" alt=\"\"/></a>\r\n <div class=\"card\"><div class=\"card-tag\"></div><div class=\"card-name same-height-title\"><a href=\"/vi-VN/KHCN/SPDV/Vay/Vay-tin-chap-doi-voi-nguoi-lao-dong\" class=\"text-decoration-none stretched-link\"> Vay tín chấp theo lương </a></div><div class=\"card__footer\"><div class=\"card-features\"><div class=\"feature\"><div class=\"feature-name\"> Mức vay </div><div class=\"feature-value\"> Linh hoạt </div></div><div class=\"feature\"><div class=\"feature-name\"> Thời hạn vay tối đa </div><div class=\"feature-value\"> 84 tháng </div></div></div><div class=\"card-actions\"><a class=\"btn btn-secondary btn-left \" href=\"https://dangkydichvu.vietcombank.com.vn/\">Mở thẻ ngay</a></div></div></div></div>"
+  },
+  {
+   "Id": "x",
+   "Language": "vi-VN",
+   "Path": "/sitecore/content/x",
+   "Url": "/vi-VN/KHCN/SPDV/Vay/Vay-mua--oto",
+   "Name": null,
+   "Html": "<div class=\"card-item\" data-type=\"\">\r\n <a href=\"/vi-VN/KHCN/SPDV/Vay/Vay-mua--oto\" class=\"card-img ratio ratio--card\"><img src=\"/-/media/Project/VCB-Sites/VCB/KHCN/San-pham-Dich-vu/Vay/Danh-sach-vay/3-(1).jpg?h=32&amp;w=32&amp;ts=20230505082513\" alt=\"\"/></a>\r\n <div class=\"card\"><div class=\"card-tag\"></div><div class=\"card-name same-height-title\"><a href=\"/vi-VN/KHCN/SPDV/Vay/Vay-mua--oto\" class=\"text-decoration-none stretched-link\"> Vay mua ô tô </a></div><div class=\"card__footer\"><div class=\"card-features\"><div class=\"feature\"><div class=\"feature-name\"> MỨC VAY LÊN TỚI </div><div class=\"feature-value\"> 100% giá trị xe </div></div><div class=\"feature\"><div class=\"feature-name\"> THỜI hạn VAY TỐI ĐA </div><div class=\"feature-value\"> 96 tháng </div></div></div><div class=\"card-actions\"><a class=\"btn btn-secondary btn-left \" href=\"https://dangkydichvu.vietcombank.com.vn/\">Mở thẻ ngay</a></div></div></div></div>"
+  },
+  {
+   "Id": "x",
+   "Language": "vi-VN",
+   "Path": "/sitecore/content/x",
+   "Url": "/vi-VN/KHCN/SPDV/Vay/An-tam-kinh-doanh",
+   "Name": null,
+   "Html": "<div class=\"card-item\" data-type=\"\">\r\n <a href=\"/vi-VN/KHCN/SPDV/Vay/An-tam-kinh-doanh\" class=\"card-img ratio ratio--card\"><img src=\"/-/media/Project/VCB-Sites/VCB/KHCN/San-pham-Dich-vu/Vay/Danh-sach-vay/4.jpg?h=32&amp;w=32&amp;ts=20230505082513\" alt=\"\"/></a>\r\n <div class=\"card\"><div class=\"card-tag\"></div><div class=\"card-name same-height-title\"><a href=\"/vi-VN/KHCN/SPDV/Vay/An-tam-kinh-doanh\" class=\"text-decoration-none stretched-link\"> An tâm kinh doanh </a></div><div class=\"card__footer\"><div class=\"card-features\"><div class=\"feature\"><div class=\"feature-name\"> mức vay LÊN TỚI </div><div class=\"feature-value\"> 70% phương án vay </div></div><div class=\"feature\"><div class=\"feature-name\"> Thời gian vay tối đa </div><div class=\"feature-value\"> 84 tháng </div></div></div><div class=\"card-actions\"><a class=\"btn btn-secondary btn-left \" href=\"https://dangkydichvu.vietcombank.com.vn/\">Mở thẻ ngay</a></div></div></div></div>"
+  },
+  {
+   "Id": "x",
+   "Language": "vi-VN",
+   "Path": "/sitecore/content/x",
+   "Url": "/vi-VN/KHCN/SPDV/Vay/Nha-moi-thanh-dat",
+   "Name": null,
+   "Html": "<div class=\"card-item\" data-type=\"\">\r\n <a href=\"/vi-VN/KHCN/SPDV/Vay/Nha-moi-thanh-dat\" class=\"card-img ratio ratio--card\"><img src=\"/-/media/Project/VCB-Sites/VCB/KHCN/San-pham-Dich-vu/Vay/Danh-sach-vay/5.jpg?h=32&amp;w=32&amp;ts=20230505082513\" alt=\"\"/></a>\r\n <div class=\"card\"><div class=\"card-tag\"></div><div class=\"card-name same-height-title\"><a href=\"/vi-VN/KHCN/SPDV/Vay/Nha-moi-thanh-dat\" class=\"text-decoration-none stretched-link\"> Nhà Mới Thành Đạt </a></div><div class=\"card__footer\"><div class=\"card-features\"><div class=\"feature\"><div class=\"feature-name\"> Mức cho vay lên tới </div><div class=\"feature-value\"> 70% giá trị căn nhà </div></div><div class=\"feature\"><div class=\"feature-name\"> Thời hạn vay tối đa </div><div class=\"feature-value\"> 40 năm </div></div></div><div class=\"card-actions\"><a class=\"btn btn-secondary btn-left \" href=\"https://dangkydichvu.vietcombank.com.vn/\">Mở thẻ ngay</a></div></div></div></div>"
+  },
+  {
+   "Id": "x",
+   "Language": "vi-VN",
+   "Path": "/sitecore/content/x",
+   "Url": "/vi-VN/KHCN/SPDV/Vay/Vay-tieu-dung-co-tsbd",
+   "Name": null,
+   "Html": "<div class=\"card-item\" data-type=\"\">\r\n <a href=\"/vi-VN/KHCN/SPDV/Vay/Vay-tieu-dung-co-tsbd\" class=\"card-img ratio ratio--card\"><img src=\"/-/media/Project/VCB-Sites/VCB/KHCN/San-pham-Dich-vu/Vay/Danh-sach-vay/6.jpg?h=32&amp;w=32&amp;ts=20230505082513\" alt=\"\"/></a>\r\n <div class=\"card\"><div class=\"card-tag\"></div><div class=\"card-name same-height-title\"><a href=\"/vi-VN/KHCN/SPDV/Vay/Vay-tieu-dung-co-tsbd\" class=\"text-decoration-none stretched-link\"> Vay tiêu dùng có tài sản bảo đảm </a></div><div class=\"card__footer\"><div class=\"card-features\"><div class=\"feature\"><div class=\"feature-name\"> Mức vay tối đa </div><div class=\"feature-value\"> 02 tỷ VND </div></div><div class=\"feature\"><div class=\"feature-name\"> Thời hạn vay tối đa </div><div class=\"feature-value\"> 120 tháng </div></div></div><div class=\"card-actions\"><a class=\"btn btn-secondary btn-left \" href=\"https://dangkydichvu.vietcombank.com.vn/\">Mở thẻ ngay</a></div></div></div></div>"
+  }
+ ]
+}

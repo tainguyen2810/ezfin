@@ -1,0 +1,25 @@
+{
+ "TotalTime": 12,
+ "QueryTime": 3,
+ "Signature": "",
+ "Index": "x",
+ "Count": 2,
+ "Results": [
+  {
+   "Id": "x",
+   "Language": "vi-VN",
+   "Path": "/sitecore/content/x",
+   "Url": "/vi-VN/KHCN/SPDV/The/Credit_VCB-Vibe-Platinum",
+   "Name": null,
+   "Html": "<div class=\"card-item\" data-type=\"Thẻ tín dụng\">\r\n <a href=\"/vi-VN/KHCN/SPDV/The/Credit_VCB-Vibe-Platinum\" class=\"card-img ratio ratio--card\"><img src=\"/-/media/Project/VCB-Sites/VCB/KHCN/San-pham-Dich-vu/The/Chi-tiet-the/Destop/Card-Vibe-Platinum.png?h=32&amp;w=32&amp;ts=20230505082513\" alt=\"\"/></a>\r\n <div class=\"card\"><div class=\"card-tag\"></div><div class=\"card-name same-height-title\"><a href=\"/vi-VN/KHCN/SPDV/The/Credit_VCB-Vibe-Platinum\" class=\"text-decoration-none stretched-link\"> Vietcombank Vibe Platinum </a></div><div class=\"card__footer\"><div class=\"card-features\"><div class=\"feature\"><div class=\"feature-name\"> Tích điểm VCB Rewards </div><div class=\"feature-value\"> x10 điểm thưởng </div></div><div class=\"feature\"><div class=\"feature-name\"> Bảo hiểm chuyến đi </div><div class=\"feature-value\"> Đến 11,65 tỷ VND </div></div></div><div class=\"card-actions\"><a class=\"btn btn-secondary btn-left \" href=\"https://dangkydichvu.vietcombank.com.vn/\">Mở thẻ ngay</a></div></div></div></div>"
+  },
+  {
+   "Id": "x",
+   "Language": "vi-VN",
+   "Path": "/sitecore/content/x",
+   "Url": "/vi-VN/KHCN/SPDV/The/Credit_VCB-VNAirlines-Amex",
+   "Name": null,
+   "Html": "<div class=\"card-item\" data-type=\"Thẻ tín dụng\">\r\n <a href=\"/vi-VN/KHCN/SPDV/The/Credit_VCB-VNAirlines-Amex\" class=\"card-img ratio ratio--card\"><img src=\"/-/media/Project/VCB-Sites/VCB/KHCN/San-pham-Dich-vu/The/Chi-tiet-the/Destop/Card VNA Amex.png?h=32&amp;w=32&amp;ts=20230505082513\" alt=\"\"/></a>\r\n <div class=\"card\"><div class=\"card-tag\"></div><div class=\"card-name same-height-title\"><a href=\"/vi-VN/KHCN/SPDV/The/Credit_VCB-VNAirlines-Amex\" class=\"text-decoration-none stretched-link\"> Vietcombank Vietnam Airlines American Express® </a></div><div class=\"card__footer\"><div class=\"card-features\"><div class=\"feature\"><div class=\"feature-name\"> Tích lũy dặm Bông Sen Vàng </div><div class=\"feature-value\"> Đến 1,5 dặm/USD </div></div></div><div class=\"card-actions\"><a class=\"btn btn-secondary btn-left \" href=\"https://dangkydichvu.vietcombank.com.vn/\">Mở thẻ ngay</a></div></div></div></div>"
+  }
+ ]
+}

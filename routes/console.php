@@ -33,3 +33,7 @@ Schedule::command('ezfin:sync', ['--kind' => 'fx'])->hourlyAt(5)->between('7:00'
 Schedule::command('ezfin:sync', ['--kind' => 'gold'])->hourlyAt(10)->between('7:00', '19:00')->withoutOverlapping(30)->onOneServer();
 // Hồ sơ ngân hàng (website, logo): mỗi tuần, chờ duyệt.
 Schedule::command('ezfin:sync', ['--kind' => 'institution'])->weeklyOn(1, '05:30')->withoutOverlapping(30)->onOneServer();
+// Danh mục thẻ tín dụng, khoản vay, tài khoản (đọc cả trang chi tiết từng sản phẩm, chờ duyệt): hằng tuần.
+Schedule::command('ezfin:sync', ['--kind' => 'credit_card'])->weeklyOn(2, '05:30')->withoutOverlapping(60)->onOneServer();
+Schedule::command('ezfin:sync', ['--kind' => 'loan'])->weeklyOn(3, '05:30')->withoutOverlapping(60)->onOneServer();
+Schedule::command('ezfin:sync', ['--kind' => 'bank_account'])->weeklyOn(4, '05:30')->withoutOverlapping(60)->onOneServer();

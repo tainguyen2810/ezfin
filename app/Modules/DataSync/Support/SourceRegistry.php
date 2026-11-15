@@ -4,6 +4,7 @@ namespace App\Modules\DataSync\Support;
 
 use App\Modules\DataSync\Contracts\Scraper;
 use App\Modules\DataSync\Models\SyncSource;
+use App\Modules\DataSync\Scrapers\Catalog;
 use App\Modules\DataSync\Scrapers\Institutions\BankProfile;
 use App\Modules\DataSync\Scrapers\Markets;
 use App\Modules\DataSync\Scrapers\Savings;
@@ -26,6 +27,10 @@ class SourceRegistry
         Savings\Tpbank::class,
         Markets\VietcombankFx::class,
         Markets\SjcGold::class,
+        Catalog\VietcombankCards::class,
+        Catalog\VietcombankLoans::class,
+        Catalog\TechcombankCards::class,
+        Catalog\BidvCards::class,
     ];
 
     /** @var array<string, Scraper>|null */

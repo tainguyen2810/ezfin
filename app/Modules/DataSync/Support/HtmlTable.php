@@ -84,4 +84,21 @@ class HtmlTable
 
         return null;
     }
+
+    /**
+     * Các phần tử có class cho trước (so khớp cả từ, như CSS ".class"), trong cả trang hoặc trong $context.
+     *
+     * @return list<DOMElement>
+     */
+    public static function byClass(DOMXPath $xpath, string $class, ?\DOMNode $context = null): array
+    {
+        $query = ($context ? './/' : '//').'*[contains(concat(" ", normalize-space(@class), " "), " '.$class.' ")]';
+
+        return array_values(array_filter(iterator_to_array($xpath->query($query, $context) ?: [], false), fn ($node) => $node instanceof DOMElement));
+    }
+
+    public static function firstByClass(DOMXPath $xpath, string $class, ?\DOMNode $context = null): ?DOMElement
+    {
+        return self::byClass($xpath, $class, $context)[0] ?? null;
+    }
 }
