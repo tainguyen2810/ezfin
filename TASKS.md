@@ -594,3 +594,9 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Test: `vendor/bin/pest` 688 xanh; `test:ui` thêm /vay, /ngan-hang, không tràn ngang, không lỗi JS.
 - Chưa giải quyết: khoản vay Vietcombank trên production thiếu lãi suất và hạn mức (bộ thu thập chỉ lấy tên, loại, thời hạn).
 - Tiếp theo: deploy khi Tai đồng ý.
+
+### 15/11/2026 (khuya) — Lãi suất tiết kiệm dạng lưới + Sắp xếp
+
+- Xong: `/lai-suat-tiet-kiem` lưới 3 ô/hàng theo mockup Tai duyệt; Tai yêu cầu thêm sắp xếp theo ngân hàng lãi cao nhất trong kỳ hạn → `SavingsFilters::SORTS` + `arrange()` (lai-cao, moi-ngan-hang, ten-ngan-hang). `x-ui.product-tile` thêm `detailLabel`.
+- Test: `vendor/bin/pest` 689 xanh; `test:ui` không tràn ngang, không lỗi JS.
+- Tiếp theo: deploy khi Tai đồng ý.

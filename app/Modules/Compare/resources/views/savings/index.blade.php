@@ -1,6 +1,8 @@
 @php
     $paymentLabel = $filters->payment ? 'lĩnh lãi '.mb_strtolower($filters->payment->getLabel()) : 'mọi hình thức lĩnh lãi';
-    $leader = $results->count() > 1 && $results[0]['interest'] > $results[1]['interest'];
+    $ranked = $filters->sort !== 'ten-ngan-hang';
+    $top = $results->max('interest');
+    $leader = $results->count() > 1 && $results->where('interest', $top)->count() === 1;
     $partnerLinks = app(\App\Modules\Partner\Actions\PartnerLinks::class)->forProducts($results->map(fn ($result) => $result['rate']->product_id));
 @endphp
 <x-layouts.public title="So sánh lãi suất tiết kiệm"
@@ -16,12 +18,13 @@
         </div>
 
         <x-ui.card class="mt-6">
-            <form method="GET" action="{{ route('compare.savings.index') }}" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto] lg:items-end">
+            <form method="GET" action="{{ route('compare.savings.index') }}" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.5fr_auto] lg:items-end">
                 <x-ui.money-input name="so_tien" label="Số tiền gửi" :value="$filters->amount" required />
                 <x-ui.select name="ky_han" label="Kỳ hạn" :options="$terms" :value="$filters->term" />
                 <x-ui.select name="kenh" label="Kênh gửi" placeholder="Mọi kênh" :options="$channels" :value="$filters->channel?->slug()" />
                 <x-ui.select name="linh_lai" label="Lĩnh lãi" :options="$payments"
                     :value="$filters->payment?->slug() ?? \App\Modules\Compare\Support\SavingsFilters::ANY_PAYMENT" />
+                <x-ui.select name="sap_xep" label="Sắp xếp" :options="\App\Modules\Compare\Support\SavingsFilters::SORTS" :value="$filters->sort" />
                 <x-ui.button type="submit" class="sm:col-span-2 lg:col-span-1">Tính lãi</x-ui.button>
             </form>
         </x-ui.card>
@@ -32,7 +35,7 @@
                 Gửi <strong class="text-navy-900">{{ Format::money($filters->amount) }}</strong>,
                 kỳ hạn <strong class="text-navy-900">{{ \App\Modules\Compare\Models\SavingsRate::termLabel($filters->term) }}</strong>,
                 {{ $paymentLabel }}{{ $filters->channel ? ', kênh '.mb_strtolower($filters->channel->getLabel()) : '' }}:
-                <strong class="text-navy-900">{{ $results->count() }}</strong> sản phẩm, xếp theo tiền lãi nhận được.
+                <strong class="text-navy-900">{{ $results->count() }}</strong> {{ $filters->sort === 'moi-ngan-hang' ? 'ngân hàng' : 'sản phẩm' }}, {{ $ranked ? 'xếp theo lãi suất từ cao xuống thấp' : 'xếp theo tên ngân hàng' }}.
             </p>
 
             @if ($partnerLinks->isNotEmpty())<x-ui.disclosure />@endif
@@ -46,11 +49,11 @@
                         ? ((float) $rate->min_amount > 0 ? 'Từ '.Format::money($rate->min_amount) : '').($rate->max_amount !== null ? ((float) $rate->min_amount > 0 ? ' đến dưới ' : 'Dưới ').Format::money($rate->max_amount) : '')
                         : 'Mọi mức tiền';
                 @endphp
-                <x-ui.product-tile :id="$product->slug.'-'.($index + 1)" :name="($index + 1).'. '.$product->name" :institution="$product->institution->short_name"
+                <x-ui.product-tile :id="$product->slug.'-'.($index + 1)" :name="($ranked ? ($index + 1).'. ' : '').$product->name" :institution="$product->institution->short_name"
                     :logo="$product->institution->logoUrl()" :comparable="false"
                     :detail-url="route('compare.institutions.show', $product->institution->slug)" :detail-label="'Lãi suất '.$product->institution->short_name"
                     :partner-url="$partnerLinks->get($product->id)?->url()" :partner-label="$partnerLinks->get($product->id)?->cta_label ?? ''"
-                    :highlights="$index === 0 && $leader ? ['Tiền lãi cao nhất'] : []"
+                    :highlights="$leader && $result['interest'] === $top ? ['Tiền lãi cao nhất'] : []"
                     :key-facts="[
                         'Tiền lãi' => Format::money($result['interest']),
                         'Lãi suất' => Format::rate($rate->rate),
@@ -89,7 +92,7 @@
                 Rút trước hạn thường chỉ được hưởng lãi không kỳ hạn.
             </x-ui.alert>
             <p class="text-xs text-slate-500">
-                Thứ tự chỉ dựa trên tiền lãi tính theo biểu lãi suất đã công bố. Hãy xác nhận lại với ngân hàng trước khi gửi.
+                Thứ tự chỉ dựa trên lãi suất và tiền lãi tính theo biểu lãi suất đã công bố, không phụ thuộc quan hệ đối tác. Hãy xác nhận lại với ngân hàng trước khi gửi.
                 Đây không phải khuyến nghị tài chính cá nhân.
             </p>
             @include('compare::savings._term-links')

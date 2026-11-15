@@ -29,7 +29,7 @@ class SavingsController
 
         return view('compare::savings.index', [
             'filters' => $filters,
-            'results' => $compare->handle($filters),
+            'results' => $filters->arrange($compare->handle($filters)),
             'terms' => collect(SavingsFilters::TERMS)->mapWithKeys(fn (int $months) => [$months => SavingsRate::termLabel($months)]),
             'channels' => collect(SavingsChannel::cases())->mapWithKeys(fn (SavingsChannel $channel) => [$channel->slug() => $channel->getLabel()]),
             'payments' => collect(InterestPayment::cases())->mapWithKeys(fn (InterestPayment $payment) => [$payment->slug() => $payment->getLabel()])

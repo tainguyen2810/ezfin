@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Lãi suất tiết kiệm dạng lưới, thêm Sắp xếp
+
+- Trang So sánh lãi suất tiết kiệm hiện kết quả dạng ô 3 ô/hàng (`x-ui.product-tile`), bấm ô mở hộp Xem nhanh (lĩnh lãi, mức tiền áp dụng, ngày hiệu lực, nút sang trang lãi suất của ngân hàng).
+- Thêm ô Sắp xếp: Lãi suất cao nhất (mặc định), Cao nhất mỗi ngân hàng (mỗi ngân hàng chỉ hiện mức lãi cao nhất của kỳ hạn), Tên ngân hàng A–Z. Tham số `sap_xep` trên URL.
+
 ### Màu chủ đạo xanh dương
 
 - Thay hướng màu "Bạc hà" (xanh rêu/bạc hà/xanh chanh) bằng "Xanh dương": mực navy cho tiêu đề, nút chính, khối tối, footer; xanh dương cho link, viền chọn, nút phụ; xanh nhạt cho logo trên nền tối và chữ tô sáng. Xám về `slate` mặc định. Chỉ đổi token trong `resources/css/app.css`, view giữ nguyên tên lớp.
