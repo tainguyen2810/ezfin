@@ -8,6 +8,7 @@ use App\Support\Navigation\Navigation;
 use App\Support\Seo\Sitemap;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Pennant\Feature;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
@@ -39,5 +40,11 @@ class AppServiceProvider extends ServiceProvider
         EnsureFeaturesAreActive::whenInactive(fn () => abort(404));
 
         Event::subscribe(RecordAuthenticationEvents::class);
+
+        // Site chạy HTTPS (APP_URL https://...) sau Cloudflare/nginx: mọi URL sinh ra đều là https, kể cả địa chỉ gửi
+        // cập nhật của Livewire (nếu là http, trình duyệt chặn và các nút trong trang quản trị không chạy).
+        if (str_starts_with((string) config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
     }
 }

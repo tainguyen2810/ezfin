@@ -542,3 +542,9 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 ### 15/11/2026 — Giá vàng Bảo Tín Minh Châu
 - DOJI (banggia.doji.vn) mã hóa dữ liệu bảng giá: cố ý chặn lấy tự động, không dùng. Thêm `gold.btmc` (`Markets\BtmcGold`): bảng HTML trên trang chủ btmc.vn (robots.txt cho phép), nghìn đồng/chỉ → đồng/lượng; báo lỗi nếu đơn vị đổi. Bỏ đồng xu 0.1 chỉ và dòng "Liên hệ".
 - Test: MarketsSyncTest; toàn bộ Pest xanh (667).
+
+### 15/11/2026 — Sửa nút trong trang quản trị không chạy trên ezfin.vn
+- Nguyên nhân: sau Cloudflare, Laravel tưởng khách vào bằng http nên địa chỉ cập nhật Livewire là `http://ezfin.vn/livewire-.../update` → trình duyệt/Cloudflare chặn (503), mọi nút Duyệt không có tác dụng.
+- Sửa: `trustProxies(at: TRUSTED_PROXIES, mặc định *)` trong `bootstrap/app.php`; `URL::forceScheme('https')` khi APP_URL là https (`AppServiceProvider`). `fallback_locale` mặc định `en` để khóa Filament chưa có bản tiếng Việt không hiện tên khóa.
+- Production cần `APP_URL=https://ezfin.vn` trong .env.
+- Test: `tests/Feature/Core/HttpsUrlsTest.php`; toàn bộ Pest xanh (669).

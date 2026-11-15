@@ -80,7 +80,7 @@ return [
 
     'locale' => env('APP_LOCALE', 'vi'),
 
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'vi'),
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'), // khóa thiếu bản tiếng Việt (vd. Filament) hiện tiếng Anh thay vì tên khóa
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'vi_VN'),
 
