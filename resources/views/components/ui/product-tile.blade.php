@@ -12,6 +12,8 @@
                 <img src="{{ $image }}" alt="{{ $name }}" width="176" height="111" class="h-28 w-44 rounded-lg object-cover shadow-md transition group-hover:scale-105" loading="lazy">
             @elseif ($logo)
                 <img src="{{ $logo }}" alt="{{ $institution }}" width="96" height="48" class="max-h-14 max-w-36 object-contain transition group-hover:scale-105" loading="lazy">
+            @else
+                <span class="text-xl font-bold text-navy-800">{{ $institution }}</span>
             @endif
         </div>
         <div class="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
