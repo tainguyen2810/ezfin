@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Quản trị viên đăng nhập ở trang chủ
+
+- Quản trị viên nhập email, mật khẩu ở form chung ezfin.vn/dang-nhap thì được đưa thẳng vào trang quản trị, không cần nhớ đường dẫn bí mật.
+- Tài khoản đã bật xác thực 2 lớp không được đăng nhập chỉ bằng mật khẩu ở form chung: hệ thống chuyển sang form quản trị, điền sẵn email, để nhập lại mật khẩu và mã. Trước đây đăng nhập ở /dang-nhap rồi mở đường dẫn quản trị là bỏ qua được bước nhập mã.
+- Sai mật khẩu vẫn báo chung "Email hoặc mật khẩu không đúng", không lộ tài khoản nào là quản trị; vẫn khóa tạm sau 5 lần sai.
+
 ### Sửa đăng nhập quản trị trên aaPanel
 
 - `composer install` tự xuất file JS của Livewire ra `public/vendor/livewire`. Trên aaPanel, Nginx chặn route JS động của Livewire nên form đăng nhập quản trị không gửi được.
