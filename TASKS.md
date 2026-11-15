@@ -75,6 +75,7 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | E1 | Khung lấy dữ liệu tự động + lãi suất tiết kiệm | Lệnh `ezfin:sync` chạy theo lịch; tôn trọng robots.txt, giãn cách, user-agent chung; dữ liệu lấy về là bản nháp chờ duyệt (tùy chọn tự duyệt theo nguồn); kiểm tra số vô lý, cảnh báo thay đổi lớn; nguồn lỗi/quá hạn hiện trong quản trị (lần thành công, lỗi gần nhất) và báo qua chuông + email; duyệt = lần công bố mới, giữ lịch sử; có test | Xong |
 | E2 | Tỷ giá, giá vàng tự động | Cùng cơ chế nháp/cảnh báo; nguồn chính thức (tỷ giá Vietcombank, giá vàng SJC); tự duyệt khi hợp lệ, thay đổi bất thường chờ duyệt; trang công khai ghi nguồn và giờ công bố; có test | Xong |
 | E3 | Hồ sơ ngân hàng + logo, trường ảnh cho mọi sản phẩm | Hồ sơ 10 ngân hàng (tên, website, logo gốc tải từ trang chủ chính thức, không vẽ lại) lấy hằng tuần, chờ duyệt kèm xem trước logo; logo kiểm tra đúng ảnh PNG/JPG/WebP ≤1 MB; form thẻ, vay, tài khoản, tiết kiệm có trường ảnh; có test | Xong |
+| E4 | Danh mục thẻ tín dụng, khoản vay tự động | Đọc danh sách sản phẩm + trang chi tiết trên website ngân hàng (tên, link, ảnh gốc, phí thường niên, phí phát hành, ngày miễn lãi, lãi suất, thu nhập tối thiểu; vay: loại, thời hạn, mức vay tối đa); bản nháp chờ duyệt kèm câu gốc về phí; duyệt thì tạo/cập nhật sản phẩm, không xóa số liệu nhập tay; cảnh báo khi phí đổi hoặc sản phẩm biến mất; có test | Đang làm |
 
 ## Nhật ký phiên
 
@@ -511,3 +512,11 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Chưa giải quyết: chưa chạy thử trên WAMP thật của chủ dự án; CI MySQL sẽ chạy khi mở PR.
 - File quan trọng: `composer.json`, `config/app.php`, `.env.example`, `.github/workflows/ci.yml`, `docs/`.
 - Tiếp theo: task 2 (module, route theo tên miền, feature flag).
+
+### 15/11/2026 — E4 (phần 1): danh mục thẻ, khoản vay
+- `DataSync/Scrapers/Catalog`: `CatalogScraper` (nháp, kiểm tra, so sánh, tải ảnh gốc khi duyệt), `VietcombankCards`/`VietcombankLoans` (API tìm kiếm SXA của website + mục chi tiết), `HtmlCardCatalog` + `TechcombankCards`, `BidvCards` (danh sách HTML, phí đọc bằng `Support\CatalogParsing::cardTerms`).
+- Ghi qua `Compare\Actions\PublishProductCatalog` (khớp slug hoặc tên, chỉ ghi trường có giá trị, giữ tên/trạng thái quản trị viên đã sửa).
+- Lịch: thẻ thứ Ba, vay thứ Tư, tài khoản thứ Năm 05:30.
+- Test: `tests/Feature/DataSync/CatalogSyncTest.php`; toàn bộ Pest xanh.
+- Tiếp theo: thẻ/vay các ngân hàng còn lại (VietinBank, MB, ACB, TPBank, VPBank, Sacombank, Agribank), tài khoản thanh toán.
+
