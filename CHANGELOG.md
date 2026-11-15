@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Trang Vay, Ngân hàng, Công cụ tính dạng lưới
+
+- Trang Vay hiện khoản vay dạng ô 3 ô/hàng (dùng `x-ui.product-tile`), bấm ô mở hộp Xem nhanh với đủ thông số (số tiền tối thiểu, tỷ lệ cho vay, thu nhập, phí hồ sơ, phí và điều kiện trả nợ trước hạn).
+- Trang Ngân hàng: ô lớn 3 ô/hàng có logo gốc, lãi tiết kiệm 12 tháng tốt nhất và số sản phẩm theo loại (tiết kiệm, thẻ, vay, tài khoản). Chưa có logo thì hiện tên ngân hàng.
+- Trang Công cụ tính: 3 ô/hàng, biểu tượng lớn, nút Tính ngay.
+
 ### Danh sách thẻ tín dụng dạng lưới
 
 - Trang So sánh thẻ tín dụng hiện thẻ dạng ô: 3 ô/hàng trên desktop, 2 trên tablet, 1 trên mobile. Mỗi ô có ảnh thẻ, ngân hàng, tối đa 3 nhãn và 4 thông số chính (phí thường niên, hoàn tiền, miễn lãi, thu nhập tối thiểu), giữ ô So sánh.

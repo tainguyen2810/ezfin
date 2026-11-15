@@ -204,3 +204,17 @@ it('creates and edits a loan with exact values', function () {
         ->call('create')
         ->assertHasFormErrors(['loan.promo_rate' => 'required']);
 });
+
+it('shows loans as grid tiles with a quick view listing every published term', function () {
+    loanProduct('Vay Nhà Alpha', ['processing_fee' => 0, 'prepayment_note' => '2% trong 5 năm đầu']);
+
+    $html = $this->get('http://ezfin.test/vay')->assertOk()
+        ->assertSee('sm:grid-cols-2 xl:grid-cols-3', false)
+        ->assertSee("open-modal', 'tile-vay-nha-alpha'", false)
+        ->getContent();
+
+    $modal = str($html)->after('id="tile-vay-nha-alpha-title"')->before('role="dialog"')->toString();
+    expect($modal)->toContain('Số tiền vay tối thiểu')->toContain('Phí hồ sơ')->toContain('Phí trả nợ trước hạn')
+        ->toContain('2% trong 5 năm đầu')->toContain('Lãi ưu đãi 12 tháng đầu')->toContain('Lãi tiết kiệm 24 tháng + 3,5%')
+        ->toContain('Xem trang chi tiết');
+});

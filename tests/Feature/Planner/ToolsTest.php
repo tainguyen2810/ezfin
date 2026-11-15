@@ -10,7 +10,8 @@ const TOOL_URL = 'http://ezfin.test/cong-cu/';
 it('lists the five tools', function () {
     $this->get('http://ezfin.test/cong-cu')
         ->assertOk()
-        ->assertSeeInOrder(['Tính lãi kép', 'Tính lãi tiền gửi tiết kiệm', 'Tính tiết kiệm định kỳ', 'Tính khoản vay', 'Tính trả góp']);
+        ->assertSeeInOrder(['Tính lãi kép', 'Tính lãi tiền gửi tiết kiệm', 'Tính tiết kiệm định kỳ', 'Tính khoản vay', 'Tính trả góp'])
+        ->assertSee('lg:grid-cols-3', false)->assertSee('Tính ngay');
 });
 
 it('renders every tool with a chart, a table and its assumptions', function (string $slug) {
