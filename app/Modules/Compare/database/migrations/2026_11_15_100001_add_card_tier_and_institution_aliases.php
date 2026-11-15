@@ -12,13 +12,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('credit_card_details', function (Blueprint $table) {
-            $table->string('tier', 20)->nullable()->after('network')->index();
-        });
+        // MySQL không rollback ALTER TABLE: lần chạy trước lỗi giữa chừng có thể đã thêm cột, nên kiểm tra trước.
+        if (! Schema::hasColumn('credit_card_details', 'tier')) {
+            Schema::table('credit_card_details', function (Blueprint $table) {
+                $table->string('tier', 20)->nullable()->after('network')->index();
+            });
+        }
 
-        Schema::table('financial_institutions', function (Blueprint $table) {
-            $table->string('search_aliases')->nullable()->after('short_name');
-        });
+        if (! Schema::hasColumn('financial_institutions', 'search_aliases')) {
+            Schema::table('financial_institutions', function (Blueprint $table) {
+                $table->string('search_aliases')->nullable()->after('short_name');
+            });
+        }
 
         foreach (InstitutionAliases::KNOWN as $slug => $aliases) {
             DB::table('financial_institutions')->where('slug', $slug)->whereNull('search_aliases')->update(['search_aliases' => $aliases]);
@@ -30,10 +35,15 @@ return new class extends Migration
             ->select('card.product_id', 'card.network', 'product.name')
             ->orderBy('card.product_id')
             ->each(function (object $row) {
-                DB::table('credit_card_details')->where('product_id', $row->product_id)->update(array_filter([
+                $values = array_filter([
                     'tier' => CardTier::fromName($row->name)?->value,
-                    'network' => $row->network ?? CardNetwork::fromName($row->name)?->value,
-                ]));
+                    'network' => $row->network === null ? CardNetwork::fromName($row->name)?->value : null,
+                ]);
+
+                // Tên thẻ không nêu hạng/loại: không có gì để ghi (UPDATE rỗng là lỗi cú pháp trên MySQL).
+                if ($values !== []) {
+                    DB::table('credit_card_details')->where('product_id', $row->product_id)->update($values);
+                }
             });
     }
 
