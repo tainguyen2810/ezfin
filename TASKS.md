@@ -68,7 +68,25 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 | D3 | Quiz gợi ý thẻ tín dụng | Form GET chạy khi tắt JS, không lưu dữ liệu người dùng; xếp thẻ theo điều kiện thu nhập, nhóm chi tiêu, ước tính hoàn tiền trừ phí năm, lãi nếu trả không đủ; giải thích lý do từng thẻ; không xét hoa hồng; có test | Xong |
 | D4 | Tỷ giá ngoại tệ và giá vàng hằng ngày | Nhập tay hoặc nhập file trong quản trị (chưa tự lấy từ nguồn ngoài cho tới khi chủ dự án xác nhận điều khoản); trang công khai ghi nguồn và giờ cập nhật, ẩn khi chưa có dữ liệu hoặc tắt flag; lịch sử theo ngày; có test | Xong |
 
+## Tự động hóa dữ liệu sản phẩm (yêu cầu 15/11/2026, chủ dự án đồng ý)
+
+| # | Việc | Tiêu chí nghiệm thu | Trạng thái |
+| --- | --- | --- | --- |
+| E1 | Khung lấy dữ liệu tự động + lãi suất tiết kiệm | Lệnh `ezfin:sync` chạy theo lịch; tôn trọng robots.txt, giãn cách, user-agent chung; dữ liệu lấy về là bản nháp chờ duyệt (tùy chọn tự duyệt theo nguồn); kiểm tra số vô lý, cảnh báo thay đổi lớn; nguồn lỗi/quá hạn hiện trong quản trị (lần thành công, lỗi gần nhất) và báo qua chuông + email; duyệt = lần công bố mới, giữ lịch sử; có test | Xong |
+| E2 | Tỷ giá, giá vàng tự động | Cùng cơ chế nháp/cảnh báo; nguồn chính thức (tỷ giá Vietcombank, giá vàng SJC); tự duyệt khi hợp lệ, thay đổi bất thường chờ duyệt; trang công khai ghi nguồn và giờ công bố; có test | Xong |
+| E3 | Ngân hàng + logo, thẻ tín dụng (ảnh thẻ), khoản vay, tài khoản thanh toán | Lấy từ trang chính thức, lưu nháp kèm nguồn | Chưa làm |
+
 ## Nhật ký phiên
+
+### 15/11/2026 — E1: lấy lãi suất tiết kiệm tự động
+
+- Xong: module `DataSync` (flag `data_sync`), trang quản trị "Dữ liệu tự động" (Nguồn dữ liệu, Chờ duyệt), widget bảng điều khiển, chuông thông báo Filament (bảng `notifications`), email cảnh báo, mục mới trong `ezfin:check`. Bộ lấy lãi suất: Vietcombank, BIDV, VietinBank, Agribank, MB, ACB, TPBank. Lịch: 06:20 và 14:20 hằng ngày.
+- Chưa làm được: Techcombank, Sacombank, VPBank chỉ công bố lãi suất bằng PDF; VIB, HDBank chưa khảo sát được.
+- Test đã chạy: `vendor/bin/pest` (file mẫu chụp từ trang thật trong `tests/Fixtures/DataSync`).
+- Lưu ý: chưa chạy thử từ máy chủ production (máy dev cloud bị chặn truy cập web ngân hàng). Nguồn nào bị chặn/đổi giao diện sẽ hiện "Lỗi, cần sửa" và gửi cảnh báo.
+- File quan trọng: `app/Modules/DataSync/**`, `app/Modules/Compare/Actions/PublishSavingsRates.php`, `routes/console.php`.
+- E2 cùng PR: tỷ giá Vietcombank (`input#currentDataExchange`), giá vàng SJC (`PriceService.ashx`), chạy mỗi giờ 07:00–19:00, mặc định tự duyệt (USD đổi >3%, vàng đổi >8% thì chờ duyệt).
+- Tiếp theo: E3 dữ liệu sản phẩm (ngân hàng + logo, thẻ, vay, tài khoản).
 
 ### 15/11/2026 — Quản trị viên đăng nhập từ /dang-nhap
 

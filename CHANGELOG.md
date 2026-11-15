@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Lãi suất tiết kiệm tự động
+
+- Hệ thống tự lấy lãi suất tiết kiệm từ trang chính thức của Vietcombank, BIDV, VietinBank, Agribank, MB, ACB, TPBank hai lần mỗi ngày. Số liệu mới vào mục quản trị "Chờ duyệt", có so sánh với lần trước; duyệt xong mới hiện trên website (lần công bố cũ giữ làm lịch sử).
+- Trang "Nguồn dữ liệu" cho biết từng nguồn chạy được lần gần nhất lúc nào, lỗi gần nhất là gì. Khi không lấy được (bị chặn, trang đổi cấu trúc, số liệu vô lý) hoặc quá 48 giờ chưa cập nhật, quản trị viên nhận thông báo ở chuông trong trang quản trị và email.
+- Tỷ giá Vietcombank và giá vàng SJC tự cập nhật mỗi giờ (07:00–19:00). Số liệu hợp lệ được ghi luôn; nếu đổi bất thường (USD hơn 3%, vàng hơn 8%) thì chờ duyệt.
+
 ### Quản trị viên đăng nhập ở trang chủ
 
 - Quản trị viên nhập email, mật khẩu ở form chung ezfin.vn/dang-nhap thì được đưa thẳng vào trang quản trị, không cần nhớ đường dẫn bí mật.

@@ -11,8 +11,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 
 /**
- * Tỷ giá ngoại tệ và giá vàng. Số liệu do người vận hành nhập tay hoặc nhập file trong trang quản trị;
- * chưa tự lấy từ nguồn ngoài cho tới khi chủ dự án xác nhận điều khoản của nguồn. Trang chưa có dữ liệu thì 404.
+ * Tỷ giá ngoại tệ và giá vàng. Số liệu nhập tay, nhập file trong trang quản trị, hoặc tự lấy từ trang chính thức
+ * (Vietcombank, SJC) qua module DataSync. Trang chưa có dữ liệu thì 404.
  */
 class MarketsServiceProvider extends ModuleServiceProvider
 {

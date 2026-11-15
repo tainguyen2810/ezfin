@@ -5,6 +5,7 @@ namespace App\Modules\Core\Console;
 use App\Models\User;
 use App\Modules\Core\Enums\Role;
 use App\Modules\Core\Support\Heartbeat;
+use App\Modules\DataSync\Actions\SourceStatus;
 use Illuminate\Console\Command;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\Cache;
@@ -79,6 +80,13 @@ class CheckDeploymentCommand extends Command
 
         $this->heartbeat('Cron (schedule:run)', Heartbeat::SCHEDULE, self::SCHEDULE_MAX_MINUTES, 'Thêm cron mỗi phút: php artisan schedule:run');
         $this->heartbeat('Queue worker', Heartbeat::QUEUE, self::QUEUE_MAX_MINUTES, 'Kiểm tra Supervisor chạy php artisan queue:work');
+
+        try {
+            $problems = app(SourceStatus::class)->problems();
+            $this->check('Dữ liệu tự động', $problems === [], implode('; ', $problems).'. Xem trang quản trị Nguồn dữ liệu.', warn: true);
+        } catch (Throwable $e) {
+            $this->check('Dữ liệu tự động', false, Str::limit($e->getMessage(), 120), warn: true);
+        }
 
         $mailer = (string) config('mail.default');
         $this->check('Gửi email', ! in_array($mailer, ['log', 'array'], true) || ! $live, "MAIL_MAILER=$mailer: email không được gửi đi", warn: true, ok: $mailer);
