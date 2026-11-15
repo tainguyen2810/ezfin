@@ -550,7 +550,7 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Test: `tests/Feature/Core/HttpsUrlsTest.php`; toàn bộ Pest xanh (669).
 
 ### 15/11/2026 — Bài viết kiến thức khởi đầu
-- `Content\Console\StarterContentCommand` (`ezfin:starter-content [--draft]`) + nội dung ở `Content\Support\StarterContent` (16 bài, 6 chuyên mục, tác giả "Ban biên tập EzFin" thay vì nhân vật giả lập; ảnh bìa dùng bộ ảnh minh họa trong `database/seeders/Demo/assets/covers`). Bỏ qua bài/chuyên mục/tác giả đã có theo slug.
+- `Content\Console\StarterContentCommand` (`ezfin:starter-content [--draft]`) + nội dung ở `Content\Support\StarterContent` (15 bài, 6 chuyên mục, tác giả "Ban biên tập EzFin" thay vì nhân vật giả lập; ảnh bìa dùng bộ ảnh minh họa trong `database/seeders/Demo/assets/covers`). Bỏ qua bài/chuyên mục/tác giả đã có theo slug.
 - Sửa bài demo: hạn mức bảo hiểm tiền gửi 350 triệu (từ 13/7/2026).
 - Test: `tests/Feature/Content/StarterContentTest.php`.
 
@@ -568,3 +568,8 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ### 15/11/2026 — Sửa migration hạng thẻ khi deploy
 - Production lỗi: UPDATE rỗng cho thẻ không nêu hạng/loại (MariaDB báo lỗi cú pháp), cột đã được thêm trước đó. Migration kiểm tra cột có sẵn và bỏ qua dòng không có gì để ghi. Test: CardTierMigrationTest.
+
+### 15/11/2026 (tối) — Triển khai PR #60–#63 lên ezfin.vn
+- Đã deploy main 651aa56 qua tác vụ Cron tạm trên aaPanel (đã xóa sau khi chạy): npm ci + build, migrate (cột hạng thẻ + tên gọi khác của ngân hàng), `ezfin:starter-content` tạo 15 bài đã xuất bản, optimize.
+- Lần chạy đầu lỗi migration trên MariaDB (UPDATE rỗng khi tên thẻ không nêu hạng/loại, cột đã thêm dở) → PR #63 sửa migration chạy lại được; lần hai thành công.
+- Đã kiểm tra trên production: `/the-tin-dung?tu_khoa=vcb` ra 12 thẻ Vietcombank, `/kien-thuc` có bài mới, trình soạn TinyMCE hiện ở form bài viết, trang Nguồn dữ liệu có ô chọn và lọc.
