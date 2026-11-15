@@ -5,9 +5,9 @@ namespace App\Modules\Content\Filament\Resources\Articles\Schemas;
 use App\Modules\Content\Models\Article;
 use App\Modules\Content\Models\Author;
 use App\Modules\Core\Filament\Schemas\SeoFields;
+use App\Support\Filament\TinyEditor;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -45,20 +45,13 @@ class ArticleForm
                     ->helperText('Hạn chế đổi sau khi xuất bản.'),
                 Textarea::make('excerpt')->label('Tóm tắt')->rows(3)->maxLength(500)
                     ->helperText('Hiện dưới tiêu đề và trong kết quả tìm kiếm (nên 120–160 ký tự). Bắt buộc khi gửi duyệt.'),
-                RichEditor::make('body')->label('Nội dung')
-                    ->toolbarButtons([
-                        ['bold', 'italic', 'link'],
-                        ['h2', 'h3'],
-                        ['bulletList', 'orderedList', 'blockquote'],
-                        ['table', 'attachFiles'],
-                        ['undo', 'redo'],
-                    ])
+                TinyEditor::make('body')->label('Nội dung')->columnSpanFull()
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsDirectory(Article::COVER_DIRECTORY.'/noi-dung')
                     ->fileAttachmentsVisibility('public')
                     ->fileAttachmentsAcceptedFileTypes(['image/png', 'image/jpeg', 'image/webp'])
-                    ->fileAttachmentsMaxSize(2048)
-                    ->helperText('Mã HTML không an toàn (script, iframe, thuộc tính sự kiện) được tự động loại bỏ khi lưu.'),
+                    ->fileAttachmentsMaxSize(4096)
+                    ->helperText('Ảnh PNG, JPG, WebP tối đa 4 MB (kéo thả, dán hoặc nút Chèn ảnh). Mã HTML không an toàn (script, iframe, thuộc tính sự kiện) được tự động loại bỏ khi lưu.'),
                 Repeater::make('references')->label('Nguồn tham khảo')
                     ->schema([
                         TextInput::make('title')->label('Tên nguồn')->required()->maxLength(255)

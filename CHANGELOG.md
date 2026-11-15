@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Trình soạn bài viết TinyMCE, thao tác hàng loạt cho Nguồn dữ liệu
+
+- Nội dung bài viết soạn bằng TinyMCE (giao diện tiếng Việt, đủ nút như TinyMCE Advanced của WordPress): tiêu đề H2–H4, cỡ chữ, gạch chân, gạch ngang, màu chữ, tô nền, căn lề, thụt lề, danh sách, liên kết (mở tab mới, nofollow/sponsored), neo, chèn ảnh (kéo thả, dán, chọn tệp; có chú thích), bảng, trích dẫn, đường kẻ, ký tự đặc biệt, chỉ số trên/dưới, xóa định dạng, tìm và thay thế, xem mã HTML, xem trước, toàn màn hình, đếm từ.
+- Nguồn dữ liệu: ô chọn từng dòng và thao tác hàng loạt (chạy ngay qua hàng đợi, bật/tắt, bật/tắt tự duyệt); lọc theo loại dữ liệu, tình trạng (đang lỗi, có bản chờ duyệt, đang tắt), tự duyệt; nhóm theo loại; bấm số Chờ duyệt mở đúng bản nháp của nguồn đó.
+
 ### Lọc thẻ theo loại, hạng và tìm theo mã viết tắt
 
 - Thẻ tín dụng có thêm trường Hạng thẻ (Phổ thông, Gold, Platinum, Cao cấp). Hạng và loại thẻ (Visa, Mastercard, JCB...) tự nhận theo tên thẻ khi để trống; giá trị người quản trị chọn được giữ.

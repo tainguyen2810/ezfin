@@ -44,3 +44,31 @@ it('accepts only http and https urls for links printed outside the body', functi
         ->and(ArticleHtml::safeUrl('ftp://example.com'))->toBeNull()
         ->and(ArticleHtml::safeUrl(''))->toBeNull();
 });
+
+it('keeps the formatting TinyMCE produces: colours, alignment, font size, image size, tables, link targets', function () {
+    $html = '<p style="text-align: center;"><span style="color: #e03e2d; background-color: rgb(251, 238, 184); font-size: 18px;">Lãi suất</span></p>'
+        .'<h4>Mục nhỏ</h4><p><a href="/lai-suat-tiet-kiem" target="_blank" rel="noopener">Xem</a></p>'
+        .'<p><img src="/storage/articles/noi-dung/a.jpg" alt="Ảnh" width="600" height="400" style="float: right; margin-left: 10px;"></p>'
+        .'<table style="border-collapse: collapse; width: 100%;" border="1"><tbody><tr><td style="width: 50%; text-align: right;">1</td></tr></tbody></table>';
+
+    $clean = ArticleHtml::sanitize($html);
+
+    expect($clean)->toContain('style="text-align: center"')
+        ->toContain('color: #e03e2d; background-color: rgb(251, 238, 184); font-size: 18px')
+        ->toContain('<h4>Mục nhỏ</h4>')
+        ->toContain('target="_blank"')
+        ->toContain('style="float: right; margin-left: 10px"')
+        ->toContain('style="border-collapse: collapse; width: 100%"')
+        ->toContain('style="width: 50%; text-align: right"');
+});
+
+it('drops dangerous or layout-breaking CSS from style attributes', function (string $style) {
+    expect(ArticleHtml::sanitize('<p style="'.$style.'">x</p>'))->toBe('<p>x</p>');
+})->with([
+    'url()' => ['background-image: url(https://evil.example/t.gif)'],
+    'expression' => ['width: expression(alert(1))'],
+    'position fixed' => ['position: fixed; top: 0'],
+    'javascript' => ['color: javascript:alert(1)'],
+    'escaped url' => ['background: u\\72l(x)'],
+    'display none' => ['display: none'],
+]);

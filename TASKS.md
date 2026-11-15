@@ -558,3 +558,10 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - `Compare\Enums\CardTier` (+ `fromName`), `CardNetwork::fromName`; cột `credit_card_details.tier`, `financial_institutions.search_aliases` (migration điền sẵn mã cho ngân hàng đã biết, `Compare\Support\InstitutionAliases::KNOWN`). `CreditCardDetail` tự điền hạng/loại còn trống khi lưu.
 - Trang `/the-tin-dung`: `tu_khoa`, `loai_the`, `hang`. Quản trị: cột + bộ lọc Loại thẻ, Hạng; ô tìm kiếm các bảng sản phẩm, ngân hàng dùng `InstitutionAliases::searchProducts/searchInstitutions`.
 - Test: CreditCardListingTest, CreditCardAdminTest.
+
+### 15/11/2026 — TinyMCE, thao tác hàng loạt Nguồn dữ liệu
+- Chủ dự án chọn TinyMCE (thẻ quyết định). `App\Support\Filament\TinyEditor` (Field + HasFileAttachments, view `filament.forms.tiny-editor`), JS `resources/js/tinymce-editor.js` (tinymce 7.9.3 GPL, tinymce-i18n vi; giao diện sáng/tối theo admin). Ảnh: `$wire.upload` → `saveUploadedFileAttachmentAndGetUrl`, PNG/JPG/WebP ≤ 4 MB, URL /storage/...
+- `ArticleHtml`: thêm span/div/h4, style lọc bằng `StyleAttributeSanitizer` (danh sách thuộc tính, bỏ url()/expression/position), a target/rel, thuộc tính bảng.
+- Nguồn dữ liệu: `BulkActionGroup` (runSelected → `DataSync\Jobs\RunSourceJob` qua hàng đợi, enable/disable, autoOn/autoOff), bộ lọc Loại dữ liệu/Tình trạng/Tự duyệt, nhóm theo loại, link Chờ duyệt có `filters[source][value]`.
+- Đã thử bằng trình duyệt (Playwright): sửa bài, lưu, tải ảnh lên; giao diện tối.
+- Test: ArticleHtmlTest, ArticleAdminTest, DataSyncTest.
