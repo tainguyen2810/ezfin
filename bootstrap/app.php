@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(PublicRedirects::class);
 
+        // Sau Cloudflare + nginx: tin X-Forwarded-Proto/For để biết khách vào bằng HTTPS và IP thật.
+        // TRUSTED_PROXIES: danh sách IP, hoặc * (mặc định) khi máy chủ chỉ nhận kết nối qua proxy.
+        $middleware->trustProxies(at: env('TRUSTED_PROXIES', '*'));
+
         // Ứng dụng khách hàng (module Personal); trang quản trị Filament có trang đăng nhập riêng.
         $middleware->redirectGuestsTo(fn () => route('personal.login'));
         $middleware->redirectUsersTo(fn () => route('personal.dashboard'));
