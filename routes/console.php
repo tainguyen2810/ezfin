@@ -28,3 +28,6 @@ Schedule::command('ezfin:newsletter-weekly')->weeklyOn(1, '08:00')->withoutOverl
 // Dữ liệu tự động (lệnh tự bỏ qua khi tắt flag data_sync): lấy lãi suất tiết kiệm từ trang ngân hàng 2 lần/ngày,
 // lưu bản nháp chờ duyệt; nguồn lỗi hoặc quá hạn được báo trong trang quản trị và qua email.
 Schedule::command('ezfin:sync', ['--kind' => 'savings'])->twiceDailyAt(6, 14, 20)->withoutOverlapping(30)->onOneServer();
+// Tỷ giá, giá vàng: mỗi giờ trong ngày (nguồn cập nhật nhiều lần/ngày), tự duyệt khi hợp lệ.
+Schedule::command('ezfin:sync', ['--kind' => 'fx'])->hourlyAt(5)->between('7:00', '19:00')->withoutOverlapping(30)->onOneServer();
+Schedule::command('ezfin:sync', ['--kind' => 'gold'])->hourlyAt(10)->between('7:00', '19:00')->withoutOverlapping(30)->onOneServer();

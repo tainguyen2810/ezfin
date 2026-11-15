@@ -4,6 +4,7 @@ namespace App\Modules\DataSync\Support;
 
 use App\Modules\DataSync\Contracts\Scraper;
 use App\Modules\DataSync\Models\SyncSource;
+use App\Modules\DataSync\Scrapers\Markets;
 use App\Modules\DataSync\Scrapers\Savings;
 
 /**
@@ -21,6 +22,8 @@ class SourceRegistry
         Savings\MbBank::class,
         Savings\Acb::class,
         Savings\Tpbank::class,
+        Markets\VietcombankFx::class,
+        Markets\SjcGold::class,
     ];
 
     /** @var array<string, Scraper>|null */
@@ -50,6 +53,9 @@ class SourceRegistry
     {
         foreach ($this->all() as $key => $scraper) {
             $source = SyncSource::query()->firstOrNew(['key' => $key]);
+            if (! $source->exists) {
+                $source->auto_approve = $scraper->kind()->autoApproveByDefault();
+            }
             $source->fill(['kind' => $scraper->kind(), 'name' => $scraper->name(), 'url' => $scraper->url()])->save();
         }
     }

@@ -55,10 +55,12 @@ it('registers every bank source and runs them all from the scheduled command', f
 
     $this->artisan('ezfin:sync', ['--kind' => 'savings'])->assertSuccessful();
 
+    $savings = SyncSource::where('kind', 'savings')->get();
     expect(SyncSource::count())->toBe(count(SourceRegistry::SCRAPERS))
-        ->and(SyncDraft::where('status', DraftStatus::Pending)->count())->toBe(count(SourceRegistry::SCRAPERS))
-        ->and(SyncSource::all()->every(fn (SyncSource $source) => $source->health() === SourceHealth::Ok))->toBeTrue()
-        ->and($admin->notifications()->count())->toBe(count(SourceRegistry::SCRAPERS));
+        ->and($savings)->toHaveCount(7)
+        ->and(SyncDraft::where('status', DraftStatus::Pending)->count())->toBe(7)
+        ->and($savings->every(fn (SyncSource $source) => $source->health() === SourceHealth::Ok && ! $source->auto_approve))->toBeTrue()
+        ->and($admin->notifications()->count())->toBe(7);
 
     // Chưa duyệt thì chưa có lãi suất nào trên website.
     expect(SavingsRate::count())->toBe(0);

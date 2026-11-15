@@ -74,9 +74,14 @@ class RunSource
         });
 
         if ($source->auto_approve && $warnings === []) {
-            $message = $this->approve->handle($draft, null, 'Tự duyệt (nguồn bật tự duyệt, không có cảnh báo).');
+            try {
+                $message = $this->approve->handle($draft, null, 'Tự duyệt (nguồn bật tự duyệt, không có cảnh báo).');
 
-            return ['status' => 'approved', 'message' => $message, 'draft' => $draft];
+                return ['status' => 'approved', 'message' => $message, 'draft' => $draft];
+            } catch (Throwable $e) {
+                // Không ghi được (ví dụ dữ liệu trùng/không hợp lệ với bảng đích): để bản nháp chờ người duyệt xem.
+                $draft->forceFill(['warnings' => ['Tự duyệt không thành công: '.Str::limit($e->getMessage(), 300)]])->save();
+            }
         }
 
         $this->alerts->draftWaiting($source, $draft);

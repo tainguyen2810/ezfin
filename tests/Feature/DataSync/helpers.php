@@ -13,7 +13,9 @@ function fakeBankSites(array $override = []): void
     Http::preventStrayRequests();
     Http::fake($override + [
         '*/robots.txt' => Http::response('', 404),
-        'www.vietcombank.com.vn/vi-VN/KHCN/*' => Http::response($fixture('vietcombank.html')),
+        'www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-tien-ich/Ty-gia' => Http::response($fixture('vietcombank-fx.html')),
+        'www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-tien-ich/KHCN---Lai-suat' => Http::response($fixture('vietcombank.html')),
+        'sjc.com.vn/GoldPrice/Services/PriceService.ashx' => Http::response($fixture('sjc-gold.json')),
         'bidv.com.vn/ServicesBIDV/InterestDetailServlet' => Http::response($fixture('bidv.json'), 200, ['Content-Type' => 'application/json']),
         'www.vietinbank.vn/ca-nhan/*' => Http::response($fixture('vietinbank.html')),
         'www.agribank.com.vn/vn/lai-suat-tien-gui' => Http::response($fixture('agribank-page.html')),

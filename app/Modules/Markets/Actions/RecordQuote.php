@@ -14,6 +14,12 @@ use InvalidArgumentException;
  */
 class RecordQuote
 {
+    /** @return array<string, string> Mã ngoại tệ nhận ghi => tên. */
+    public static function fxCurrencies(): array
+    {
+        return FxRate::CURRENCIES;
+    }
+
     /**
      * @param  array{source?: ?string, currency?: ?string, quoted_at?: ?string, buy_cash?: ?string, buy_transfer?: ?string, sell?: ?string, source_url?: ?string}  $data
      * @return array{quote: FxRate, created: bool}
