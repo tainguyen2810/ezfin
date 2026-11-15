@@ -4,10 +4,13 @@ namespace App\Modules\DataSync\Actions;
 
 use App\Models\User;
 use App\Modules\DataSync\Enums\DraftStatus;
+use App\Modules\DataSync\Enums\SyncKind;
 use App\Modules\DataSync\Models\SyncDraft;
 use App\Modules\DataSync\Support\SourceRegistry;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
+use Throwable;
 
 /** Duyệt bản nháp: ghi dữ liệu vào bảng sản phẩm qua bộ lấy dữ liệu của nguồn, đánh dấu đã duyệt. */
 class ApproveDraft
@@ -33,6 +36,33 @@ class ApproveDraft
 
             return $message;
         });
+    }
+
+    /**
+     * Duyệt nhiều bản một lượt (hồ sơ ngân hàng trước, để logo có trước sản phẩm). Bản lỗi được giữ chờ duyệt, không chặn bản khác.
+     *
+     * @param  iterable<SyncDraft>  $drafts
+     * @return array{approved: int, failed: list<string>}
+     */
+    public function handleMany(iterable $drafts, ?User $reviewer): array
+    {
+        $approved = 0;
+        $failed = [];
+
+        $ordered = Collection::make($drafts)
+            ->filter(fn (SyncDraft $draft) => $draft->status === DraftStatus::Pending)
+            ->sortBy(fn (SyncDraft $draft) => [$draft->source->kind === SyncKind::Institution ? 0 : 1, $draft->fetched_at?->timestamp ?? 0]);
+
+        foreach ($ordered as $draft) {
+            try {
+                $this->handle($draft, $reviewer, 'Duyệt hàng loạt');
+                $approved++;
+            } catch (Throwable $e) {
+                $failed[] = $draft->source->name.' ('.$draft->source->kind->getLabel().'): '.$e->getMessage();
+            }
+        }
+
+        return ['approved' => $approved, 'failed' => $failed];
     }
 
     public function reject(SyncDraft $draft, User $reviewer, ?string $note = null): void

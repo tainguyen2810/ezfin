@@ -53,6 +53,8 @@ class AdminPanelProvider extends PanelProvider
             // Chuông thông báo: cảnh báo dữ liệu tự động lỗi, dữ liệu mới chờ duyệt. Hoạt động cả khi chưa cấu hình email.
             ->databaseNotifications()
             ->databaseNotificationsPolling('60s')
+            // Dữ liệu tự động (Chờ duyệt) đứng đầu: việc hằng ngày của quản trị viên.
+            ->navigationGroups(['Dữ liệu tự động', 'Dữ liệu sản phẩm', 'Nội dung', 'Đối tác', 'Hệ thống'])
             ->pages([Dashboard::class])
             ->middleware([
                 EncryptCookies::class,

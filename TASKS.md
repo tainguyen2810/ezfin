@@ -533,3 +533,8 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Giá vàng: sjc.com.vn trả 403 cho máy chủ. Thêm nguồn `gold.pnj` (`Markets\PnjGold`, API công khai của giavang.pnj.com.vn, nghìn đồng/lượng): vàng miếng SJC tại PNJ + vàng nữ trang. Nguồn SJC vẫn giữ (có thể tắt trong quản trị nếu tiếp tục bị chặn).
 - MB (lãi suất, logo) trả 403 từ Akamai cho bot: không vượt chặn, nhập tay.
 - Test: InstitutionSyncTest, MarketsSyncTest, ScrapersTest; toàn bộ Pest xanh (662).
+
+### 15/11/2026 — Duyệt dữ liệu tự động dễ hơn
+- Chủ dự án không thấy dữ liệu: các bản nháp nằm ở Chờ duyệt (nhóm menu cuối). Nhóm "Dữ liệu tự động" đưa lên đầu menu (`AdminPanelProvider::navigationGroups`).
+- Chờ duyệt: ô chọn + "Duyệt các bản đã chọn", nút "Duyệt tất cả (N)" (`ApproveDraft::handleMany`: hồ sơ ngân hàng trước, bản lỗi giữ chờ duyệt và được liệt kê). Danh sách sản phẩm trống chỉ tới Chờ duyệt.
+- Test: DataSyncTest (3 test mới); toàn bộ Pest xanh (665).
