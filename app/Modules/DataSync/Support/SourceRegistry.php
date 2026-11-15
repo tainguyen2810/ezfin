@@ -34,6 +34,7 @@ class SourceRegistry
         Catalog\VietinbankCards::class,
         Catalog\AcbCards::class,
         Catalog\SacombankCards::class,
+        Catalog\AgribankCards::class,
     ];
 
     /** @var array<string, Scraper>|null */

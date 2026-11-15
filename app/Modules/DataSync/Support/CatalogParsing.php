@@ -161,7 +161,7 @@ class CatalogParsing
     {
         $amount = '(\d{1,3}(?:[.,]\d{3})+|\d+(?:[.,]\d+)?\s*(?:triệu|tr)(?!\p{L}))\s*(?:VND|VNĐ|đồng|đ)?';
         // Khoảng chữ giữa "phí thường niên" và số tiền, không vượt qua điều kiện miễn phí ("chi tiêu từ 2 triệu...").
-        $gap = '(?:(?!chi tiêu|doanh số|từ )[^.])';
+        $gap = '(?:(?!chi tiêu|doanh số|hạn mức|từ )[^.])';
         $annual = $note = null;
         foreach ([
             '/phí thường niên[^.]{0,80}?thẻ chính\s*:?'.$gap.'{0,80}?'.$amount.'/iu',

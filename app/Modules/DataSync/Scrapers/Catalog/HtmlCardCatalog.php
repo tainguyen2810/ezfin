@@ -16,7 +16,7 @@ use DOMXPath;
 abstract class HtmlCardCatalog extends CatalogScraper
 {
     /**
-     * @return list<array{name: string, url: string, image: ?string, features: list<string>}>
+     * @return list<array{name: string, url: string, image: ?string, features: list<string>, key?: string}>
      */
     abstract protected function cards(DOMXPath $xpath): array;
 
@@ -47,7 +47,7 @@ abstract class HtmlCardCatalog extends CatalogScraper
             $name = CatalogParsing::cardName($card['name']);
 
             $items[] = $this->item(
-                $this->slugFromUrl($url),
+                $card['key'] ?? $this->slugFromUrl($url),
                 $name,
                 $url,
                 CatalogParsing::imageUrl($card['image'], $this->base()),

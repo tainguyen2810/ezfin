@@ -206,6 +206,15 @@ it('reads Sacombank cards with the annual fee from the card listing data', funct
         ->and($items['the-tin-dung-sacombank-visa-platinum-cashback']['details']['benefits'])->toContain('cashback', 'shopping');
 });
 
+it('reads Agribank cards keyed by the card path, leaving the fee empty when the page lists none', function () {
+    $items = collect(app(RunSource::class)->handle(SyncSource::where('key', 'credit_card.agribank')->sole())['draft']->payload['items'])->keyBy('key');
+
+    expect($items->keys()->all())->toBe(['the-agribank-visa-gold', 'the-agribank-visa-standard'])
+        ->and($items['the-agribank-visa-gold']['name'])->toBe('Agribank Visa Gold')
+        ->and($items['the-agribank-visa-gold']['details']['annual_fee'])->toBe(300000)
+        ->and($items['the-agribank-visa-standard']['details']['annual_fee'])->toBeNull();
+});
+
 it('fails with an alert when the card listing comes back empty', function () {
     fakeBankSites(['www.vietcombank.com.vn/vi-VN/sxa/searchapi/customresults/*' => Http::response(['Results' => []])]);
 
