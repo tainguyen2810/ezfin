@@ -565,3 +565,6 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Nguồn dữ liệu: `BulkActionGroup` (runSelected → `DataSync\Jobs\RunSourceJob` qua hàng đợi, enable/disable, autoOn/autoOff), bộ lọc Loại dữ liệu/Tình trạng/Tự duyệt, nhóm theo loại, link Chờ duyệt có `filters[source][value]`.
 - Đã thử bằng trình duyệt (Playwright): sửa bài, lưu, tải ảnh lên; giao diện tối.
 - Test: ArticleHtmlTest, ArticleAdminTest, DataSyncTest.
+
+### 15/11/2026 — Sửa migration hạng thẻ khi deploy
+- Production lỗi: UPDATE rỗng cho thẻ không nêu hạng/loại (MariaDB báo lỗi cú pháp), cột đã được thêm trước đó. Migration kiểm tra cột có sẵn và bỏ qua dòng không có gì để ghi. Test: CardTierMigrationTest.
