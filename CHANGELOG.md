@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Màu chủ đạo xanh dương
+
+- Thay hướng màu "Bạc hà" (xanh rêu/bạc hà/xanh chanh) bằng "Xanh dương": mực navy cho tiêu đề, nút chính, khối tối, footer; xanh dương cho link, viền chọn, nút phụ; xanh nhạt cho logo trên nền tối và chữ tô sáng. Xám về `slate` mặc định. Chỉ đổi token trong `resources/css/app.css`, view giữ nguyên tên lớp.
+- Xanh lá/đỏ giữ cho ý nghĩa tăng/giảm, thu/chi. Hình minh họa và avatar chữ cái đọc màu từ token; trang quản trị đổi sang `Color::Blue`.
+- Ảnh bìa bài viết mặc định vẽ lại theo màu mới. Bài đang dùng ảnh bìa mặc định cũ: `php artisan ezfin:starter-content --refresh-covers` (giữ ảnh biên tập viên tự tải lên).
+
 ### Danh sách thẻ tín dụng dạng lưới
 
 - Trang So sánh thẻ tín dụng hiện thẻ dạng ô: 3 ô/hàng trên desktop, 2 trên tablet, 1 trên mobile. Mỗi ô có ảnh thẻ, ngân hàng, tối đa 3 nhãn và 4 thông số chính (phí thường niên, hoàn tiền, miễn lãi, thu nhập tối thiểu), giữ ô So sánh.

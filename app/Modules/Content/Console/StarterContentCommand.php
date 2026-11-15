@@ -17,14 +17,28 @@ use Illuminate\Support\Str;
  */
 class StarterContentCommand extends Command
 {
-    protected $signature = 'ezfin:starter-content {--draft : Tạo bài ở trạng thái nháp để duyệt trước khi xuất bản}';
+    protected $signature = 'ezfin:starter-content
+        {--draft : Tạo bài ở trạng thái nháp để duyệt trước khi xuất bản}
+        {--refresh-covers : Thay ảnh bìa mặc định cũ (màu xanh rêu) bằng ảnh bìa mặc định hiện tại, giữ ảnh tự tải lên}';
 
     protected $description = 'Nạp bộ bài viết kiến thức khởi đầu của Ban biên tập EzFin';
 
     private const COVERS = 'database/seeders/Demo/assets/covers';
 
+    /** MD5 của 12 ảnh bìa mặc định màu xanh rêu (trước 15/11/2026), theo thứ tự cover-1..12. */
+    private const OLD_COVERS = [
+        '78bae6f22fc4d2ff79c06c640debf364', '46d14afe39d0d0bceae2c30a1378b06f', 'e8573ce1678fd78211856fc6e02420c6',
+        '5a3fb8e9f4117321cd6eb6a59f434c48', '272ef512e5d45ed0d311ae40c8a230bf', 'b0dbb31c1c9a9fc6a99be1134977ecc5',
+        'b0b876f24fb9ccc49b3a1a6f13d9b3b0', '76970e53414c9ab0c55841dc9e4f15b8', 'f083f5fd942dc144be767e45036e8539',
+        '308303244288b518f0fafbd418bde911', 'dc4aeaed2514dbc0df19ac4b3330ee46', '3ed8530949359642df88aa1f59b9af56',
+    ];
+
     public function handle(): int
     {
+        if ($this->option('refresh-covers')) {
+            return $this->refreshCovers();
+        }
+
         $categories = [];
         $sort = (int) ArticleCategory::max('sort_order');
         foreach (StarterContent::CATEGORIES as $slug => [$name, $description]) {
@@ -55,6 +69,37 @@ class StarterContentCommand extends Command
         }
 
         $this->info("Đã tạo $created bài viết".($this->option('draft') ? ' (nháp)' : '').", bỏ qua $skipped bài đã có.");
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Đổi màu thương hiệu: bài nào còn dùng ảnh bìa mặc định cũ thì nhận ảnh mặc định mới cùng số thứ tự.
+     * Lưu thành file mới (tên khác) để trình duyệt và máy chủ không dùng lại ảnh cũ trong bộ nhớ đệm; rồi xóa file cũ.
+     */
+    private function refreshCovers(): int
+    {
+        $disk = Storage::disk('public');
+        $updated = 0;
+
+        Article::withTrashed()->whereNotNull('cover_path')->each(function (Article $article) use ($disk, &$updated) {
+            if (! $disk->exists($article->cover_path)) {
+                return;
+            }
+
+            $index = array_search(md5($disk->get($article->cover_path)), self::OLD_COVERS, true);
+            if ($index === false || ! ($path = $this->cover($index))) {
+                return;
+            }
+
+            $old = $article->cover_path;
+            $article->cover_path = $path;
+            $article->saveQuietly();
+            $disk->delete($old);
+            $updated++;
+        });
+
+        $this->info("Đã thay ảnh bìa cho $updated bài viết.");
 
         return self::SUCCESS;
     }

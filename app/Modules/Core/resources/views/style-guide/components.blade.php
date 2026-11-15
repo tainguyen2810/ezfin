@@ -21,7 +21,7 @@
             <h2 class="{{ $h2 }}">Màu và chữ</h2>
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                 @foreach ([
-                    ['Navy', 'bg-navy-900', '#0B1F3A'],
+                    ['Navy', 'bg-navy-900', '#0F2240'],
                     ['Xanh dương (chính)', 'bg-primary-600', 'blue-600'],
                     ['Thu / tăng', 'bg-income', 'green-600'],
                     ['Chi / vượt', 'bg-expense', 'red-600'],

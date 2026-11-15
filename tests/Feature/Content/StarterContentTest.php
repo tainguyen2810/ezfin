@@ -45,3 +45,21 @@ it('is safe to run again and keeps articles the editor already has', function ()
         ->and($edited->fresh()->title)->toBe('Tiêu đề đã sửa')
         ->and($category->fresh()->name)->toBe('Tiết kiệm của tôi');
 });
+
+it('swaps the old default covers for the new ones and keeps uploaded covers', function () {
+    $old = base_path('tests/Fixtures/Content/old-cover-3.jpg');
+    $this->artisan('ezfin:starter-content')->assertSuccessful();
+    [$legacy, $custom] = Article::orderBy('id')->take(2)->get();
+    Storage::disk('public')->put($legacy->cover_path, file_get_contents($old));
+    Storage::disk('public')->put($custom->cover_path, 'ảnh biên tập viên tự tải lên');
+    $legacyPath = $legacy->cover_path;
+    $customPath = $custom->cover_path;
+
+    $this->artisan('ezfin:starter-content --refresh-covers')->expectsOutputToContain('Đã thay ảnh bìa cho 1 bài viết')->assertSuccessful();
+
+    $legacy->refresh();
+    expect($legacy->cover_path)->not->toBe($legacyPath)
+        ->and(Storage::disk('public')->get($legacy->cover_path))->toBe(file_get_contents(base_path('database/seeders/Demo/assets/covers/cover-3.jpg')))
+        ->and($custom->fresh()->cover_path)->toBe($customPath);
+    Storage::disk('public')->assertMissing($legacyPath);
+});
