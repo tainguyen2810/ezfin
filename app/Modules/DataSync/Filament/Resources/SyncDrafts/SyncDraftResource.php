@@ -2,14 +2,17 @@
 
 namespace App\Modules\DataSync\Filament\Resources\SyncDrafts;
 
+use App\Modules\DataSync\Actions\ApproveDraft;
 use App\Modules\DataSync\Enums\DraftStatus;
 use App\Modules\DataSync\Filament\Resources\SyncDrafts\Pages\ListSyncDrafts;
 use App\Modules\DataSync\Filament\Resources\SyncDrafts\Pages\ViewSyncDraft;
 use App\Modules\DataSync\Models\SyncDraft;
 use BackedEnum;
+use Filament\Actions\BulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
@@ -18,6 +21,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 use UnitEnum;
 
 /** Dữ liệu lấy tự động chờ duyệt. Duyệt = ghi vào dữ liệu sản phẩm; từ chối = bỏ qua bản này. */
@@ -95,8 +99,38 @@ class SyncDraftResource extends Resource
                 SelectFilter::make('source')->label('Nguồn')->relationship('source', 'name'),
             ])
             ->recordActions([ViewAction::make()->label('Xem và duyệt')])
+            ->toolbarActions([
+                BulkAction::make('approveSelected')->label('Duyệt các bản đã chọn')->icon(Heroicon::OutlinedCheck)->color('success')
+                    ->visible(fn () => static::canEditAny())
+                    ->requiresConfirmation()
+                    ->modalDescription('Số liệu của các bản đang chờ duyệt đã chọn sẽ được ghi vào dữ liệu sản phẩm và hiện trên website. Bản nào lỗi sẽ được giữ lại để xem riêng.')
+                    ->action(fn (Collection $records) => static::notifyBulk(app(ApproveDraft::class)->handleMany($records, auth()->user())))
+                    ->deselectRecordsAfterCompletion(),
+            ])
             ->emptyStateHeading('Không có dữ liệu chờ duyệt')
             ->emptyStateDescription('Khi nguồn có số liệu mới, bản nháp sẽ hiện ở đây.');
+    }
+
+    /** Người dùng được duyệt (cùng quyền với nút Duyệt trên từng bản). */
+    public static function canEditAny(): bool
+    {
+        $draft = SyncDraft::query()->where('status', DraftStatus::Pending)->first();
+
+        return $draft !== null && static::canEdit($draft);
+    }
+
+    /** @param  array{approved: int, failed: list<string>}  $result */
+    public static function notifyBulk(array $result): void
+    {
+        $notification = Notification::make()->title("Đã duyệt {$result['approved']} bản dữ liệu");
+        if ($result['failed'] === []) {
+            $notification->success()->send();
+
+            return;
+        }
+        $notification->warning()->persistent()
+            ->body(count($result['failed']).' bản chưa duyệt được, vẫn nằm trong Chờ duyệt: '.implode('; ', array_slice($result['failed'], 0, 5)))
+            ->send();
     }
 
     public static function getPages(): array

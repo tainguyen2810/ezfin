@@ -51,7 +51,8 @@ class SavingsProductResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return SavingsProductsTable::configure($table);
+        return SavingsProductsTable::configure($table)
+            ->emptyStateDescription('Dữ liệu lấy tự động từ website ngân hàng nằm ở mục Dữ liệu tự động → Chờ duyệt; duyệt xong sẽ hiện ở đây. Cũng có thể tạo mới bằng tay.');
     }
 
     public static function getPages(): array

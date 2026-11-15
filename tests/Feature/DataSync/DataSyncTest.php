@@ -12,6 +12,7 @@ use App\Modules\DataSync\Actions\ApproveDraft;
 use App\Modules\DataSync\Actions\RunSource;
 use App\Modules\DataSync\Enums\DraftStatus;
 use App\Modules\DataSync\Enums\SourceHealth;
+use App\Modules\DataSync\Filament\Resources\SyncDrafts\Pages\ListSyncDrafts;
 use App\Modules\DataSync\Filament\Resources\SyncDrafts\Pages\ViewSyncDraft;
 use App\Modules\DataSync\Filament\Resources\SyncSources\Pages\ListSyncSources;
 use App\Modules\DataSync\Models\SyncDraft;
@@ -24,6 +25,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Pennant\Feature;
 use Livewire\Livewire;
 
@@ -212,4 +214,61 @@ it('lets data operators review drafts in the admin and run a source; editors onl
     // Đã từ chối, lần chạy sau ra đúng số liệu đó thì không tạo lại bản nháp.
     app(RunSource::class)->handle(source('savings.agribank'));
     expect(source('savings.agribank')->pendingDrafts()->count())->toBe(0);
+});
+
+it('approves selected drafts with checkboxes, or every pending draft at once, keeping failed ones pending', function () {
+    Storage::fake('public');
+    $editor = User::factory()->admin(Role::Editor)->create();
+    $operator = User::factory()->admin(Role::DataOperator)->create();
+    $run = app(RunSource::class);
+    $vcb = $run->handle(source('savings.vietcombank'))['draft'];
+    $bidv = $run->handle(source('savings.bidv'))['draft'];
+    $agribank = $run->handle(source('savings.agribank'))['draft'];
+    $cards = $run->handle(source('credit_card.vietcombank'))['draft'];
+
+    $this->actingAs($editor);
+    Livewire::test(ListSyncDrafts::class)->assertActionHidden('approveAll');
+
+    $this->actingAs($operator);
+    Livewire::test(ListSyncDrafts::class)
+        ->assertActionVisible('approveAll')
+        ->callTableBulkAction('approveSelected', [$vcb, $bidv])
+        ->assertNotified('Đã duyệt 2 bản dữ liệu');
+    expect($vcb->fresh()->status)->toBe(DraftStatus::Approved)
+        ->and($bidv->fresh()->status)->toBe(DraftStatus::Approved)
+        ->and($agribank->fresh()->status)->toBe(DraftStatus::Pending);
+
+    // Ảnh thẻ không tải được: bản thẻ vẫn được duyệt (ảnh lỗi không chặn), bản lãi suất Agribank cũng vậy.
+    Livewire::test(ListSyncDrafts::class)->callAction('approveAll')->assertNotified('Đã duyệt 2 bản dữ liệu');
+    expect($agribank->fresh()->status)->toBe(DraftStatus::Approved)
+        ->and($cards->fresh()->status)->toBe(DraftStatus::Approved)
+        ->and(SyncDraft::where('status', DraftStatus::Pending)->count())->toBe(0)
+        ->and(FinancialProduct::where('type', 'credit_card')->count())->toBeGreaterThan(0);
+});
+
+it('approves bank profiles before products and reports drafts that fail', function () {
+    Storage::fake('public');
+    fakeBankSites([
+        'bidv.com.vn/logo.png' => Http::response('<html>blocked</html>'),
+        'bidv.com.vn' => Http::response('<img class="logo" src="/logo.png" alt="BIDV">'),
+        'bidv.com.vn/' => Http::response('<img class="logo" src="/logo.png" alt="BIDV">'),
+    ]);
+    $run = app(RunSource::class);
+    $savings = $run->handle(source('savings.vietcombank'))['draft'];
+    $profile = $run->handle(source('institution.bidv'))['draft'];
+
+    $result = app(ApproveDraft::class)->handleMany([$savings, $profile], null);
+
+    expect($result['approved'])->toBe(1)
+        ->and($result['failed'])->toHaveCount(1)
+        ->and($result['failed'][0])->toContain('BIDV')->toContain('không phải ảnh')
+        ->and($profile->fresh()->status)->toBe(DraftStatus::Pending)
+        ->and($savings->fresh()->status)->toBe(DraftStatus::Approved);
+});
+
+it('shows the automatic data group first in the admin menu', function () {
+    $this->actingAs(User::factory()->admin(Role::SuperAdmin)->create());
+
+    $groups = collect(Filament::getCurrentPanel()->getNavigation())->map(fn ($group) => $group->getLabel())->filter()->values();
+    expect($groups->first())->toBe('Dữ liệu tự động');
 });
