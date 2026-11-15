@@ -10,6 +10,7 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 - Trang "Nguồn dữ liệu" cho biết từng nguồn chạy được lần gần nhất lúc nào, lỗi gần nhất là gì. Khi không lấy được (bị chặn, trang đổi cấu trúc, số liệu vô lý) hoặc quá 48 giờ chưa cập nhật, quản trị viên nhận thông báo ở chuông trong trang quản trị và email.
 - Tỷ giá Vietcombank và giá vàng SJC tự cập nhật mỗi giờ (07:00–19:00). Số liệu hợp lệ được ghi luôn; nếu đổi bất thường (USD hơn 3%, vàng hơn 8%) thì chờ duyệt.
 - Hồ sơ 10 ngân hàng lớn (tên, website, logo gốc lấy từ trang chủ chính thức) tự cập nhật mỗi tuần, chờ duyệt kèm ảnh xem trước. Form thẻ tín dụng, khoản vay, tài khoản, tiết kiệm có thêm trường ảnh sản phẩm.
+- Giá vàng thêm nguồn PNJ (vàng miếng SJC bán tại PNJ, vàng nữ trang) vì trang SJC chặn truy cập tự động. Logo VietinBank, Techcombank, Agribank lấy được bản PNG gốc; lãi suất TPBank đọc đúng chữ tiếng Việt viết bằng dấu tổ hợp.
 - Danh mục thẻ tín dụng (Vietcombank, Techcombank, BIDV, VietinBank, ACB, Sacombank, Agribank) và khoản vay (Vietcombank) tự lấy từ website ngân hàng mỗi tuần: tên, ảnh gốc, phí thường niên, phí phát hành, số ngày miễn lãi; khoản vay có loại, thời hạn, mức vay tối đa. Chờ duyệt, có câu gốc về phí để đối chiếu; báo khi phí đổi hoặc sản phẩm không còn trên trang ngân hàng.
 
 ### Quản trị viên đăng nhập ở trang chủ

@@ -80,11 +80,11 @@ class SjcGold implements Scraper
         if ($rows->count() < 3) {
             $errors[] = "Chỉ đọc được {$rows->count()} loại vàng (cần ít nhất 3).";
         }
-        $bar = $rows->first(fn ($row) => str_contains(mb_strtolower($row['product']), 'vàng sjc 1l'));
+        $bar = $rows->first(fn ($row) => str_contains(mb_strtolower($row['product']), $this->barProduct()));
         if ($bar === null) {
-            $errors[] = 'Không có giá vàng miếng SJC 1 lượng.';
+            $errors[] = 'Không có giá vàng miếng SJC.';
         } elseif ($bar['sell'] === null || (float) $bar['sell'] < self::BAR_RANGE[0] || (float) $bar['sell'] > self::BAR_RANGE[1]) {
-            $errors[] = "Giá bán vàng miếng SJC = {$bar['sell']} nằm ngoài khoảng hợp lý.";
+            $errors[] = "Giá bán {$bar['product']} = {$bar['sell']} nằm ngoài khoảng hợp lý.";
         }
         foreach ($rows as $row) {
             if ($row['sell'] === null) {
@@ -98,6 +98,12 @@ class SjcGold implements Scraper
         }
 
         return $errors;
+    }
+
+    /** Chữ (thường) trong tên dòng giá vàng miếng SJC dùng để kiểm tra độ hợp lý. */
+    protected function barProduct(): string
+    {
+        return 'vàng sjc 1l';
     }
 
     public function compare(array $payload, ?array $previous): array
@@ -123,7 +129,7 @@ class SjcGold implements Scraper
 
         return DB::transaction(function () use ($draft, $record) {
             foreach ($draft->rows() as $row) {
-                $record->gold([...$row, 'source' => self::SOURCE, 'quoted_at' => $draft->payload['quoted_at'], 'source_url' => $this->url()]);
+                $record->gold([...$row, 'source' => static::SOURCE, 'quoted_at' => $draft->payload['quoted_at'], 'source_url' => $this->url()]);
             }
 
             return 'Đã ghi giá '.count($draft->rows()).' loại vàng, công bố lúc '.Carbon::parse($draft->payload['quoted_at'])->format('H:i d/m/Y').'.';

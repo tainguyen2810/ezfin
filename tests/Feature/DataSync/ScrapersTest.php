@@ -105,6 +105,10 @@ it('reads ACB traditional counter columns and online amount tiers', function () 
 });
 
 it('reads TPBank online and counter columns from the WCM component', function () {
+    // Mẫu chụp từ trang thật: chữ có dấu viết bằng ký tự tổ hợp (NFD), phải chuẩn hóa mới khớp "điện tử".
+    expect(file_get_contents(base_path('tests/Fixtures/DataSync/tpbank-component.html')))->not->toContain('ĐIỆN TỬ')
+        ->and(Fetcher::nfc("TI\u{1EBE}T KI\u{1EC6}M \u{110}I\u{CA}\u{323}N T\u{1AF}\u{309}"))->toBe('TIẾT KIỆM ĐIỆN TỬ');
+
     $rates = scrapedRates(Savings\Tpbank::class);
 
     expect($rates)->toMatchArray([

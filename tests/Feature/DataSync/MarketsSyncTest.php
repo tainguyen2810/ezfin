@@ -61,6 +61,27 @@ it('auto-approves SJC gold prices and rounds per-tael prices', function () {
     Http::assertSent(fn ($request) => $request->method() === 'POST' && $request['method'] === 'GetCurrentGoldPricesByBranch');
 });
 
+it('auto-approves PNJ gold prices (SJC bars sold at PNJ and jewelry) converted from thousand dong', function () {
+    $result = app(RunSource::class)->handle(SyncSource::where('key', 'gold.pnj')->sole());
+
+    expect($result['status'])->toBe('approved')
+        ->and(GoldPrice::where('source', 'PNJ')->count())->toBe(12)
+        ->and(GoldPrice::where('product', 'Vàng miếng SJC')->value('sell'))->toBe('137500000.00')
+        ->and(GoldPrice::where('product', 'Vàng miếng SJC')->value('buy'))->toBe('134500000.00')
+        ->and(GoldPrice::where('product', 'Nhẫn Trơn PNJ 999.9')->value('sell'))->toBe('136900000.00')
+        ->and(GoldPrice::where('product', '99.99')->exists())->toBeFalse()
+        ->and(GoldPrice::where('source', 'PNJ')->first()->quoted_at->format('d/m/Y H:i'))->toBe('14/11/2026 09:10');
+
+    $this->get('http://ezfin.test/gia-vang')->assertOk()->assertSee('PNJ')->assertSee('137.500.000');
+});
+
+it('fails the PNJ source when the SJC bar price is missing', function () {
+    fakeBankSites(['edge-cf-api.pnj.io/*' => Http::response(['updated_text' => 'Giá vàng ngày: 14/11/2026 09:10:06', 'locations' => [['name' => 'TPHCM', 'gold_type' => [['name' => 'PNJ', 'gia_mua' => '132.700', 'gia_ban' => '136.900']]]]])]);
+
+    expect(app(RunSource::class)->handle(SyncSource::where('key', 'gold.pnj')->sole())['status'])->toBe('failed')
+        ->and(SyncSource::where('key', 'gold.pnj')->value('last_error'))->toContain('vàng miếng SJC');
+});
+
 it('holds big FX jumps for review and alerts on broken gold data', function () {
     Notification::fake();
     User::factory()->admin(Role::SuperAdmin)->create();

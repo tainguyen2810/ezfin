@@ -69,7 +69,7 @@ class HtmlTable
 
     public static function text(\DOMNode $node): string
     {
-        return trim(preg_replace('/\s+/u', ' ', str_replace("\u{00A0}", ' ', $node->textContent)));
+        return trim(preg_replace('/\s+/u', ' ', str_replace("\u{00A0}", ' ', Fetcher::nfc($node->textContent))));
     }
 
     /** Bảng đầu tiên có chữ (không phân biệt hoa thường) chứa tất cả các cụm cho trước. */

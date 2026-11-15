@@ -37,7 +37,20 @@ class Fetcher
 
     public function html(string $url, array $query = []): string
     {
-        return $this->get($url, $query)->body();
+        return self::nfc($this->get($url, $query)->body());
+    }
+
+    /**
+     * Chữ tiếng Việt về dạng dựng sẵn (NFC). Một số trang ghi dấu bằng ký tự tổ hợp ("I" + dấu huyền),
+     * nhìn giống hệt nhưng so chuỗi "điện tử" sẽ không khớp.
+     */
+    public static function nfc(string $text): string
+    {
+        if ($text === '' || ! class_exists(\Normalizer::class) || \Normalizer::isNormalized($text)) {
+            return $text;
+        }
+
+        return \Normalizer::normalize($text) ?: $text;
     }
 
     public function json(string $url, array $query = []): array
@@ -47,7 +60,7 @@ class Fetcher
 
     public function decode(Response $response, string $url): array
     {
-        $data = json_decode($response->body(), true);
+        $data = json_decode(self::nfc($response->body()), true);
         if (! is_array($data)) {
             throw ScrapeException::layoutChanged("{$url} không trả về JSON.");
         }
