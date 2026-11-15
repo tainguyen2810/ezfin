@@ -11,12 +11,12 @@ use DOMXPath;
 /**
  * Thẻ tín dụng từ trang danh sách HTML của ngân hàng: bộ con chỉ cần đọc danh sách (tên, link, ảnh, ý chính);
  * phí thường niên, phí phát hành, số ngày miễn lãi, lãi suất, thu nhập tối thiểu đọc từ chữ trên trang chi tiết
- * (CatalogParsing::cardTerms). Chỉ đọc trang chi tiết trên tên miền của ngân hàng.
+ * (CatalogParsing::cardTerms). Chỉ đọc trang chi tiết trên tên miền của ngân hàng; thẻ ghi "dừng phát hành" bỏ qua.
  */
 abstract class HtmlCardCatalog extends CatalogScraper
 {
     /**
-     * @return list<array{name: string, url: string, image: ?string, features: list<string>}>
+     * @return list<array{name: string, url: string, image: ?string, features: list<string>, key?: string}>
      */
     abstract protected function cards(DOMXPath $xpath): array;
 
@@ -40,14 +40,14 @@ abstract class HtmlCardCatalog extends CatalogScraper
 
         foreach ($this->cards(new DOMXPath(HtmlTable::document($http->html($this->url())))) as $card) {
             $url = $this->absolute($card['url']);
-            if (parse_url($url, PHP_URL_HOST) !== $host) {
+            if (parse_url($url, PHP_URL_HOST) !== $host || preg_match('/(dừng|ngừng) phát hành/iu', $card['name'])) {
                 continue;
             }
             $terms = CatalogParsing::cardTerms(CatalogParsing::pageText($http->html($url)));
             $name = CatalogParsing::cardName($card['name']);
 
             $items[] = $this->item(
-                $this->slugFromUrl($url),
+                $card['key'] ?? $this->slugFromUrl($url),
                 $name,
                 $url,
                 CatalogParsing::imageUrl($card['image'], $this->base()),

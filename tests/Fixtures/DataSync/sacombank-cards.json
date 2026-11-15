@@ -1,0 +1,82 @@
+{
+ "cards": [
+  {
+   "productCriteria": [
+    {
+     "isShownOnCompare": false,
+     "title": "Đặc quyền",
+     "value": "<p>Phòng chờ VIP, Golf/Spa</p>"
+    },
+    {
+     "isShownOnCompare": false,
+     "title": "Phí thường niên",
+     "value": "<p>29.999.000 VND</p>\r\n"
+    }
+   ],
+   "hideCompareLabel": false,
+   "thumbnailShare": "/content/dam/x.jpg",
+   "comparisonCriteriaList": [
+    {
+     "comparisonCriteria": "Hạng thẻ",
+     "value": "<p>Infinite</p>\r\n"
+    },
+    {
+     "comparisonCriteria": "Hạn mức",
+     "value": "<p>Từ 300 triệu VND trở lên</p>\r\n"
+    },
+    {
+     "comparisonCriteria": "Phí thường niên",
+     "value": "<p>29.999.000 VND</p>\r\n"
+    }
+   ],
+   "primaryBtn": {},
+   "cta": {},
+   "title": "THẺ SACOMBANK VISA INFINITE",
+   "image": "/content/dam/sacombank/images/the-new/the-tin-dung/Visa Infinite_contactless-01.png",
+   "thumbnail": "/content/dam/sacombank/images/the-new/the-tin-dung/Visa Infinite_contactless-01.png",
+   "bannerTablet": "/content/dam/sacombank/images/the-new/the-tin-dung/Visa Infinite_contactless-01.png",
+   "alt": "Thẻ tín dụng Sacombank Visa Infinite",
+   "url": "/ca-nhan/the/the-tin-dung/the-tin-dung-sacombank-visa-infinite.html"
+  },
+  {
+   "productCriteria": [
+    {
+     "isShownOnCompare": false,
+     "title": "Đặc quyền",
+     "value": "<p>Hoàn tiền đến 5% mua sắm online</p>"
+    },
+    {
+     "isShownOnCompare": false,
+     "title": "Phí thường niên",
+     "value": "<p>599.000 VND</p>\r\n"
+    }
+   ],
+   "hideCompareLabel": false,
+   "thumbnailShare": "/content/dam/x.jpg",
+   "comparisonCriteriaList": [
+    {
+     "comparisonCriteria": "Hạng thẻ",
+     "value": "<p>Platinum</p>\r\n"
+    },
+    {
+     "comparisonCriteria": "Hạn mức",
+     "value": "<p>Từ 300 triệu VND trở lên</p>\r\n"
+    },
+    {
+     "comparisonCriteria": "Phí thường niên",
+     "value": "<p>599.000 VND</p>\r\n"
+    }
+   ],
+   "primaryBtn": {},
+   "cta": {},
+   "title": "THẺ SACOMBANK VISA BẠCH KIM HOÀN TIỀN",
+   "image": "/content/dam/sacombank/images/the-new/the-tin-dung/Visa Credit Plantinum_contactless-01.png",
+   "thumbnail": "/content/dam/sacombank/images/the-new/the-tin-dung/Visa Credit Plantinum_contactless-01.png",
+   "bannerTablet": "/content/dam/sacombank/images/the-new/the-tin-dung/Visa Credit Plantinum_contactless-01.png",
+   "alt": "Thẻ tín dụng Sacombank Visa Bạch kim Hoàn tiền",
+   "url": "/ca-nhan/the/the-tin-dung/the-tin-dung-sacombank-visa-platinum-cashback.html"
+  }
+ ],
+ "total": 2,
+ "start": 0
+}

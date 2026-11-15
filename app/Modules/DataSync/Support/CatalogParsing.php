@@ -119,7 +119,10 @@ class CatalogParsing
     public static function imageUrl(?string $src, string $base, bool $original = false): ?string
     {
         $src = trim(html_entity_decode((string) $src));
-        if ($src === '' || ! preg_match('/\.(png|jpe?g|webp)(\?|#|$)/i', $src)) {
+        $path = (string) parse_url($src, PHP_URL_PATH);
+        $extension = str_contains(basename($path), '.') ? strtolower(pathinfo($path, PATHINFO_EXTENSION)) : null;
+        // Ảnh không có đuôi (kho ảnh của CMS) vẫn nhận, định dạng được kiểm tra khi tải về lúc duyệt.
+        if ($src === '' || ($extension !== null && ! in_array($extension, ['png', 'jpg', 'jpeg', 'webp'], true))) {
             return null;
         }
         if ($original) {
@@ -157,11 +160,13 @@ class CatalogParsing
     public static function cardTerms(string $text): array
     {
         $amount = '(\d{1,3}(?:[.,]\d{3})+|\d+(?:[.,]\d+)?\s*(?:triệu|tr)(?!\p{L}))\s*(?:VND|VNĐ|đồng|đ)?';
+        // Khoảng chữ giữa "phí thường niên" và số tiền, không vượt qua điều kiện miễn phí ("chi tiêu từ 2 triệu...").
+        $gap = '(?:(?!chi tiêu|doanh số|hạn mức|từ )[^.])';
         $annual = $note = null;
         foreach ([
-            '/phí thường niên[^.]{0,80}?thẻ chính\s*:?[^.]{0,80}?'.$amount.'/iu',
+            '/phí thường niên[^.]{0,80}?thẻ chính\s*:?'.$gap.'{0,80}?'.$amount.'/iu',
             '/phí thường niên(?: tiêu chuẩn)?(?: là| :|:)?\s*'.$amount.'/iu',
-            '/phí thường niên[^.]{0,60}?'.$amount.'/iu',
+            '/phí thường niên'.$gap.'{0,60}?'.$amount.'/iu',
         ] as $pattern) {
             if (preg_match($pattern, $text, $m, PREG_OFFSET_CAPTURE)) {
                 $annual = self::money($m[1][0].(preg_match('/triệu|tr/u', $m[1][0]) ? '' : ' đ'));
@@ -179,7 +184,13 @@ class CatalogParsing
             $issuance = self::money($m[1]);
         }
 
-        $free = preg_match('/miễn lãi[^.]{0,40}?(\d{2})\s*ngày|(\d{2})\s*ngày[^.]{0,20}miễn lãi/iu', $text, $m) ? (int) ($m[1] ?: $m[2]) : null;
+        $free = null;
+        foreach (['/miễn lãi[^.]{0,40}?(\d{2})\s*ngày/iu', '/(\d{2})\s*ngày[^.]{0,20}miễn lãi/iu'] as $pattern) {
+            if (preg_match($pattern, $text, $m)) {
+                $free = (int) $m[1];
+                break;
+            }
+        }
 
         $rate = null;
         if (preg_match('/lãi suất[^.]{0,50}?(\d{1,2}(?:[.,]\d{1,2})?)\s*%\s*\/\s*năm/iu', $text, $m)) {

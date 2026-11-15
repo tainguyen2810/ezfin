@@ -31,6 +31,10 @@ class SourceRegistry
         Catalog\VietcombankLoans::class,
         Catalog\TechcombankCards::class,
         Catalog\BidvCards::class,
+        Catalog\VietinbankCards::class,
+        Catalog\AcbCards::class,
+        Catalog\SacombankCards::class,
+        Catalog\AgribankCards::class,
     ];
 
     /** @var array<string, Scraper>|null */
