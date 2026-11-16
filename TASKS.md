@@ -84,6 +84,7 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Xong: thêm 12 ngân hàng vào `Support\Banks` (hồ sơ + logo gốc); bộ lấy lãi suất OCB (HTML dựng sẵn, có ngày hiệu lực); đọc PDF bằng smalot/pdfparser (`Support\PdfText`, `Fetcher::pdf()`); lệnh `ezfin:probe` xem trước nguồn mới trên máy chủ.
 - Khảo sát: HDBank, Eximbank, SHB, Nam A, PVcomBank, Techcombank, Sacombank, VPBank chỉ đăng lãi suất dạng PDF; máy cloud không tải được web ngân hàng, nên dùng `ezfin:probe` trên máy chủ để lấy chữ PDF làm file mẫu.
 - Test đã chạy: `vendor/bin/pest`, `vendor/bin/pint`.
+- Thêm (PR sau): thẻ tín dụng đọc hoàn tiền (`CatalogParsing::cashback`, `ownText`), lãi suất %/tháng, trang chi tiết Sacombank; ô thẻ chỉ hiện thông số có số liệu.
 - Bước tiếp: chạy `ezfin:probe` với PDF của từng ngân hàng trên máy chủ, viết bộ đọc PDF cho HDBank, Eximbank, SHB, Techcombank, Sacombank, VPBank...
 
 ### 15/11/2026 — Màu chủ đạo xanh dương

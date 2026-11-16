@@ -43,8 +43,10 @@ abstract class HtmlCardCatalog extends CatalogScraper
             if (parse_url($url, PHP_URL_HOST) !== $host || preg_match('/(dừng|ngừng) phát hành/iu', $card['name'])) {
                 continue;
             }
-            $terms = CatalogParsing::cardTerms(CatalogParsing::pageText($http->html($url)));
+            $page = CatalogParsing::ownText(CatalogParsing::pageText($http->html($url)));
+            $terms = CatalogParsing::cardTerms($page);
             $name = CatalogParsing::cardName($card['name']);
+            $terms['cashback_rate'] = CatalogParsing::cashback($name.'. '.implode('. ', $card['features']).'. '.$page);
 
             $items[] = $this->item(
                 $card['key'] ?? $this->slugFromUrl($url),

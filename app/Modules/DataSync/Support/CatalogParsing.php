@@ -141,6 +141,25 @@ class CatalogParsing
         return trim(preg_replace('/^(thẻ\s+tín\s+dụng(\s+quốc\s+tế)?|thẻ)\s+/iu', '', trim(preg_replace('/\s+/u', ' ', $name))));
     }
 
+    /** Chữ của riêng thẻ trên trang chi tiết: cắt bỏ phần gợi ý sản phẩm khác ở cuối trang. */
+    public static function ownText(string $pageText): string
+    {
+        return preg_split('/có thể bạn quan tâm|sản phẩm liên quan|thẻ tín dụng khác|gợi ý thẻ|bạn có thể quan tâm/iu', $pageText, 2)[0];
+    }
+
+    /**
+     * Mức hoàn tiền cao nhất (%) ghi trong ưu đãi của chính thẻ: "Hoàn tiền lên đến 16.8%", "Hoàn tiền chi tiêu: Đến 1,5%",
+     * "hoàn 6,8%". Chỉ dùng với chữ của riêng thẻ (danh sách, phần ưu đãi), không dùng cả trang chi tiết vì trang
+     * thường gợi ý thẻ khác ("Có thể bạn quan tâm") kèm mức hoàn tiền của thẻ đó.
+     */
+    public static function cashback(string $text): ?string
+    {
+        preg_match_all('/hoàn(?: tiền)?(?![^.;:]{0,4}phí)[^.;%\d]{0,40}?(\d{1,2}(?:[.,]\d{1,2})?)\s*%/iu', $text, $m);
+        $rates = array_filter(array_map(fn ($v) => (float) str_replace(',', '.', $v), $m[1]), fn ($v) => $v > 0 && $v <= 20);
+
+        return $rates === [] ? null : number_format(max($rates), 4, '.', '');
+    }
+
     /**
      * Thông số thẻ tín dụng đọc từ chữ trên trang chi tiết (cách viết phổ biến của các ngân hàng Việt Nam). Trường không
      * thấy để null; ghi chú phí là câu gốc trên trang để người duyệt đối chiếu.
@@ -185,6 +204,10 @@ class CatalogParsing
         $rate = null;
         if (preg_match('/lãi suất[^.]{0,50}?(\d{1,2}(?:[.,]\d{1,2})?)\s*%\s*\/\s*năm/iu', $text, $m)) {
             $value = (float) str_replace(',', '.', $m[1]);
+            $rate = $value >= 10 && $value <= 45 ? number_format($value, 4, '.', '') : null;
+        } elseif (preg_match('/lãi suất[^.]{0,50}?(\d(?:[.,]\d{1,3})?)\s*%\s*\/\s*tháng/iu', $text, $m)) {
+            // Nhiều ngân hàng ghi lãi thẻ theo tháng (2,45%/tháng): đổi ra %/năm như các thẻ khác.
+            $value = (float) str_replace(',', '.', $m[1]) * 12;
             $rate = $value >= 10 && $value <= 45 ? number_format($value, 4, '.', '') : null;
         }
 

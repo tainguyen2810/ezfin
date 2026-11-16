@@ -203,7 +203,11 @@ it('reads Sacombank cards with the annual fee from the card listing data', funct
         ->and($items['the-tin-dung-sacombank-visa-infinite']['details'])->toMatchArray(['annual_fee' => 29999000, 'network' => 'visa'])
         ->and($items['the-tin-dung-sacombank-visa-infinite']['details']['benefits'])->toContain('travel')
         ->and($items['the-tin-dung-sacombank-visa-platinum-cashback']['details']['annual_fee'])->toBe(599000)
-        ->and($items['the-tin-dung-sacombank-visa-platinum-cashback']['details']['benefits'])->toContain('cashback', 'shopping');
+        ->and($items['the-tin-dung-sacombank-visa-platinum-cashback']['details']['benefits'])->toContain('cashback', 'shopping')
+        // Trang chi tiết: miễn lãi, thu nhập tối thiểu, hoàn tiền cao nhất; bỏ qua phần "Sản phẩm liên quan".
+        ->and($items['the-tin-dung-sacombank-visa-platinum-cashback']['details'])->toMatchArray([
+            'interest_free_days' => 55, 'min_monthly_income' => 10000000, 'cashback_rate' => '16.8000',
+        ]);
 });
 
 it('reads Agribank cards keyed by the card path, leaving the fee empty when the page lists none', function () {

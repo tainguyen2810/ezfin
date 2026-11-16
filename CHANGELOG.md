@@ -4,6 +4,11 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Thẻ tín dụng: thêm thông số, ô thẻ không còn hàng "—"
+
+- Bộ lấy thẻ đọc thêm mức hoàn tiền cao nhất (từ ưu đãi của chính thẻ, bỏ phần gợi ý thẻ khác), lãi suất ghi theo tháng (đổi ra %/năm); Sacombank đọc thêm trang chi tiết (số ngày miễn lãi, thu nhập tối thiểu, hoàn tiền).
+- Ô thẻ chỉ hiện 4 thông số đầu tiên có số liệu (phí thường niên, lãi suất, hoàn tiền, miễn lãi, thu nhập, phí phát hành, hạng, tổ chức thẻ); hộp Xem nhanh ghi "Chưa công bố" cho thông số ngân hàng chưa đăng.
+
 ### Thêm ngân hàng, đọc được biểu lãi suất PDF
 
 - Theo dõi thêm 12 ngân hàng: HDBank, VIB, SHB, SeABank, OCB, MSB, LPBank, Eximbank, Nam A Bank, Bac A Bank, PVcomBank, ABBANK (hồ sơ và logo gốc từ trang chủ, vào mục Chờ duyệt).
