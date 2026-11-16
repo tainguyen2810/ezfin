@@ -118,6 +118,19 @@ it('reads TPBank online and counter columns from the WCM component', function ()
     ])->not->toHaveKey('counter|end_of_term|0|12');
 });
 
+it('reads OCB counter and online columns and the effective date', function () {
+    $result = app(Savings\Ocb::class)->scrape(app(Fetcher::class));
+    $rates = scrapedRates(Savings\Ocb::class);
+
+    expect($result->effectiveFrom?->format('Y-m-d'))->toBe('2026-11-06')
+        ->and($rates)->toMatchArray([
+            'counter|end_of_term|0|0' => '0.0000',
+            'counter|end_of_term|0|12' => '6.2000',
+            'online|end_of_term|0|12' => '6.3000',
+            'online|end_of_term|0|36' => '6.0000',
+        ])->toHaveCount(24);
+});
+
 it('parses Vietnamese term labels, rates and multi-level tables', function () {
     expect(SavingsParsing::term('Không kỳ hạn'))->toBe(0)
         ->and(SavingsParsing::term('KKH'))->toBe(0)

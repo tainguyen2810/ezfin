@@ -25,6 +25,7 @@ class SourceRegistry
         Savings\MbBank::class,
         Savings\Acb::class,
         Savings\Tpbank::class,
+        Savings\Ocb::class,
         Markets\VietcombankFx::class,
         Markets\SjcGold::class,
         Markets\PnjGold::class,

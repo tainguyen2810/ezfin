@@ -17,6 +17,18 @@ final class Banks
         'vpbank' => ['slug' => 'vpbank', 'name' => 'Ngân hàng TMCP Việt Nam Thịnh Vượng', 'short_name' => 'VPBank', 'website' => 'https://www.vpbank.com.vn'],
         'sacombank' => ['slug' => 'sacombank', 'name' => 'Ngân hàng TMCP Sài Gòn Thương Tín', 'short_name' => 'Sacombank', 'website' => 'https://www.sacombank.com.vn'],
         'tpbank' => ['slug' => 'tpbank', 'name' => 'Ngân hàng TMCP Tiên Phong', 'short_name' => 'TPBank', 'website' => 'https://tpb.vn'],
+        'hdbank' => ['slug' => 'hdbank', 'name' => 'Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh', 'short_name' => 'HDBank', 'website' => 'https://hdbank.com.vn'],
+        'vib' => ['slug' => 'vib', 'name' => 'Ngân hàng TMCP Quốc tế Việt Nam', 'short_name' => 'VIB', 'website' => 'https://www.vib.com.vn'],
+        'shb' => ['slug' => 'shb', 'name' => 'Ngân hàng TMCP Sài Gòn – Hà Nội', 'short_name' => 'SHB', 'website' => 'https://www.shb.com.vn'],
+        'seabank' => ['slug' => 'seabank', 'name' => 'Ngân hàng TMCP Đông Nam Á', 'short_name' => 'SeABank', 'website' => 'https://www.seabank.com.vn'],
+        'ocb' => ['slug' => 'ocb', 'name' => 'Ngân hàng TMCP Phương Đông', 'short_name' => 'OCB', 'website' => 'https://ocb.com.vn'],
+        'msb' => ['slug' => 'msb', 'name' => 'Ngân hàng TMCP Hàng Hải Việt Nam', 'short_name' => 'MSB', 'website' => 'https://www.msb.com.vn'],
+        'lpbank' => ['slug' => 'lpbank', 'name' => 'Ngân hàng TMCP Lộc Phát Việt Nam', 'short_name' => 'LPBank', 'website' => 'https://lpbank.com.vn'],
+        'eximbank' => ['slug' => 'eximbank', 'name' => 'Ngân hàng TMCP Xuất Nhập khẩu Việt Nam', 'short_name' => 'Eximbank', 'website' => 'https://eximbank.com.vn'],
+        'namabank' => ['slug' => 'namabank', 'name' => 'Ngân hàng TMCP Nam Á', 'short_name' => 'Nam A Bank', 'website' => 'https://www.namabank.com.vn'],
+        'bacabank' => ['slug' => 'bacabank', 'name' => 'Ngân hàng TMCP Bắc Á', 'short_name' => 'Bac A Bank', 'website' => 'https://www.baca-bank.vn'],
+        'pvcombank' => ['slug' => 'pvcombank', 'name' => 'Ngân hàng TMCP Đại Chúng Việt Nam', 'short_name' => 'PVcomBank', 'website' => 'https://www.pvcombank.com.vn'],
+        'abbank' => ['slug' => 'abbank', 'name' => 'Ngân hàng TMCP An Bình', 'short_name' => 'ABBANK', 'website' => 'https://www.abbank.vn'],
     ];
 
     /** @return array{slug: string, name: string, short_name: string, website: string} */

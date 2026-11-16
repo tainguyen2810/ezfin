@@ -46,5 +46,6 @@ function fakeBankSites(array $override = []): void
         'acb.com.vn/lai-suat-tien-gui' => Http::response($fixture('acb.html')),
         'tpb.vn/cong-cu-tinh-toan/lai-suat' => Http::response($fixture('tpbank-page.html')),
         'tpb.vn/wps/wcm/connect/tpbank_data/*' => Http::response($fixture('tpbank-component.html')),
+        'ocb.com.vn/vi/cong-cu/lai-suat' => Http::response($fixture('ocb.html')),
     ]);
 }
