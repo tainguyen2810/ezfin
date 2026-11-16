@@ -45,7 +45,9 @@ final class LoanFacts
     public static function rateLabel(?LoanDetail $detail): string
     {
         return match (true) {
-            $detail?->promo_months !== null => 'Lãi ưu đãi '.$detail->promo_months.' tháng đầu',
+            $detail?->promo_rate === null => 'Lãi suất',
+            $detail->promo_months !== null => 'Lãi ưu đãi '.$detail->promo_months.' tháng đầu',
+            $detail->floating_note !== null => 'Lãi suất từ',
             default => 'Lãi suất cố định',
         };
     }
@@ -53,9 +55,9 @@ final class LoanFacts
     public static function afterPromo(?LoanDetail $detail): string
     {
         return match (true) {
-            $detail === null => '—',
-            ! $detail->isFloating() => 'Cố định cả kỳ hạn',
+            $detail?->promo_rate === null => '—',
             $detail->floating_note !== null => $detail->floating_note,
+            ! $detail->isFloating() => 'Cố định cả kỳ hạn',
             $detail->floating_margin !== null => 'Lãi cơ sở + '.Format::rate($detail->floating_margin),
             default => 'Thả nổi',
         };

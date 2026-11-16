@@ -86,7 +86,7 @@ class SyncSourceResource extends Resource
             ])
             ->defaultSort(fn (Builder $query) => $query->orderBy('kind')->orderBy('name'))
             ->paginated([25, 50, 100])
-            ->defaultPaginationPageOption(50)
+            ->defaultPaginationPageOption(100)
             ->groups([Group::make('kind')->label('Loại dữ liệu')->collapsible()])
             ->filters([
                 SelectFilter::make('kind')->label('Loại dữ liệu')->options(SyncKind::class)->multiple(),

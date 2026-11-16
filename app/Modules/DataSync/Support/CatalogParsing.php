@@ -102,6 +102,50 @@ class CatalogParsing
         };
     }
 
+    /** Chữ của riêng khoản vay: cắt phần tin tức, sản phẩm liên quan ở cuối trang (thường có lãi suất của gói khác). */
+    public static function loanText(string $pageText): string
+    {
+        return preg_split('/tin tức|tin liên quan|bài viết liên quan|có thể bạn quan tâm|sản phẩm liên quan|sản phẩm khác|câu hỏi thường gặp/iu', $pageText, 2)[0];
+    }
+
+    /**
+     * Thông số khoản vay đọc từ chữ trên trang sản phẩm. Lãi chỉ nhận câu "lãi suất ... (chỉ) từ X%/năm" (mức thấp nhất
+     * ngân hàng công bố); câu ví dụ "lãi suất 10%/năm" hay lãi theo ngày bị bỏ qua. Không thấy số ưu đãi bao nhiêu tháng
+     * thì ghi lãi sau ưu đãi là "Chưa công bố". $rate = false với ngân hàng không công bố lãi trên trang sản phẩm.
+     *
+     * @return array{promo_rate: ?string, promo_months: ?int, floating_note: ?string, max_term_months: ?int, max_ltv: ?string, max_amount: ?int}
+     */
+    public static function loanTerms(string $text, bool $rate = true): array
+    {
+        $number = '(\d{1,2}(?:[.,]\d{1,2})?)';
+        preg_match_all('/lãi suất[^.%]{0,40}?từ\s*'.$number.'\s*%(?!\s*\/\s*(?:ngày|tháng))/iu', $text, $m);
+        $rates = array_filter(array_map(fn ($v) => (float) str_replace(',', '.', $v), $m[1]), fn ($v) => $v >= 2 && $v <= 30);
+        $promo = $rate && $rates !== [] ? number_format(min($rates), 4, '.', '') : null;
+
+        $months = null;
+        if ($promo !== null && preg_match('/(?:cố định|ưu đãi)[^.]{0,30}?(\d{1,2})\s*(tháng|năm) đầu/iu', $text, $p)) {
+            $months = (int) $p[1] * (mb_strtolower($p[2]) === 'năm' ? 12 : 1);
+        }
+
+        preg_match_all('/thời (?:gian|hạn) (?:cho )?vay[^.\d]{0,40}?(?:\d{1,3}\s*[–-]\s*)?(\d{1,3})\s*(năm|tháng)/iu', $text, $t, PREG_SET_ORDER);
+        $terms = array_map(fn ($x) => (int) $x[1] * (mb_strtolower($x[2]) === 'năm' ? 12 : 1), $t);
+
+        preg_match_all('/(?:mức cho vay|giá trị cho vay|tỷ lệ cho vay|hạn mức vay|số tiền cho vay|cho vay)[^.\d]{0,25}?(\d{2,3})\s*%\s*(?:trên\s*)?giá trị/iu', $text, $l);
+        $ltvs = array_filter(array_map('intval', $l[1]), fn ($v) => $v > 0 && $v <= 100);
+
+        preg_match_all('/(?:hạn mức|số tiền|mức) (?:cho )?vay[^.\d%]{0,30}?(\d+(?:[.,]\d+)?\s*(?:tỷ|triệu))/iu', $text, $a);
+        $amounts = array_filter(array_map(fn ($v) => self::money($v), $a[1]));
+
+        return [
+            'promo_rate' => $promo,
+            'promo_months' => $months,
+            'floating_note' => $promo !== null && $months === null ? 'Chưa công bố' : null,
+            'max_term_months' => $terms === [] ? null : max($terms),
+            'max_ltv' => $ltvs === [] ? null : number_format(max($ltvs), 4, '.', ''),
+            'max_amount' => $amounts === [] ? null : max($amounts),
+        ];
+    }
+
     /**
      * URL tuyệt đối của ảnh sản phẩm (PNG/JPG/WebP, không nhận SVG). $original: bỏ tham số thu nhỏ ảnh (?h=32&w=32...)
      * để lấy ảnh gốc, chỉ dùng khi website trả ảnh gốc ở đường dẫn không có tham số.
