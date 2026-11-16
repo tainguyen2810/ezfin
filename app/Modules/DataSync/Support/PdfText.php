@@ -19,7 +19,7 @@ final class PdfText
 {
     public const MAX_BYTES = 15_000_000;
 
-    /** Trang có ít mẩu chữ hơn chừng này mà có Form XObject thì đọc thêm chữ trong XObject. */
+    /** Trang có ít mẩu chữ (không tính mẩu trắng) hơn chừng này mà có Form XObject thì đọc thêm chữ trong XObject. */
     private const MIN_PAGE_FRAGMENTS = 5;
 
     /** Hai mẩu chữ lệch nhau theo chiều dọc không quá chừng này (điểm PDF) coi như cùng một dòng. */
@@ -81,7 +81,7 @@ final class PdfText
         $fragments = $page->getDataTm();
         $flattened = fn (array $fragment) => str_contains((string) $fragment[1], "\n");
         $forms = array_filter($page->getXObjects(), fn ($xobject) => $xobject instanceof Form);
-        $sparse = count($fragments) < self::MIN_PAGE_FRAGMENTS;
+        $sparse = count(array_filter($fragments, fn (array $fragment) => trim((string) $fragment[1]) !== '')) < self::MIN_PAGE_FRAGMENTS;
         if ($forms === [] || $depth > 3 || (! $sparse && ! collect($fragments)->contains($flattened))) {
             return $fragments;
         }
