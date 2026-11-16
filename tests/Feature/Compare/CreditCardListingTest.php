@@ -242,3 +242,17 @@ it('shows cards as grid tiles that open a quick view with every fact, keeping lo
     expect(substr_count($html, $note))->toBe(1)
         ->and($modal)->toContain($note)->toContain('Lãi suất')->toContain('Tổ chức thẻ')->toContain('55 ngày');
 });
+
+it('shows only facts with data on the tile, and marks unpublished facts in the quick view', function () {
+    FinancialProduct::where('name', 'Thẻ Hoàn Tiền')->first()->creditCard->update([
+        'annual_fee' => 499000, 'interest_rate' => 28.5, 'cashback_rate' => null, 'interest_free_days' => null, 'min_monthly_income' => null, 'issuance_fee' => 0,
+    ]);
+
+    $html = $this->get(LISTING_URL)->assertOk()->getContent();
+    $tile = str($html)->after("open-modal', 'tile-the-hoan-tien'")->before('Xem nhanh')->toString();
+    $modal = str($html)->after('id="tile-the-hoan-tien-title"')->before('role="dialog"')->toString();
+
+    expect($tile)->toContain('499.000 đ')->toContain('28,5%/năm')->toContain('Phí phát hành')
+        ->not->toContain('Hoàn tiền tối đa')->not->toContain('—')
+        ->and($modal)->toContain('Hoàn tiền tối đa')->toContain('Chưa công bố')->toContain('28,5%/năm');
+});

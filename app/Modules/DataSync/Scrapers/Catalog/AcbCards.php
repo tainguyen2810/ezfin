@@ -51,6 +51,8 @@ class AcbCards extends CatalogScraper
             $summary = collect(preg_split('/\R/u', (string) ($post['short_description'] ?? '')))
                 ->map(fn ($line) => trim($line, " -\u{200B}"))->filter()->implode('; ');
 
+            $page = CatalogParsing::ownText(CatalogParsing::pageText($http->html($url)));
+
             $items[] = $this->item(
                 $this->slugFromUrl($url),
                 $name,
@@ -58,7 +60,8 @@ class AcbCards extends CatalogScraper
                 CatalogParsing::imageUrl($post['featured_image']['path'] ?? $post['featured_image_1']['path'] ?? null, self::BASE),
                 $summary ?: null,
                 ['network' => CatalogParsing::network($name)]
-                    + CatalogParsing::cardTerms(CatalogParsing::pageText($http->html($url)))
+                    + ['cashback_rate' => CatalogParsing::cashback($name.'. '.$summary.'. '.$page)]
+                    + CatalogParsing::cardTerms($page)
                     + ['benefits' => CatalogParsing::benefits($name.' '.$summary)],
             );
         }

@@ -50,6 +50,10 @@ class SacombankCards extends CatalogScraper
             $summary = collect(['Hạng thẻ' => $criteria['hạng thẻ'] ?? null, 'Hạn mức' => $criteria['hạn mức'] ?? null, 'Đặc quyền' => $criteria['đặc quyền'] ?? null])
                 ->filter()->map(fn ($v, $k) => "{$k}: {$v}")->implode('; ');
 
+            // Trang chi tiết (cùng tên miền): số ngày miễn lãi, thu nhập tối thiểu, mức hoàn tiền.
+            $page = CatalogParsing::ownText(CatalogParsing::pageText($http->html($url)));
+            $terms = CatalogParsing::cardTerms($page);
+
             $items[] = $this->item(
                 $this->slugFromUrl(preg_replace('/\.html$/', '', $url)),
                 $name,
@@ -58,8 +62,13 @@ class SacombankCards extends CatalogScraper
                 $summary ?: null,
                 [
                     'network' => CatalogParsing::network($name),
-                    'annual_fee' => CatalogParsing::money($fee),
+                    'annual_fee' => CatalogParsing::money($fee) ?? $terms['annual_fee'],
                     'annual_fee_note' => $fee ? mb_substr($fee, 0, 200) : null,
+                    'issuance_fee' => $terms['issuance_fee'],
+                    'interest_free_days' => $terms['interest_free_days'],
+                    'interest_rate' => $terms['interest_rate'],
+                    'min_monthly_income' => $terms['min_monthly_income'],
+                    'cashback_rate' => CatalogParsing::cashback(($criteria['đặc quyền'] ?? '').'. '.($criteria['tiện ích nổi bật'] ?? '').'. '.$page),
                     'benefits' => CatalogParsing::benefits($name.' '.($criteria['tiện ích nổi bật'] ?? '').' '.($criteria['đặc quyền'] ?? '')),
                 ],
             );

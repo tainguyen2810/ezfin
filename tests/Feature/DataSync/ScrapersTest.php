@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\DataSync\Scrapers\Savings;
+use App\Modules\DataSync\Support\CatalogParsing;
 use App\Modules\DataSync\Support\Fetcher;
 use App\Modules\DataSync\Support\HtmlTable;
 use App\Modules\DataSync\Support\RobotsTxt;
@@ -129,6 +130,16 @@ it('reads OCB counter and online columns and the effective date', function () {
             'online|end_of_term|0|12' => '6.3000',
             'online|end_of_term|0|36' => '6.0000',
         ])->toHaveCount(24);
+});
+
+it('reads the highest cashback rate of the card itself, not of suggested cards', function () {
+    expect(CatalogParsing::cashback('Hoàn tiền lên đến 16.8% chi tiêu di chuyển; Giao dịch khác: hoàn 0,39%'))->toBe('16.8000')
+        ->and(CatalogParsing::cashback('Hoàn tiền chi tiêu: Đến 1,5%'))->toBe('1.5000')
+        ->and(CatalogParsing::cashback('Hoàn phí thường niên 699,000 VND. Trả góp lãi suất 0%'))->toBeNull()
+        ->and(CatalogParsing::cashback('HOÀN TIỀN KHÔNG GIỚI HẠN'))->toBeNull()
+        ->and(CatalogParsing::cardTerms('Lãi suất thẻ tín dụng: 2,45%/tháng.')['interest_rate'])->toBe('29.4000')
+        ->and(CatalogParsing::cardTerms('Trả góp lãi suất 0%/tháng.')['interest_rate'])->toBeNull()
+        ->and(CatalogParsing::ownText('Tiện ích thẻ này. Có thể bạn quan tâm Thẻ khác HOÀN TIỀN Đến 5%'))->toBe('Tiện ích thẻ này. ');
 });
 
 it('parses Vietnamese term labels, rates and multi-level tables', function () {

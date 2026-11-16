@@ -44,25 +44,25 @@
                             ->map(fn ($benefit) => \App\Modules\Compare\Enums\CardBenefit::tryFrom($benefit)?->getLabel())
                             ->filter()->take(3)
                             ->all();
+                        // Thông số theo thứ tự ưu tiên; null = ngân hàng chưa công bố. Ô thẻ chỉ hiện 4 thông số đầu tiên có số liệu.
+                        $specs = [
+                            'Phí thường niên' => $detail?->annual_fee === null ? null : $fee,
+                            'Lãi suất' => $detail?->interest_rate === null ? null : Format::rate($detail->interest_rate),
+                            'Hoàn tiền tối đa' => $detail?->cashback_rate === null ? null : Format::percent($detail->cashback_rate),
+                            'Miễn lãi tối đa' => $detail?->interest_free_days ? $detail->interest_free_days.' ngày' : null,
+                            'Thu nhập tối thiểu' => $detail?->min_monthly_income === null ? null : Format::money($detail->min_monthly_income).'/tháng',
+                            'Phí phát hành' => $detail?->issuance_fee === null ? null : ((float) $detail->issuance_fee === 0.0 ? 'Miễn phí' : Format::money($detail->issuance_fee)),
+                            'Hạng thẻ' => $detail?->tier?->shortLabel(),
+                            'Tổ chức thẻ' => $detail?->network?->getLabel(),
+                        ];
+                        $keyFacts = array_slice(array_filter($specs, fn ($value) => $value !== null), 0, 4, true);
+                        $allFacts = array_map(fn ($value) => $value ?? 'Chưa công bố', $specs);
                     @endphp
                     <x-ui.product-tile :id="$card->slug" :name="$card->name" :institution="$card->institution->short_name"
                         :logo="$card->institution->logoUrl()" :image="$card->imageUrl()" :highlights="$highlights" :note="$detail?->annual_fee_note"
-                        :key-facts="[
-                            'Phí thường niên' => $fee,
-                            'Hoàn tiền tối đa' => Format::percent($detail?->cashback_rate),
-                            'Miễn lãi tối đa' => $detail?->interest_free_days ? $detail->interest_free_days.' ngày' : '—',
-                            'Thu nhập tối thiểu' => Format::money($detail?->min_monthly_income),
-                        ]"
+                        :key-facts="$keyFacts"
                         :detail-url="route('compare.credit-cards.show', $card->slug)" :partner-url="$partnerLinks->get($card->id)?->url()" :partner-label="$partnerLinks->get($card->id)?->cta_label ?? ''"
-                        :facts="[
-                            'Phí thường niên' => $fee,
-                            'Thu nhập tối thiểu' => Format::money($detail?->min_monthly_income).($detail?->min_monthly_income !== null ? '/tháng' : ''),
-                            'Hoàn tiền tối đa' => Format::percent($detail?->cashback_rate),
-                            'Lãi suất' => Format::rate($detail?->interest_rate),
-                            'Miễn lãi tối đa' => $detail?->interest_free_days ? $detail->interest_free_days.' ngày' : '—',
-                            'Tổ chức thẻ' => $detail?->network?->getLabel() ?? '—',
-                            'Hạng thẻ' => $detail?->tier?->shortLabel() ?? '—',
-                        ]">
+                        :facts="$allFacts">
                         <x-slot:footer>
                             <x-ui.data-freshness :verified-at="$card->verified_at" source="Trang chính thức của ngân hàng"
                                 :source-url="$card->source_url" :stale="$card->isDueForReview()" />

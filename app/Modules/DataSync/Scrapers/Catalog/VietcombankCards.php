@@ -51,6 +51,7 @@ class VietcombankCards extends VietcombankCatalog
                     'annual_fee_note' => $fee === '' ? null : mb_substr(str_replace("\n", '; ', $fee), 0, 250),
                     'issuance_fee' => CatalogParsing::money($sections['phí phát hành'] ?? null),
                     'interest_free_days' => $freeDays,
+                    'cashback_rate' => CatalogParsing::cashback(collect($card['features'])->map(fn ($value, $label) => "{$label}: {$value}")->implode('. ').'. '.implode('. ', array_intersect_key($sections, array_flip(['đặc quyền', 'tối ưu tài chính', 'hoàn tiền'])))),
                     'benefits' => CatalogParsing::benefits($benefitText),
                 ],
             );

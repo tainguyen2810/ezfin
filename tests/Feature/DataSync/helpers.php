@@ -30,6 +30,8 @@ function fakeBankSites(array $override = []): void
         'acb.com.vn/api/front/v1/posts*' => Http::response($fixture('acb-cards.json'), 200, ['Content-Type' => 'application/json']),
         'acb.com.vn/the/the-acb-visa-platinum' => Http::response($fixture('acb-card-platinum.html')),
         'www.sacombank.com.vn/ca-nhan/the/the-tin-dung/_jcr_content/*' => Http::response($fixture('sacombank-cards.json'), 200, ['Content-Type' => 'application/json']),
+        'www.sacombank.com.vn/ca-nhan/the/the-tin-dung/the-tin-dung-sacombank-visa-platinum-cashback.html' => Http::response($fixture('sacombank-card-cashback.html')),
+        'www.sacombank.com.vn/ca-nhan/the/the-tin-dung/the-tin-dung-sacombank-visa-infinite.html' => Http::response('<html><body><p>Phòng chờ VIP</p></body></html>'),
         'www.agribank.com.vn/vn/ca-nhan/san-pham/the/the-tin-dung-quoc-te' => Http::response($fixture('agribank-cards.html')),
         'www.agribank.com.vn/vn/ca-nhan/san-pham/the/dtl*the-agribank-visa-gold' => Http::response($fixture('agribank-card-gold.html')),
         'www.agribank.com.vn/vn/ca-nhan/san-pham/the/dtl*the-agribank-visa-standard' => Http::response($fixture('agribank-card-standard.html')),
