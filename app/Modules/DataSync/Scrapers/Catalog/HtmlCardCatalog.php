@@ -58,6 +58,17 @@ abstract class HtmlCardCatalog extends CatalogScraper
             );
         }
 
+        return $this->enrich($http, $items);
+    }
+
+    /**
+     * Bổ sung số liệu từ nguồn khác của ngân hàng (ví dụ phụ lục lãi suất thẻ dạng PDF). Mặc định không đổi gì.
+     *
+     * @param  list<array<string, mixed>>  $items
+     * @return list<array<string, mixed>>
+     */
+    protected function enrich(Fetcher $http, array $items): array
+    {
         return $items;
     }
 

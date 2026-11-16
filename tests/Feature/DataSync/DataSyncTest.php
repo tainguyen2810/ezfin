@@ -64,10 +64,10 @@ it('registers every bank source and runs them all from the scheduled command', f
     $savings = SyncSource::where('kind', 'savings')->get();
     expect(SyncSource::count())->toBe(count(app(SourceRegistry::class)->all()))
         ->and(SyncSource::where('kind', 'institution')->count())->toBe(count(Banks::ALL))
-        ->and($savings)->toHaveCount(8)
-        ->and(SyncDraft::where('status', DraftStatus::Pending)->count())->toBe(8)
+        ->and($savings)->toHaveCount(11)
+        ->and(SyncDraft::where('status', DraftStatus::Pending)->count())->toBe(11)
         ->and($savings->every(fn (SyncSource $source) => $source->health() === SourceHealth::Ok && ! $source->auto_approve))->toBeTrue()
-        ->and($admin->notifications()->count())->toBe(8);
+        ->and($admin->notifications()->count())->toBe(11);
 
     // Chưa duyệt thì chưa có lãi suất nào trên website.
     expect(SavingsRate::count())->toBe(0);
