@@ -132,6 +132,79 @@ it('reads OCB counter and online columns and the effective date', function () {
         ])->toHaveCount(24);
 });
 
+it('reads Techcombank Phat Loc counter and online rates for normal customers under 1 billion from the newest PDF', function () {
+    $result = app(Savings\Techcombank::class)->scrape(app(Fetcher::class));
+    $rates = scrapedRates(Savings\Techcombank::class);
+
+    expect($result->effectiveFrom?->format('Y-m-d'))->toBe('2026-11-01')
+        ->and(SavingsParsing::term('12M'))->toBe(12)
+        ->and($rates)->toBe([
+            'counter|end_of_term|0|1' => '4.0500',
+            'counter|end_of_term|0|3' => '4.3500',
+            'counter|end_of_term|0|6' => '5.5500',
+            'counter|end_of_term|0|12' => '5.7500',
+            'counter|end_of_term|0|13' => '4.8500',
+            'counter|end_of_term|0|36' => '4.8500',
+            'online|end_of_term|0|0' => '0.0500',
+            'online|end_of_term|0|1' => '4.2500',
+            'online|end_of_term|0|6' => '6.0500',
+            'online|end_of_term|0|12' => '6.2500',
+            'online|end_of_term|0|36' => '5.3500',
+        ]);
+});
+
+it('reads HDBank counter and online rates from the newest PDF, skipping the 500 billion tier and Vikki', function () {
+    $result = app(Savings\Hdbank::class)->scrape(app(Fetcher::class));
+    $rates = scrapedRates(Savings\Hdbank::class);
+
+    expect($result->effectiveFrom?->format('Y-m-d'))->toBe('2026-10-19')
+        ->and($rates)->toMatchArray([
+            'counter|end_of_term|0|1' => '3.5000',
+            'counter|upfront|0|1' => '3.4000',
+            'counter|end_of_term|0|6' => '4.9000',
+            'counter|monthly|0|6' => '4.8000',
+            'counter|quarterly|0|6' => '4.8000',
+            'counter|end_of_term|0|12' => '5.2000',
+            'counter|monthly|0|12' => '5.0000',
+            'counter|end_of_term|0|13' => '5.4000',
+            'counter|end_of_term|0|36' => '4.9000',
+            'online|end_of_term|0|1' => '4.2000',
+            'online|end_of_term|0|12' => '5.3000',
+            'online|monthly|0|12' => '5.1000',
+            'online|end_of_term|0|36' => '5.0000',
+        ])->not->toContain('7.2000')->not->toContain('7.1000')->not->toContain('5.9500')
+        ->and(collect($rates)->keys()->filter(fn ($key) => str_ends_with($key, '|0|0')))->toBeEmpty();
+});
+
+it('reads Eximbank counter rates from the newest announcement PDF', function () {
+    $result = app(Savings\Eximbank::class)->scrape(app(Fetcher::class));
+    $rates = scrapedRates(Savings\Eximbank::class);
+
+    expect($result->effectiveFrom?->format('Y-m-d'))->toBe('2026-10-31')
+        ->and($rates)->toBe([
+            'counter|end_of_term|0|1' => '3.5000',
+            'counter|end_of_term|0|2' => '3.5000',
+            'counter|end_of_term|0|6' => '4.2000',
+            'counter|end_of_term|0|7' => '4.2000',
+            'counter|end_of_term|0|12' => '4.5000',
+            'counter|end_of_term|0|24' => '5.0000',
+            'counter|end_of_term|0|60' => '5.0000',
+            'counter|monthly|0|2' => '3.3000',
+            'counter|monthly|0|6' => '4.0000',
+            'counter|monthly|0|7' => '4.0000',
+            'counter|monthly|0|12' => '4.3000',
+            'counter|monthly|0|24' => '4.8000',
+            'counter|monthly|0|60' => '4.8000',
+            'counter|upfront|0|1' => '3.1000',
+            'counter|upfront|0|2' => '3.1000',
+            'counter|upfront|0|6' => '3.3000',
+            'counter|upfront|0|7' => '3.3000',
+            'counter|upfront|0|12' => '3.6000',
+            'counter|upfront|0|24' => '4.1000',
+            'counter|upfront|0|60' => '4.1000',
+        ]);
+});
+
 it('reads the highest cashback rate of the card itself, not of suggested cards', function () {
     expect(CatalogParsing::cashback('Hoàn tiền lên đến 16.8% chi tiêu di chuyển; Giao dịch khác: hoàn 0,39%'))->toBe('16.8000')
         ->and(CatalogParsing::cashback('Hoàn tiền chi tiêu: Đến 1,5%'))->toBe('1.5000')

@@ -7,7 +7,7 @@ class SavingsParsing
 {
     /**
      * Số tháng của nhãn kỳ hạn; null nếu không phải kỳ hạn tháng (tuần, ngày, "trên 36 tháng"...).
-     * Ví dụ: "Không kỳ hạn"/"KKH"/"Demand" → 0, "12 tháng"/"12T"/"12-months"/"01 tháng" → 12,
+     * Ví dụ: "Không kỳ hạn"/"KKH"/"Demand" → 0, "12 tháng"/"12T"/"12M"/"12-months"/"01 tháng" → 12,
      * "Từ 6 tháng đến dưới 7 tháng" → 6, "Trên 12 tháng đến 13 tháng" → 13.
      */
     public static function term(string $label): ?int
@@ -17,7 +17,7 @@ class SavingsParsing
         if (in_array($text, ['không kỳ hạn', 'không kì hạn', 'kkh', 'demand', 'tiết kiệm không kỳ hạn'], true)) {
             return 0;
         }
-        if (preg_match('/^0*(\d{1,3})\s*(tháng|t|th|-months?|months?)$/u', $text, $m)) {
+        if (preg_match('/^0*(\d{1,3})\s*(tháng|t|th|m|-months?|months?)$/u', $text, $m)) {
             return (int) $m[1];
         }
         if (preg_match('/^từ 0*(\d{1,3}) tháng đến dưới 0*\d{1,3} tháng$/u', $text, $m)) {

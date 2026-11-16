@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Lãi suất tiết kiệm Techcombank, HDBank, Eximbank từ PDF; lãi suất thẻ Techcombank
+
+- `PdfText` ghép chữ bị tách từng mẩu (PDF xuất từ Word: "4 | , | 90", "áp d | ụ | ng") và đọc bảng nằm trong Form XObject (PDF Techcombank).
+- Lãi suất tiết kiệm tự động (vào Chờ duyệt): Techcombank (Phát Lộc tại quầy và online, khách hàng thường dưới 1 tỷ), HDBank (tiết kiệm thường tại quầy và online, cuối kỳ/trả trước/hằng tháng/hằng quý; bỏ mức từ 500 tỷ và Vikki), Eximbank (tại quầy, cuối kỳ/trả trước/hằng tháng). Mỗi nguồn tự tìm tệp PDF mới nhất trên trang lãi suất của ngân hàng.
+- Thẻ Techcombank lấy lãi suất từ "Phụ lục lãi suất thẻ tín dụng" (PDF), ghép theo tên thẻ.
+
 ### Thẻ tín dụng: thêm thông số, ô thẻ không còn hàng "—"
 
 - Bộ lấy thẻ đọc thêm mức hoàn tiền cao nhất (từ ưu đãi của chính thẻ, bỏ phần gợi ý thẻ khác), lãi suất ghi theo tháng (đổi ra %/năm); Sacombank đọc thêm trang chi tiết (số ngày miễn lãi, thu nhập tối thiểu, hoàn tiền).

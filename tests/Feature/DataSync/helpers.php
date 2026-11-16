@@ -49,5 +49,12 @@ function fakeBankSites(array $override = []): void
         'tpb.vn/cong-cu-tinh-toan/lai-suat' => Http::response($fixture('tpbank-page.html')),
         'tpb.vn/wps/wcm/connect/tpbank_data/*' => Http::response($fixture('tpbank-component.html')),
         'ocb.com.vn/vi/cong-cu/lai-suat' => Http::response($fixture('ocb.html')),
+        'techcombank.com/cong-cu-tien-ich/bieu-phi-lai-suat' => Http::response($fixture('techcombank-rates.html')),
+        'techcombank.com/content/dam/techcombank/public-site/documents/techcombank-bieu-lai-suat-tien-gui-tiet-kiem-tien-gui-co-ky-han-20261101.pdf' => Http::response($fixture('techcombank-savings.pdf'), 200, ['Content-Type' => 'application/pdf']),
+        'techcombank.com/content/dam/techcombank/public-site/documents/vn-phu-luc-lai-suat-the-tin-dung-09-2026.pdf' => Http::response($fixture('techcombank-card-rates.pdf'), 200, ['Content-Type' => 'application/pdf']),
+        'hdbank.com.vn/vi/personal/cong-cu/interest-rate' => Http::response($fixture('hdbank-rates.html')),
+        'cdn.hdbank.com.vn/hdbank-file/document/20261910BIEULAISUATTIENGUIKHACHHANGCANHANKHCNWEBSITEF2TD_1792402278333.pdf' => Http::response($fixture('hdbank-savings.pdf'), 200, ['Content-Type' => 'application/pdf']),
+        'eximbank.com.vn/lai-suat-tiet-kiem' => Http::response($fixture('eximbank-rates.html')),
+        'media.eximbank.com.vn/exim/files/TB%20LSHD%20VND%20KHBL%20hieu%20luc%20tu%20ngay%2031102026.pdf' => Http::response($fixture('eximbank-savings.pdf'), 200, ['Content-Type' => 'application/pdf']),
     ]);
 }

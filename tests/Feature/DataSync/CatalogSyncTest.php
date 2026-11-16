@@ -155,13 +155,14 @@ it('reads Techcombank and BIDV cards from their listing pages and the fee wordin
     $bidv = collect(app(RunSource::class)->handle(SyncSource::where('key', 'credit_card.bidv')->sole())['draft']->payload['items'])->keyBy('key');
 
     // Thẻ trên tên miền khác (Techcom Wealth) bỏ qua; chữ trong script, đầu/chân trang không tính.
+    // Lãi suất lấy từ phụ lục lãi suất thẻ (PDF), ghép theo tên: "Vietnam Airlines Visa Platinum" khớp dòng "Bạch kim (Platinum)".
     expect($tcb->keys()->all())->toBe(['techcombank-spark', 'vietnam-airlines-techcombank-visa-platinum'])
         ->and($tcb['techcombank-spark']['name'])->toBe('Techcombank Spark')
         ->and($tcb['techcombank-spark']['image_url'])->toBe('https://techcombank.com/content/dam/techcombank/public-site/image-card/img-tcb-spark-credit-card.jpg.rendition/cq5dam.web.768.768.webp')
-        ->and($tcb['techcombank-spark']['details'])->toMatchArray(['annual_fee' => 699000, 'interest_free_days' => null, 'network' => null])
+        ->and($tcb['techcombank-spark']['details'])->toMatchArray(['annual_fee' => 699000, 'interest_free_days' => null, 'network' => null, 'interest_rate' => '37.9200'])
         ->and($tcb['techcombank-spark']['details']['benefits'])->toContain('travel')
         ->and($tcb['vietnam-airlines-techcombank-visa-platinum']['details'])->toMatchArray([
-            'network' => 'visa', 'annual_fee' => 990000, 'interest_free_days' => 55, 'interest_rate' => '31.8000', 'min_monthly_income' => 15000000,
+            'network' => 'visa', 'annual_fee' => 990000, 'interest_free_days' => 55, 'interest_rate' => '36.9600', 'min_monthly_income' => 15000000,
         ])
         ->and($tcb['vietnam-airlines-techcombank-visa-platinum']['details']['benefits'])->toContain('miles');
 

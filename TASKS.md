@@ -79,6 +79,13 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 16/11/2026 — Lãi suất PDF Techcombank, HDBank, Eximbank
+
+- Xong: `PdfText` ghép mẩu chữ bị tách và đọc Form XObject (PR #71, đã kiểm tra trên máy chủ với PDF thật của HDBank, Eximbank, Techcombank). Bộ đọc lãi tiết kiệm `Savings\Techcombank`, `Savings\Hdbank`, `Savings\Eximbank`; `TechcombankCards` lấy lãi suất từ phụ lục PDF. `SavingsParsing::term` hiểu "12M".
+- Test: `vendor/bin/pest` toàn bộ xanh; file mẫu PDF dựng lại từ chữ đọc được trên máy chủ (`tests/Fixtures/DataSync/*-savings.pdf`, `techcombank-card-rates.pdf`).
+- Chưa giải quyết: trang lãi suất HDBank tải chậm từ máy chủ (lần thử bằng curl hết 40 giây); nếu nguồn báo lỗi thì tăng `ezfin.data_sync.timeout`. Sacombank tiết kiệm là PDF ảnh quét, không đọc được. Eximbank online (bảng gộp ô) chưa đọc.
+- Bước tiếp: deploy khi chủ dự án đồng ý, chạy `ezfin:sync --kind=savings` và kiểm tra bản nháp; logo dự phòng ABBANK, Eximbank; nguồn lãi suất VIB, SeABank, MSB, LPBank, Nam A, Bac A, PVcomBank.
+
 ### 16/11/2026 — Thêm ngân hàng, đọc PDF lãi suất
 
 - Xong: thêm 12 ngân hàng vào `Support\Banks` (hồ sơ + logo gốc); bộ lấy lãi suất OCB (HTML dựng sẵn, có ngày hiệu lực); đọc PDF bằng smalot/pdfparser (`Support\PdfText`, `Fetcher::pdf()`); lệnh `ezfin:probe` xem trước nguồn mới trên máy chủ.
