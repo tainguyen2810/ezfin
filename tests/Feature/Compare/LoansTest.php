@@ -218,3 +218,19 @@ it('shows loans as grid tiles with a quick view listing every published term', f
         ->toContain('2% trong 5 năm đầu')->toContain('Lãi ưu đãi 12 tháng đầu')->toContain('Lãi tiết kiệm 24 tháng + 3,5%')
         ->toContain('Xem trang chi tiết');
 });
+
+it('does not claim a fixed rate when the bank publishes no rate, and labels "from" rates', function () {
+    loanProduct('Vay Chưa Công Bố Lãi', ['promo_rate' => null, 'promo_months' => null, 'floating_note' => null]);
+
+    $this->get('http://ezfin.test/vay')->assertOk()
+        ->assertSee('Vay Chưa Công Bố Lãi')
+        ->assertDontSee('Cố định cả kỳ hạn')
+        ->assertDontSee('Lãi suất cố định');
+
+    loanProduct('Vay Lãi Từ', ['promo_rate' => 3.99, 'promo_months' => null, 'floating_note' => 'Ngân hàng chưa công bố']);
+
+    $this->get('http://ezfin.test/vay')->assertOk()
+        ->assertSee('Lãi suất từ')
+        ->assertSee('3,99%/năm')
+        ->assertSee('Ngân hàng chưa công bố');
+});

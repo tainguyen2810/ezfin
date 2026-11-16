@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Khoản vay Techcombank, BIDV, ACB; ô lãi suất khi ngân hàng chưa công bố
+
+- Bộ lấy khoản vay chung `HtmlLoanCatalog` + `CatalogParsing::loanTerms`: lãi "chỉ từ X%/năm" (bỏ câu ví dụ, lãi theo ngày, khối tin tức cuối trang), số tháng ưu đãi, thời hạn tối đa, % giá trị tài sản, hạn mức.
+- Nguồn mới: khoản vay Techcombank (có lãi "từ"), BIDV và ACB (mức vay, thời hạn; hai ngân hàng không ghi lãi trên trang sản phẩm).
+- Trang Vay: khoản vay chưa có lãi suất không còn ghi "Lãi suất cố định" / "Cố định cả kỳ hạn"; lãi "từ" chưa rõ lãi sau ưu đãi ghi "Lãi suất từ" và "Chưa công bố".
+- Trang quản trị Nguồn dữ liệu mặc định hiện 100 dòng (đã hơn 50 nguồn).
+
 ### Lãi suất tiết kiệm VIB, MSB, Nam A Bank, Bắc Á
 
 - VIB: đọc API lãi suất mà trang Tiết kiệm dùng (`/PwsStaticData/api/saving-rate/core`); tại quầy (sản phẩm 531) và trực tuyến (524), bậc dưới 300 triệu, cuối kỳ/hằng tháng/hằng quý, mức hiệu lực mới nhất.

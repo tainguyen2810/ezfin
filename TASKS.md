@@ -79,6 +79,12 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 16/11/2026 — Khoản vay Techcombank, BIDV, ACB
+
+- Xong: `Catalog\HtmlLoanCatalog`, `TechcombankLoans`, `BidvLoans`, `AcbLoans`, `CatalogParsing::loanTerms/loanText`; sửa `Compare\Support\LoanFacts` (không ghi "cố định" khi chưa có lãi). Đã xem trang vay thật và robots.txt của ba ngân hàng.
+- Test: `vendor/bin/pest` toàn bộ xanh (709 test).
+- Bước tiếp: khoản vay VietinBank, TPBank, VPBank (nếu trang có số liệu); deploy khi chủ dự án đồng ý.
+
 ### 16/11/2026 — Lãi suất VIB, MSB, Nam A Bank, Bắc Á
 
 - Xong: `Savings\Vib` (API JSON), `Savings\Msb` (data-config trong trang), `Savings\NamA` (trang biểu lãi mới nhất theo ngày trong link), `Savings\BacA` (postback ASP.NET chọn VNĐ). Đã xem cấu trúc trang thật và robots.txt của cả bốn ngân hàng.

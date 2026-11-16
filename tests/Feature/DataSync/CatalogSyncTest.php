@@ -150,6 +150,56 @@ it('drafts Vietcombank personal, home and car loans, skipping business loans', f
     $this->get('/vay')->assertOk()->assertSee('Vay mua ô tô');
 });
 
+it('reads loan terms from product page wording: "from" rates, term, share of collateral value, limit', function () {
+    expect(CatalogParsing::loanTerms('Lãi suất vay chỉ từ 12.9%/năm trên dư nợ giảm dần Thời gian vay linh hoạt từ 12 – 60 tháng Hạn mức vay lên đến 1 tỷ đồng'))
+        ->toBe(['promo_rate' => '12.9000', 'promo_months' => null, 'floating_note' => 'Chưa công bố', 'max_term_months' => 60, 'max_ltv' => null, 'max_amount' => 1000000000])
+        ->and(CatalogParsing::loanTerms('Lãi suất ưu đãi chỉ từ 6,5%/năm cố định 12 tháng đầu. Giá trị cho vay đến 80% trên giá trị tài sản. Thời gian vay lên đến 35 năm'))
+        ->toMatchArray(['promo_rate' => '6.5000', 'promo_months' => 12, 'floating_note' => null, 'max_term_months' => 420, 'max_ltv' => '80.0000'])
+        // Câu ví dụ, lãi theo ngày và lãi khi ngân hàng không đọc lãi đều bỏ qua.
+        ->and(CatalogParsing::loanTerms('Ví dụ: dư nợ 1 tỷ đồng, lãi suất 10%/năm. Lãi suất chỉ từ 0.06%/ngày')['promo_rate'])->toBeNull()
+        ->and(CatalogParsing::loanTerms('Lãi suất chỉ từ 5%/năm', rate: false)['promo_rate'])->toBeNull();
+});
+
+it('drafts Techcombank, BIDV and ACB loans from their product pages', function () {
+    $run = fn (string $key) => collect(app(RunSource::class)->handle(SyncSource::where('key', $key)->sole())['draft']->payload['items'])->keyBy('key');
+    $tcb = $run('loan.techcombank');
+    $bidv = $run('loan.bidv');
+    $acb = $run('loan.acb');
+
+    // Trang nhóm (có trang con), thấu chi, cầm cố, du học, kinh doanh và trang ngoài tên miền bỏ qua.
+    expect($tcb->keys()->all())->toBe(['vay-mua-nha-o', 'vay-mua-o-to', 'vay-nhan-chuyen-nhuong', 'vay-tieu-dung-tin-chap', 'vay-xay-sua-nha'])
+        ->and($tcb['vay-mua-nha-o']['name'])->toBe('Vay mua bất động sản, Giấy có chứng nhận')
+        ->and($tcb['vay-mua-nha-o']['image_url'])->toBeNull()
+        ->and($tcb['vay-mua-nha-o']['details'])->toBe(['kind' => 'home', 'promo_rate' => '3.9900', 'promo_months' => null, 'floating_note' => 'Chưa công bố', 'max_term_months' => 540, 'max_ltv' => '80.0000', 'max_amount' => null])
+        ->and($tcb['vay-nhan-chuyen-nhuong']['details'])->toMatchArray(['kind' => 'home', 'promo_rate' => '5.0000', 'max_term_months' => 420, 'max_ltv' => '80.0000'])
+        ->and($tcb['vay-mua-o-to']['details'])->toMatchArray(['kind' => 'auto', 'promo_rate' => null, 'floating_note' => null, 'max_term_months' => 96, 'max_ltv' => '80.0000'])
+        ->and($tcb['vay-tieu-dung-tin-chap']['details'])->toMatchArray(['kind' => 'personal', 'promo_rate' => '12.9000', 'max_term_months' => 60, 'max_amount' => 1000000000])
+        // Lãi trong khối "Tin tức" cuối trang không tính.
+        ->and($tcb['vay-xay-sua-nha']['details'])->toMatchArray(['kind' => 'home', 'promo_rate' => null, 'max_term_months' => 240, 'max_amount' => 5000000000]);
+
+    expect($bidv->keys()->all())->toBe(['vay-mua-o-to', 'vay-nhu-cau-nha-o', 'vay-tieu-dung-co-tai-san-dam-bao', 'vay-tieu-dung-khong-tai-san-dam-bao'])
+        ->and($bidv['vay-nhu-cau-nha-o']['details'])->toMatchArray(['kind' => 'home', 'promo_rate' => null, 'max_term_months' => 360, 'max_ltv' => '100.0000'])
+        ->and($bidv['vay-tieu-dung-co-tai-san-dam-bao']['details'])->toMatchArray(['kind' => 'personal', 'max_term_months' => 120, 'max_ltv' => '100.0000'])
+        ->and($bidv['vay-tieu-dung-khong-tai-san-dam-bao']['details'])->toMatchArray(['kind' => 'personal', 'max_term_months' => 84, 'max_ltv' => null])
+        ->and($bidv['vay-mua-o-to']['details'])->toMatchArray(['kind' => 'auto', 'max_term_months' => 84, 'max_ltv' => '100.0000']);
+
+    expect($acb->keys()->all())->toBe(['vay-mua-nha-dat', 'vay-mua-xe-o-to', 'vay-tieu-dung-the-chap'])
+        ->and($acb['vay-mua-nha-dat']['image_url'])->toBe('https://acb.com.vn/uploads/vay-mua-nha-dat.jpg')
+        ->and($acb['vay-mua-xe-o-to']['details'])->toMatchArray(['kind' => 'auto', 'max_term_months' => 96, 'max_ltv' => null])
+        ->and($acb['vay-tieu-dung-the-chap']['details'])->toMatchArray(['kind' => 'personal', 'max_term_months' => 120]);
+});
+
+it('shows a scraped "from" rate with its unknown after-promo rate on the loans page', function () {
+    $result = app(RunSource::class)->handle(SyncSource::where('key', 'loan.techcombank')->sole());
+    app(ApproveDraft::class)->handle($result['draft'], User::factory()->admin(Role::DataOperator)->create());
+
+    $this->get('/vay')->assertOk()
+        ->assertSee('Vay tiêu dùng tín chấp trả góp')
+        ->assertSee('Lãi suất từ')
+        ->assertSee('12,9%/năm')
+        ->assertSee('Chưa công bố');
+});
+
 it('reads Techcombank and BIDV cards from their listing pages and the fee wording on each card page', function () {
     $tcb = collect(app(RunSource::class)->handle(SyncSource::where('key', 'credit_card.techcombank')->sole())['draft']->payload['items'])->keyBy('key');
     $bidv = collect(app(RunSource::class)->handle(SyncSource::where('key', 'credit_card.bidv')->sole())['draft']->payload['items'])->keyBy('key');
