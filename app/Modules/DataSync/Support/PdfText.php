@@ -19,6 +19,9 @@ final class PdfText
 {
     public const MAX_BYTES = 15_000_000;
 
+    /** Trang có ít mẩu chữ hơn chừng này mà có Form XObject thì đọc thêm chữ trong XObject. */
+    private const MIN_PAGE_FRAGMENTS = 5;
+
     /** Hai mẩu chữ lệch nhau theo chiều dọc không quá chừng này (điểm PDF) coi như cùng một dòng. */
     private const LINE_TOLERANCE = 2.5;
 
@@ -73,18 +76,20 @@ final class PdfText
      *
      * @return list<array>
      */
-    private static function fragments(Page $page, Document $document, Config $config): array
+    private static function fragments(Page $page, Document $document, Config $config, int $depth = 0): array
     {
         $fragments = $page->getDataTm();
         $flattened = fn (array $fragment) => str_contains((string) $fragment[1], "\n");
         $forms = array_filter($page->getXObjects(), fn ($xobject) => $xobject instanceof Form);
-        if ($forms === [] || ! collect($fragments)->contains($flattened)) {
+        $sparse = count($fragments) < self::MIN_PAGE_FRAGMENTS;
+        if ($forms === [] || $depth > 3 || (! $sparse && ! collect($fragments)->contains($flattened))) {
             return $fragments;
         }
 
         // Đọc lại chữ của chính trang khi bỏ XObject khỏi Resources (để chữ sau lệnh vẽ XObject không bị lệch), rồi
-        // đọc từng XObject như một trang riêng.
-        $fonts = $page->get('Resources')->has('Font') ? ['Font' => $page->get('Resources')->get('Font')] : [];
+        // đọc từng XObject như một trang riêng (XObject lồng nhau thì đọc tiếp vài tầng).
+        $resources = $page->get('Resources');
+        $fonts = method_exists($resources, 'has') && $resources->has('Font') ? ['Font' => $resources->get('Font')] : [];
         $fragments = self::virtualPage($document, $config, $page->get('Contents'), new Header($fonts, $document))->getDataTm();
         $seen = [];
         foreach ($forms as $form) {
@@ -92,9 +97,9 @@ final class PdfText
                 continue;
             }
             $seen[$key] = true;
-            $resources = $form->getHeader()->has('Resources') ? $form->get('Resources') : $page->get('Resources');
+            $formResources = $form->getHeader()->has('Resources') ? $form->get('Resources') : $resources;
             $contents = new PDFObject($document, new Header([], $document), $form->getContent(), $config);
-            array_push($fragments, ...self::virtualPage($document, $config, $contents, $resources)->getDataTm());
+            array_push($fragments, ...self::fragments(self::virtualPage($document, $config, $contents, $formResources), $document, $config, $depth + 1));
         }
 
         return $fragments;
