@@ -79,6 +79,13 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 
 ## Nhật ký phiên
 
+### 16/11/2026 — Lãi suất VIB, MSB, Nam A Bank, Bắc Á
+
+- Xong: `Savings\Vib` (API JSON), `Savings\Msb` (data-config trong trang), `Savings\NamA` (trang biểu lãi mới nhất theo ngày trong link), `Savings\BacA` (postback ASP.NET chọn VNĐ). Đã xem cấu trúc trang thật và robots.txt của cả bốn ngân hàng.
+- Test: `vendor/bin/pest` toàn bộ xanh (705 test).
+- Chưa làm được: LPBank, PVcomBank (trình duyệt dùng để khảo sát không được phép chạy script trên hai trang này), SeABank (không thấy trang công bố biểu lãi).
+- Bước tiếp: deploy khi chủ dự án đồng ý, chạy `ezfin:sync --kind=savings`, kiểm tra bản nháp.
+
 ### 16/11/2026 — Lãi suất PDF Techcombank, HDBank, Eximbank
 
 - Xong: `PdfText` ghép mẩu chữ bị tách và đọc Form XObject (PR #71, đã kiểm tra trên máy chủ với PDF thật của HDBank, Eximbank, Techcombank). Bộ đọc lãi tiết kiệm `Savings\Techcombank`, `Savings\Hdbank`, `Savings\Eximbank`; `TechcombankCards` lấy lãi suất từ phụ lục PDF. `SavingsParsing::term` hiểu "12M".

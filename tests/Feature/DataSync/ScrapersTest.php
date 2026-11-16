@@ -244,3 +244,77 @@ it('applies robots.txt rules for the EzFin bot or the wildcard group', function 
         ->and(RobotsTxt::evaluate($rules, '/wps/portal/x'))->toBeFalse()
         ->and(RobotsTxt::evaluate(RobotsTxt::parse("User-agent: EzFinBot\nDisallow: /\n\nUser-agent: *\nAllow: /\n"), '/a'))->toBeFalse();
 });
+
+it('reads VIB counter and online rates from the saving-rate API, lowest balance tier, newest effective date', function () {
+    $result = app(Savings\Vib::class)->scrape(app(Fetcher::class));
+    $rates = scrapedRates(Savings\Vib::class);
+
+    expect($result->effectiveFrom?->format('Y-m-d'))->toBe('2026-10-20')
+        ->and($rates)->toMatchArray([
+            'counter|end_of_term|0|1' => '4.2500',
+            'counter|end_of_term|0|6' => '5.0000',
+            'counter|end_of_term|0|12' => '6.5000',
+            'counter|monthly|0|12' => '6.3100',
+            'counter|quarterly|0|12' => '6.3500',
+            'counter|end_of_term|0|36' => '5.3000',
+            'online|end_of_term|0|1' => '4.3500',
+            'online|end_of_term|0|12' => '7.0000',
+            'online|monthly|0|6' => '5.5700',
+            'online|quarterly|0|24' => '5.8500',
+        ])->and(count($rates))->toBe(68)
+        ->and($rates)->not->toContain('6.9000')->not->toContain('7.2000')->not->toContain('6.8000');
+});
+
+it('reads MSB counter and online rates from the embedded rate table config', function () {
+    $result = app(Savings\Msb::class)->scrape(app(Fetcher::class));
+    $rates = scrapedRates(Savings\Msb::class);
+
+    expect($result->effectiveFrom?->format('Y-m-d'))->toBe('2026-10-20')
+        ->and($rates)->toMatchArray([
+            'counter|end_of_term|0|1' => '4.5000',
+            'counter|end_of_term|0|12' => '6.0000',
+            'counter|monthly|0|12' => '5.8000',
+            'counter|upfront|0|12' => '4.0000',
+            'counter|end_of_term|0|36' => '5.3000',
+            'online|end_of_term|0|6' => '5.8000',
+            'online|end_of_term|0|12' => '6.3000',
+            'online|monthly|0|24' => '5.7000',
+            'online|upfront|0|36' => '4.8000',
+        ])->and($rates)->not->toHaveKey('counter|monthly|0|1')->not->toContain('6.5000')->not->toContain('0.5000');
+});
+
+it('reads Nam A Bank counter and online rates from the newest dated rate pages', function () {
+    $result = app(Savings\NamA::class)->scrape(app(Fetcher::class));
+    $rates = scrapedRates(Savings\NamA::class);
+
+    expect($result->effectiveFrom?->format('Y-m-d'))->toBe('2026-10-20')
+        ->and($rates)->toMatchArray([
+            'counter|end_of_term|0|1' => '4.5000',
+            'counter|end_of_term|0|12' => '5.7000',
+            'counter|monthly|0|12' => '5.5500',
+            'counter|upfront|0|1' => '4.4800',
+            'counter|quarterly|0|6' => '5.0600',
+            'counter|monthly|0|24' => '5.5000',
+            'online|end_of_term|0|6' => '5.9000',
+            'online|end_of_term|0|24' => '6.4000',
+        ])->and($rates)->not->toHaveKey('counter|end_of_term|0|24')->not->toHaveKey('counter|end_of_term|0|0')
+        ->and(collect($rates)->keys()->filter(fn ($key) => str_contains($key, 'online|monthly')))->toBeEmpty();
+});
+
+it('reads Bac A Bank VND rates by posting the currency selector back to the page', function () {
+    $result = app(Savings\BacA::class)->scrape(app(Fetcher::class));
+    $rates = scrapedRates(Savings\BacA::class);
+
+    expect($result->effectiveFrom?->format('Y-m-d'))->toBe('2026-10-19')
+        ->and($rates)->toMatchArray([
+            'counter|end_of_term|0|1' => '4.7500',
+            'counter|end_of_term|0|6' => '6.5500',
+            'counter|end_of_term|0|12' => '6.6000',
+            'counter|monthly|0|12' => '6.4500',
+            'counter|quarterly|0|12' => '6.5000',
+            'counter|end_of_term|0|36' => '6.4500',
+        ])->and($rates)->not->toHaveKey('counter|monthly|0|1');
+
+    Http::assertSent(fn ($request) => $request->method() === 'POST' && $request['__VIEWSTATE'] === '/wEPDwUKMTY3NzE5MjIzNmRk'
+        && $request['__EVENTTARGET'] === 'ctl00$PlaceHolderMain$g_3d98$ctl00$DDL_LS');
+});

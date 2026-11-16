@@ -55,6 +55,14 @@ function fakeBankSites(array $override = []): void
         'hdbank.com.vn/vi/personal/cong-cu/interest-rate' => Http::response($fixture('hdbank-rates.html')),
         'cdn.hdbank.com.vn/hdbank-file/document/20261910BIEULAISUATTIENGUIKHACHHANGCANHANKHCNWEBSITEF2TD_1792402278333.pdf' => Http::response($fixture('hdbank-savings.pdf'), 200, ['Content-Type' => 'application/pdf']),
         'eximbank.com.vn/lai-suat-tiet-kiem' => Http::response($fixture('eximbank-rates.html')),
+        'www.baca-bank.vn/SitePages/website/lai-xuat.aspx*' => fn ($request) => $request->method() === 'POST' && str_contains($request->body(), 'VND%7CVN')
+            ? Http::response($fixture('bacabank-vnd.html'))
+            : Http::response($fixture('bacabank-usd.html')),
+        'www.namabank.com.vn/lai-suat' => Http::response($fixture('namabank-index.html')),
+        'www.namabank.com.vn/lai-suat-tien-gui-vnd-hieu-luc-20102026' => Http::response($fixture('namabank-counter.html')),
+        'www.namabank.com.vn/lai-suat-tiet-kiem-truc-tuyen-online-nam-hieu-luc-ngay-20102026' => Http::response($fixture('namabank-online.html')),
+        'www.msb.com.vn/khach-hang-ca-nhan/lai-suat-tiet-kiem/' => Http::response($fixture('msb-rates.html')),
+        'www.vib.com.vn/PwsStaticData/api/saving-rate/core' => Http::response($fixture('vib-rates.json'), 200, ['Content-Type' => 'text/plain; charset=UTF-8']),
         'media.eximbank.com.vn/exim/files/TB%20LSHD%20VND%20KHBL%20hieu%20luc%20tu%20ngay%2031102026.pdf' => Http::response($fixture('eximbank-savings.pdf'), 200, ['Content-Type' => 'application/pdf']),
     ]);
 }
