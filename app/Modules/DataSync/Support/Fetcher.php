@@ -53,6 +53,16 @@ class Fetcher
         return \Normalizer::normalize($text) ?: $text;
     }
 
+    /**
+     * Tải PDF và lấy chữ theo trang (xem PdfText).
+     *
+     * @return list<list<string>>
+     */
+    public function pdf(string $url, array $query = []): array
+    {
+        return PdfText::pages($this->get($url, $query)->body());
+    }
+
     public function json(string $url, array $query = []): array
     {
         return $this->decode($this->get($url, $query), $url);

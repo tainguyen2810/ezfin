@@ -2,6 +2,7 @@
 
 namespace App\Modules\DataSync;
 
+use App\Modules\DataSync\Console\ProbeCommand;
 use App\Modules\DataSync\Console\SyncCommand;
 use App\Modules\DataSync\Models\SyncDraft;
 use App\Modules\DataSync\Models\SyncSource;
@@ -32,7 +33,7 @@ class DataSyncServiceProvider extends ModuleServiceProvider
         Gate::policy(SyncDraft::class, DataSyncPolicy::class);
 
         if ($this->app->runningInConsole()) {
-            $this->commands([SyncCommand::class]);
+            $this->commands([SyncCommand::class, ProbeCommand::class]);
         }
     }
 }

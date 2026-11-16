@@ -4,6 +4,12 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Thêm ngân hàng, đọc được biểu lãi suất PDF
+
+- Theo dõi thêm 12 ngân hàng: HDBank, VIB, SHB, SeABank, OCB, MSB, LPBank, Eximbank, Nam A Bank, Bac A Bank, PVcomBank, ABBANK (hồ sơ và logo gốc từ trang chủ, vào mục Chờ duyệt).
+- Lãi suất tiết kiệm OCB tự động (tại quầy, online, ngày hiệu lực) từ trang Lãi suất của OCB.
+- Đọc được biểu lãi suất dạng PDF (thư viện PHP thuần smalot/pdfparser): `Fetcher::pdf()`, `Support\PdfText`. Lệnh `php artisan ezfin:probe <url>` xem trước PDF hoặc bảng HTML của nguồn mới trên máy chủ, không lưu gì.
+
 ### Lãi suất tiết kiệm dạng lưới, thêm Sắp xếp
 
 - Trang So sánh lãi suất tiết kiệm hiện kết quả dạng ô 3 ô/hàng (`x-ui.product-tile`), bấm ô mở hộp Xem nhanh (lĩnh lãi, mức tiền áp dụng, ngày hiệu lực, nút sang trang lãi suất của ngân hàng).

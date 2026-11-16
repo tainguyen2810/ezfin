@@ -12,6 +12,7 @@
         "laravel/pennant": "^1.26",
         "laravel/tinker": "^3.0",
         "openspout/openspout": "^4.32",
+        "smalot/pdfparser": "^2.12",
         "spatie/laravel-permission": "^8.3"
     },
     "require-dev": {
