@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Lãi suất tiết kiệm VIB, MSB, Nam A Bank, Bắc Á
+
+- VIB: đọc API lãi suất mà trang Tiết kiệm dùng (`/PwsStaticData/api/saving-rate/core`); tại quầy (sản phẩm 531) và trực tuyến (524), bậc dưới 300 triệu, cuối kỳ/hằng tháng/hằng quý, mức hiệu lực mới nhất.
+- MSB: bảng lãi nhúng trong trang Lãi suất tiết kiệm (data-config); tại quầy và trực tuyến, cuối kỳ (Rút gốc từng phần), hằng tháng (Định kỳ sinh lời), đầu kỳ (Trả lãi ngay).
+- Nam A Bank: tự tìm trang biểu lãi mới nhất theo ngày trong đường dẫn (tiền gửi VND tại quầy, tiết kiệm trực tuyến).
+- Bắc Á: trang Lãi suất chọn loại tiền VNĐ bằng một lần gửi lại form ASP.NET; cuối kỳ/hằng tháng/hằng quý.
+
 ### Lãi suất tiết kiệm Techcombank, HDBank, Eximbank từ PDF; lãi suất thẻ Techcombank
 
 - `PdfText` ghép chữ bị tách từng mẩu (PDF xuất từ Word: "4 | , | 90", "áp d | ụ | ng") và đọc bảng nằm trong Form XObject (PDF Techcombank).
