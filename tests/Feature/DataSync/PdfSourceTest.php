@@ -29,6 +29,24 @@ it('reads PDF text line by line with one tab between cells', function () {
         ->and(PdfText::cellPages(samplePdf())[0][2][1]['x'])->toBeGreaterThan(PdfText::cellPages(samplePdf())[0][2][0]['x']);
 });
 
+it('joins words and numbers split into pieces and reads tables drawn inside form XObjects', function () {
+    // Trang 1: chữ bị tách từng mẩu ("áp d" + "ụ" + "ng", "4" + "," + "75") như PDF xuất từ Word.
+    // Trang 2: bảng nằm trong Form XObject, trang chỉ có chân trang (như PDF Techcombank).
+    $pages = PdfText::pages(file_get_contents(base_path('tests/Fixtures/DataSync/split-rates.pdf')));
+
+    expect($pages[0])->toBe([
+        'Lãi suất áp dụng từ ngày 19/10/2026',
+        "Kỳ hạn\tLãi cuối kỳ\tLãi hằng tháng",
+        "1 tháng\t4,75\t-",
+        "12 tháng\t6,20\t6,00",
+        "24 tháng\t0,50\t1,70",
+    ])->and($pages[1])->toBe([
+        "Kỳ hạn\tLãi suất",
+        "6 tháng\t5,10",
+        'Public Document',
+    ]);
+});
+
 it('rejects files that are not PDF', function () {
     PdfText::pages('<html>not a pdf</html>');
 })->throws(ScrapeException::class, 'không phải PDF');
