@@ -2,6 +2,9 @@
 
 namespace App\Modules\Personal\Notifications;
 
+use App\Modules\Core\Actions\NotificationCenter;
+use App\Modules\Core\Notifications\Channel;
+use App\Modules\Personal\Support\PersonalNotifications;
 use Illuminate\Auth\Notifications\VerifyEmail as BaseVerifyEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,14 +23,30 @@ class VerifyEmail extends BaseVerifyEmail implements ShouldQueue
         $this->afterCommit();
     }
 
+    private string $name = '';
+
+    public function toMail($notifiable)
+    {
+        $this->name = (string) ($notifiable->name ?? '');
+
+        return parent::toMail($notifiable);
+    }
+
+    /** Chữ theo mẫu trong trang quản trị Thông báo; link và câu hiệu lực cố định. */
     protected function buildMailMessage($url): MailMessage
     {
-        return (new MailMessage)
-            ->subject('Xác nhận email tài khoản EzFin')
-            ->greeting('Chào bạn,')
-            ->line('Cảm ơn bạn đã tạo tài khoản EzFin. Bấm nút dưới đây để xác nhận địa chỉ email này là của bạn.')
-            ->action('Xác nhận email', $url)
-            ->line('Link có hiệu lực '.config('auth.verification.expire', 60).' phút. Nếu bạn không tạo tài khoản, hãy bỏ qua thư này.')
+        $minutes = config('auth.verification.expire', 60);
+        $copy = app(NotificationCenter::class)->render(PersonalNotifications::VERIFY_EMAIL, Channel::Mail, ['ten' => $this->name, 'so_phut_hieu_luc' => $minutes]);
+
+        $mail = (new MailMessage)->subject($copy->subject);
+
+        if ($copy->greeting !== '') {
+            $mail->greeting($copy->greeting);
+        }
+
+        return $mail->line($copy->bodyHtml())
+            ->action($copy->actionLabel, $url)
+            ->line('Link có hiệu lực '.$minutes.' phút. Nếu bạn không tạo tài khoản, hãy bỏ qua thư này.')
             ->salutation('EzFin');
     }
 }

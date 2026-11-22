@@ -141,3 +141,21 @@ it('explains a failed test email instead of crashing', function () {
 
     expect(NotificationLog::sole()->status)->toBe('failed');
 });
+
+it('shows customer and subscriber emails with their fixed parts, and keeps mandatory ones on', function () {
+    $this->actingAs(User::factory()->admin(Role::SuperAdmin)->create());
+    NotificationSetting::syncCatalog();
+    $confirm = NotificationSetting::where('key', 'newsletter.confirm')->sole();
+
+    $this->get(NOTIFY_URL)->assertOk()->assertSee('Xác nhận đăng ký nhận tin')->assertSee('Nhắc khoản định kỳ sắp đến hạn')->assertSee('Người nhận tin qua email');
+
+    Livewire::test(EditNotificationSetting::class, ['record' => $confirm->id])
+        ->assertSee('Phần hệ thống tự thêm, không sửa được')
+        ->assertFormFieldDisabled('enabled')
+        ->fillForm(['templates.mail.subject' => 'Xác nhận giúp EzFin'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($confirm->fresh()->enabled)->toBeTrue()
+        ->and(app(NotificationCenter::class)->render('newsletter.confirm', Channel::Mail, [])->subject)->toBe('Xác nhận giúp EzFin');
+});

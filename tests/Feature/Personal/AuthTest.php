@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Modules\Core\Models\NotificationTemplate;
 use App\Modules\Personal\Notifications\VerifyEmail;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -162,4 +163,18 @@ it('writes the password reset email in Vietnamese', function () {
 
     expect($mail->subject)->toBe('Đặt lại mật khẩu EzFin')
         ->and($mail->actionText)->toBe('Đặt lại mật khẩu');
+});
+
+it('builds the verification email from the admin template and keeps the link and expiry line', function () {
+    $user = User::factory()->unverified()->create(['name' => 'Trần C']);
+    NotificationTemplate::create(['key' => 'personal.verify_email', 'channel' => 'mail', 'subject' => 'Xác nhận cho {ten}', 'greeting' => 'Chào {ten},', 'action_label' => 'Xác nhận ngay']);
+
+    $mail = (new VerifyEmail)->toMail($user);
+    $html = (string) $mail->render();
+
+    expect($mail->subject)->toBe('Xác nhận cho Trần C')
+        ->and($mail->greeting)->toBe('Chào Trần C,')
+        ->and($mail->actionText)->toBe('Xác nhận ngay')
+        ->and($mail->actionUrl)->toContain('xac-nhan-email')
+        ->and($html)->toContain('Cảm ơn bạn đã tạo tài khoản EzFin')->toContain('Link có hiệu lực 60 phút');
 });

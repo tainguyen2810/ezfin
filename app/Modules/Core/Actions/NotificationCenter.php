@@ -114,7 +114,7 @@ class NotificationCenter
         try {
             $message = $this->build($key, $channel, $template ?? $this->template($key, $channel), $variables);
 
-            if (trim($message->subject) !== '' && ($channel !== Channel::Mail || trim($message->body) !== '')) {
+            if (trim($message->subject) !== '' && ($channel !== Channel::Mail || trim($message->body) !== '' || trim($type->defaultTemplate($channel)['body']) === '')) {
                 return $message;
             }
 

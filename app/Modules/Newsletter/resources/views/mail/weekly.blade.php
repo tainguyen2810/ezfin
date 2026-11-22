@@ -1,5 +1,11 @@
 <x-mail::message>
-# Bản tin EzFin tuần {{ now()->format('d/m/Y') }}
+@if ($copy->greeting !== '')
+# {{ $copy->greeting }}
+@endif
+@if ($copy->body !== '')
+
+{{ $copy->bodyHtml() }}
+@endif
 
 @if ($rates)
 ## Lãi suất tiết kiệm cao nhất

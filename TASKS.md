@@ -628,3 +628,11 @@ Làm trước Phase 2 theo lựa chọn của chủ dự án ngày 30/10/2026. B
 - Xong: `/lai-suat-tiet-kiem` lưới 3 ô/hàng theo mockup Tai duyệt; Tai yêu cầu thêm sắp xếp theo ngân hàng lãi cao nhất trong kỳ hạn → `SavingsFilters::SORTS` + `arrange()` (lai-cao, moi-ngan-hang, ten-ngan-hang). `x-ui.product-tile` thêm `detailLabel`.
 - Test: `vendor/bin/pest` 689 xanh; `test:ui` không tràn ngang, không lỗi JS.
 - Tiếp theo: deploy khi Tai đồng ý.
+
+### 22/11/2026 — Tùy chỉnh thông báo trong trang quản trị (N1–N3)
+
+- Xong: theo kế hoạch Tai duyệt (https://claude.ai/artifact/QPGQzeCSHYUGzXC4Gkgkhy). N1 (#75) nền tảng `Core\Notifications` + `NotificationCenter`/`SendAdminNotification`, bảng `notification_settings`, `notification_templates`, `notification_logs`; 4 cảnh báo DataSync dùng mẫu. N2 (#76) trang `/quan-tri/thong-bao` (chỉ quản trị cao nhất): bật/tắt, kênh, vai trò, email thêm, nhắc lại, sửa mẫu có biến, xem trước, gửi thử, khôi phục mặc định. N3: thư xác nhận email, nhắc khoản định kỳ, xác nhận nhận tin, bản tin tuần, báo lãi tăng dùng mẫu; bảng số liệu, lưu ý, link hủy cố định; thư xác nhận không tắt được; tắt bản tin/báo lãi/nhắc hạn thì lệnh gửi bỏ qua.
+- Test: `vendor/bin/pest` 730 xanh; chụp màn hình trang quản trị 1280/360 trên máy dựng tạm.
+- Chưa giải quyết: gửi thử thư khách hàng/nhận tin chỉ gồm phần sửa được (không có bảng số liệu). SMTP Brevo chưa cấu hình trên production nên email cảnh báo và gửi thử sẽ báo lỗi, chuông vẫn chạy. Telegram/Zalo chưa làm (chờ Tai).
+- File quan trọng: `app/Modules/Core/Notifications/*`, `Core/Actions/NotificationCenter.php`, `Core/Filament/Resources/NotificationSettings/*`, `DataSync/Support/AlertTypes.php`, `Newsletter/Support/NewsletterNotifications.php`, `Personal/Support/PersonalNotifications.php`.
+- Tiếp theo: deploy (cần `php artisan migrate --force`) khi Tai đồng ý.

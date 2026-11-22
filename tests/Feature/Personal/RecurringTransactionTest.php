@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use App\Modules\Core\Models\NotificationSetting;
+use App\Modules\Core\Models\NotificationTemplate;
 use App\Modules\Personal\Actions\CreateDefaultCategories;
 use App\Modules\Personal\Actions\ProcessRecurringTransactions;
 use App\Modules\Personal\Enums\RecurringFrequency;
@@ -200,4 +202,20 @@ it('does nothing when the personal app is switched off', function () {
     $this->artisan('ezfin:recurring')->expectsOutputToContain('đang tắt')->assertSuccessful();
     expect(Transaction::count())->toBe(0);
     $this->get(RECURRING)->assertNotFound();
+});
+
+it('uses the admin-edited reminder wording and sends nothing when the reminder is switched off', function () {
+    Mail::fake();
+    recurring(['name' => 'Tiền nhà', 'starts_on' => '2026-11-03', 'remind_days_before' => 3]);
+    Auth::logout();
+    NotificationTemplate::create(['key' => 'personal.due_reminder', 'channel' => 'mail', 'subject' => 'Nhắc {ten}: {tom_tat}', 'greeting' => 'Xin chào {ten}']);
+
+    $mail = new DueReminderMail($this->user, RecurringTransaction::withoutGlobalScopes()->get(), Carbon::parse('2026-11-01'));
+    expect($mail->envelope()->subject)->toBe('Nhắc '.$this->user->name.': Tiền nhà ngày 03/11/2026')
+        ->and($mail->render())->toContain('Xin chào '.e($this->user->name))->toContain('Các khoản định kỳ dưới đây sắp đến hạn');
+
+    NotificationSetting::create(['key' => 'personal.due_reminder', 'enabled' => false]);
+    $this->artisan('ezfin:recurring')->expectsOutputToContain('gửi 0 email')->assertSuccessful();
+    Mail::assertNothingQueued();
+    expect(RecurringTransaction::withoutGlobalScopes()->sole()->reminded_for)->toBeNull();
 });

@@ -1,7 +1,9 @@
 <x-mail::message>
-# Xác nhận nhận email từ EzFin
+@if ($copy->greeting !== '')
+# {{ $copy->greeting }}
+@endif
 
-Ai đó (có thể là bạn) vừa đăng ký nhận email từ EzFin bằng địa chỉ này:
+{{ $copy->bodyHtml() }}
 
 @if ($term)
 - Báo khi lãi suất tiết kiệm **{{ $term }} tháng** cao nhất thị trường tăng
@@ -11,7 +13,7 @@ Ai đó (có thể là bạn) vừa đăng ký nhận email từ EzFin bằng đ
 @endif
 
 <x-mail::button :url="$confirmUrl">
-Xác nhận đăng ký
+{{ $copy->actionLabel }}
 </x-mail::button>
 
 Link có hiệu lực {{ \App\Modules\Newsletter\Actions\RequestSubscription::LINK_DAYS }} ngày. Nếu bạn không đăng ký, hãy bỏ qua thư này: EzFin sẽ không gửi thêm và không lưu địa chỉ email của bạn.

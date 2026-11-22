@@ -20,6 +20,7 @@ final class NotificationType
      * @param  list<string>  $defaultRoles  Vai trò nhận mặc định (chỉ thông báo quản trị).
      * @param  bool  $canDisable  false = thông báo bắt buộc (ví dụ thư xác nhận), không tắt được.
      * @param  int|null  $defaultRepeatHours  Khoảng nhắc lại khi lỗi còn tiếp diễn; null = loại này không nhắc lại.
+     * @param  string|null  $fixedParts  Phần thư hệ thống luôn tự thêm, không sửa được (bảng số liệu, link hủy...), hiện cho quản trị viên biết.
      */
     public function __construct(
         public readonly string $key,
@@ -32,6 +33,7 @@ final class NotificationType
         public readonly array $defaultRoles = [],
         public readonly bool $canDisable = true,
         public readonly ?int $defaultRepeatHours = null,
+        public readonly ?string $fixedParts = null,
     ) {
         foreach (array_keys($templates) as $channel) {
             if (Channel::tryFrom($channel) === null) {
