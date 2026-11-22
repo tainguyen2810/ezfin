@@ -15,3 +15,25 @@
 .ez-report-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
 .dark .ez-report-table th, .dark .ez-report-table td { border-color: rgb(255 255 255 / 0.1); }
 .ez-report-table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Trang Thông báo (app/Modules/Core/resources/views/filament/notification-*.blade.php). */
+.ez-notify-muted { font-size: 0.8125rem; color: var(--gray-500); }
+.ez-notify-label { font-size: 0.875rem; font-weight: 500; color: var(--gray-950); }
+.dark .ez-notify-label { color: #fff; }
+.ez-notify-error { font-size: 0.8125rem; color: var(--danger-600); }
+.ez-notify-ok { font-size: 0.8125rem; font-weight: 500; color: var(--success-600); }
+.ez-notify-vars { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ez-notify-var { display: inline-flex; align-items: baseline; gap: 0.375rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; background: var(--gray-50); color: var(--gray-700); box-shadow: inset 0 0 0 1px var(--gray-200); cursor: pointer; }
+.ez-notify-var:hover { background: var(--primary-50); box-shadow: inset 0 0 0 1px var(--primary-300); }
+.ez-notify-var span { color: var(--gray-500); }
+.dark .ez-notify-var { background: rgb(255 255 255 / 0.05); color: var(--gray-200); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1); }
+.ez-notify-preview { display: flex; flex-direction: column; gap: 0.5rem; }
+.ez-notify-frame { width: 100%; height: 28rem; border: 1px solid var(--gray-200); border-radius: 0.5rem; background: #fff; }
+.ez-notify-bell { padding: 1rem; border: 1px solid var(--gray-200); border-radius: 0.5rem; background: #fff; }
+.dark .ez-notify-bell { background: var(--gray-900); border-color: rgb(255 255 255 / 0.1); }
+.ez-notify-bell-title { font-size: 0.875rem; font-weight: 500; color: var(--gray-950); }
+.dark .ez-notify-bell-title { color: #fff; }
+.ez-notify-link { margin-top: 0.5rem; font-size: 0.875rem; font-weight: 500; color: var(--primary-600); }
+.ez-notify-logs { font-size: 0.875rem; }
+.ez-notify-logs li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--gray-100); }
+.dark .ez-notify-logs li { border-color: rgb(255 255 255 / 0.05); }

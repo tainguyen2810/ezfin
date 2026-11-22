@@ -12,7 +12,6 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification as Notifier;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Throwable;
 
@@ -27,8 +26,6 @@ class SendAdminNotification
     /**
      * @param  array<string, scalar|null>  $variables
      * @param  string  $status  Màu trên chuông: info, success, warning, danger.
-     * @param  Collection<int, User>|null  $to  Người nhận cố định (gửi thử); null = theo cài đặt.
-     * @param  array{subject: string, greeting: string, body: string, action_label: string}|null  $template  Mẫu đang soạn (gửi thử).
      * @return bool Có gửi ít nhất một kênh.
      */
     public function handle(
@@ -37,9 +34,6 @@ class SendAdminNotification
         ?string $actionUrl = null,
         string $status = 'info',
         ?string $icon = null,
-        ?Collection $to = null,
-        ?Channel $only = null,
-        ?array $template = null,
     ): bool {
         $type = $this->center->type($key);
 
@@ -47,13 +41,11 @@ class SendAdminNotification
             throw new InvalidArgumentException("$key không phải thông báo quản trị");
         }
 
-        $test = $to !== null;
-        $channels = $only ? [$only] : $this->center->channels($key);
-        $users = $to ?? $this->recipients($key);
+        $users = $this->recipients($key);
         $sent = false;
 
-        foreach ($channels as $channel) {
-            $message = $this->center->render($key, $channel, $variables, $template);
+        foreach ($this->center->channels($key) as $channel) {
+            $message = $this->center->render($key, $channel, $variables);
 
             if ($channel === Channel::Database) {
                 if ($users->isEmpty()) {
@@ -71,13 +63,13 @@ class SendAdminNotification
                 }
 
                 $notification->sendToDatabase($users);
-                $this->log($key, $channel, $users->count(), null, $test);
+                $this->log($key, $channel, $users->count(), null);
                 $sent = true;
 
                 continue;
             }
 
-            $extra = $test ? [] : $this->center->extraEmails($key);
+            $extra = $this->center->extraEmails($key);
             $count = $users->count() + count($extra);
 
             if ($count === 0) {
@@ -92,15 +84,11 @@ class SendAdminNotification
                     Notifier::route('mail', $extra)->notify($mail);
                 }
 
-                $this->log($key, $channel, $count, null, $test);
+                $this->log($key, $channel, $count, null);
                 $sent = true;
             } catch (Throwable $e) {
                 Log::warning('Admin notification email failed', ['key' => $key, 'error' => $e->getMessage()]);
-                $this->log($key, $channel, $count, $e->getMessage(), $test);
-
-                if ($test) {
-                    throw $e;
-                }
+                $this->log($key, $channel, $count, $e->getMessage());
             }
         }
 
@@ -119,15 +107,8 @@ class SendAdminNotification
         return User::query()->whereHas('roles', fn ($query) => $query->whereIn('name', $roles))->get();
     }
 
-    private function log(string $key, Channel $channel, int $recipients, ?string $error, bool $test): void
+    private function log(string $key, Channel $channel, int $recipients, ?string $error): void
     {
-        NotificationLog::create([
-            'key' => $key,
-            'channel' => $channel->value,
-            'recipients' => $recipients,
-            'status' => $error === null ? 'sent' : 'failed',
-            'error' => $error === null ? null : Str::limit($error, 490),
-            'test' => $test,
-        ]);
+        NotificationLog::record($key, $channel, $recipients, $error);
     }
 }
