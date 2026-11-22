@@ -40,17 +40,14 @@ class NotificationCenter
     /** @return list<Channel> Kênh đang bật (rỗng khi loại bị tắt). */
     public function channels(string $key): array
     {
+        return $this->enabled($key) ? $this->configuredChannels($key) : [];
+    }
+
+    /** @return list<Channel> Kênh đã chọn cho loại này, kể cả khi loại đang tắt. */
+    public function configuredChannels(string $key): array
+    {
         $type = $this->type($key);
-
-        if (! $this->enabled($key)) {
-            return [];
-        }
-
-        if (! $type->canDisable) {
-            return $type->defaultChannels;
-        }
-
-        $saved = $this->setting($key)?->channels;
+        $saved = $type->canDisable ? $this->setting($key)?->channels : null;
 
         if ($saved === null) {
             return $type->defaultChannels;
