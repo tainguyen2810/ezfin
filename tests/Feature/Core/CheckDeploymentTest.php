@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Core\Jobs\QueueHeartbeat;
+use App\Modules\Core\Models\NotificationSetting;
 use App\Modules\Core\Support\Heartbeat;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -59,4 +60,12 @@ it('schedules the heartbeats and the click log cleanup', function () {
         ->toContain('heartbeat:schedule')
         ->toContain('heartbeat:queue')
         ->toContain('model:prune');
+});
+
+it('warns when an admin alert type is switched off entirely', function () {
+    NotificationSetting::create(['key' => 'data_sync.failed', 'enabled' => false]);
+
+    Artisan::call('ezfin:check');
+
+    expect(Artisan::output())->toContain('Đang tắt: Nguồn dữ liệu bị lỗi');
 });

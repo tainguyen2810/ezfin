@@ -2,53 +2,48 @@
 
 namespace App\Modules\DataSync\Support;
 
-use App\Models\User;
-use App\Modules\Core\Enums\Role;
+use App\Modules\Core\Actions\NotificationCenter;
+use App\Modules\Core\Actions\SendAdminNotification;
 use App\Modules\DataSync\Filament\Resources\SyncDrafts\SyncDraftResource;
 use App\Modules\DataSync\Filament\Resources\SyncSources\SyncSourceResource;
 use App\Modules\DataSync\Models\SyncDraft;
 use App\Modules\DataSync\Models\SyncSource;
-use App\Modules\DataSync\Notifications\SourceAlert;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification as Notifier;
 use Illuminate\Support\Str;
-use Throwable;
 
 /**
- * Báo cho quản trị viên (quản trị cao nhất, vận hành dữ liệu): chuông thông báo trong trang quản trị luôn hoạt động;
- * email gửi thêm khi nguồn lỗi/quá hạn/chạy lại được (lỗi gửi email không làm hỏng lần chạy, chỉ ghi log).
- * Nguồn lỗi liên tục chỉ nhắc lại sau REPEAT_HOURS để không spam.
+ * Báo cho quản trị viên khi nguồn lỗi/quá hạn/chạy lại được hoặc có dữ liệu chờ duyệt. Kênh (chuông, email), người nhận,
+ * nội dung và khoảng nhắc lại chỉnh trong trang quản trị Thông báo (xem AlertTypes cho mặc định).
+ * Nguồn lỗi liên tục chỉ nhắc lại sau số giờ đã cài để không spam.
  */
 class AdminAlerts
 {
-    public const REPEAT_HOURS = 24;
+    public function __construct(
+        private readonly SendAdminNotification $sender,
+        private readonly NotificationCenter $center,
+    ) {}
 
     public function failed(SyncSource $source): void
     {
-        if ($source->last_alerted_at !== null && $source->last_alerted_at->gt(now()->subHours(self::REPEAT_HOURS))) {
+        if ($this->recentlyAlerted($source, AlertTypes::FAILED)) {
             return;
         }
 
-        $this->send(
-            $source,
-            "Không lấy được dữ liệu: {$source->name} ({$source->kind->getLabel()})",
-            Str::limit((string) $source->last_error, 500)." (lỗi liên tiếp {$source->consecutive_failures} lần)",
-            'danger',
-        );
+        $this->send($source, AlertTypes::FAILED, 'danger', [
+            'loi' => Str::limit((string) $source->last_error, 500),
+            'so_lan_loi' => $source->consecutive_failures,
+        ]);
     }
 
     public function stale(SyncSource $source): void
     {
-        if ($source->last_alerted_at !== null && $source->last_alerted_at->gt(now()->subHours(self::REPEAT_HOURS))) {
+        if ($this->recentlyAlerted($source, AlertTypes::STALE)) {
             return;
         }
 
-        $since = $source->last_success_at ? 'lần thành công cuối lúc '.$source->last_success_at->format('H:i d/m/Y') : 'chưa thành công lần nào';
-        $this->send($source, "Quá hạn chưa cập nhật: {$source->name} ({$source->kind->getLabel()})",
-            "Đã quá {$source->kind->staleAfterHours()} giờ chưa lấy được dữ liệu mới ({$since}). Kiểm tra lịch chạy (cron) hoặc nguồn.", 'warning');
+        $this->send($source, AlertTypes::STALE, 'warning', [
+            'so_gio' => $source->kind->staleAfterHours(),
+            'lan_thanh_cong_cuoi' => $source->last_success_at ? 'lần thành công cuối lúc '.$source->last_success_at->format('H:i d/m/Y') : 'chưa thành công lần nào',
+        ]);
     }
 
     public function recovered(SyncSource $source): void
@@ -57,50 +52,43 @@ class AdminAlerts
             return;
         }
 
-        $this->send($source, "Đã lấy lại được dữ liệu: {$source->name}", 'Nguồn hoạt động bình thường trở lại.', 'success');
+        $this->send($source, AlertTypes::RECOVERED, 'success');
         $source->forceFill(['last_alerted_at' => null])->save();
     }
 
-    /** Chỉ chuông thông báo (không email) để quản trị viên vào duyệt. */
     public function draftWaiting(SyncSource $source, SyncDraft $draft): void
     {
-        $warnings = $draft->warnings ? ' Có '.count($draft->warnings).' cảnh báo cần xem kỹ.' : '';
+        $warnings = count($draft->warnings ?? []);
 
-        Notification::make()
-            ->title("Dữ liệu mới chờ duyệt: {$source->name}")
-            ->body($source->kind->getLabel().'.'.$warnings)
-            ->icon('heroicon-o-inbox-arrow-down')
-            ->color($draft->warnings ? 'warning' : 'info')
-            ->actions([Action::make('review')->label('Xem và duyệt')->url(SyncDraftResource::getUrl('view', ['record' => $draft]))])
-            ->sendToDatabase($this->recipients());
+        $this->sender->handle(
+            AlertTypes::DRAFT_WAITING,
+            $this->variables($source) + ['so_canh_bao' => $warnings, 'ghi_chu_canh_bao' => $warnings ? "Có $warnings cảnh báo cần xem kỹ." : ''],
+            SyncDraftResource::getUrl('view', ['record' => $draft]),
+            $warnings ? 'warning' : 'info',
+            'heroicon-o-inbox-arrow-down',
+        );
     }
 
-    private function send(SyncSource $source, string $title, string $body, string $color): void
+    private function recentlyAlerted(SyncSource $source, string $key): bool
     {
-        $recipients = $this->recipients();
-        $url = SyncSourceResource::getUrl('index');
+        $hours = $this->center->repeatHours($key) ?? 24;
 
-        Notification::make()
-            ->title($title)
-            ->body($body)
-            ->status($color)
-            ->actions([Action::make('open')->label('Xem nguồn dữ liệu')->url($url)])
-            ->sendToDatabase($recipients);
+        return $source->last_alerted_at !== null && $source->last_alerted_at->gt(now()->subHours($hours));
+    }
 
-        try {
-            Notifier::send($recipients, new SourceAlert($title, $body, $url));
-        } catch (Throwable $e) {
-            Log::warning('Data sync alert email failed', ['source' => $source->key, 'error' => $e->getMessage()]);
-        }
+    /** @param  array<string, scalar|null>  $variables */
+    private function send(SyncSource $source, string $key, string $status, array $variables = []): void
+    {
+        $sent = $this->sender->handle($key, $this->variables($source) + $variables, SyncSourceResource::getUrl('index'), $status);
 
-        if ($color !== 'success') {
+        if ($sent && $status !== 'success') {
             $source->forceFill(['last_alerted_at' => now()])->save();
         }
     }
 
-    /** @return Collection<int, User> */
-    public function recipients(): Collection
+    /** @return array{ten_nguon: string, loai_du_lieu: string} */
+    private function variables(SyncSource $source): array
     {
-        return User::query()->whereHas('roles', fn ($query) => $query->whereIn('name', [Role::SuperAdmin->value, Role::DataOperator->value]))->get();
+        return ['ten_nguon' => $source->name, 'loai_du_lieu' => $source->kind->getLabel()];
     }
 }

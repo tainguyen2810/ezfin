@@ -8,6 +8,7 @@ use App\Modules\Core\Console\CreateAdminCommand;
 use App\Modules\Core\Http\Controllers\InstallController;
 use App\Modules\Core\Models\AuditLog;
 use App\Modules\Core\Models\Redirect;
+use App\Modules\Core\Notifications\NotificationCatalog;
 use App\Modules\Core\Policies\AuditLogPolicy;
 use App\Modules\Core\Policies\RedirectPolicy;
 use App\Modules\Core\Policies\UserPolicy;
@@ -29,6 +30,11 @@ class CoreServiceProvider extends ModuleServiceProvider
         'legal.privacy' => 'Quyền riêng tư',
         'legal.contact' => 'Liên hệ',
     ];
+
+    public function register(): void
+    {
+        $this->app->singleton(NotificationCatalog::class);
+    }
 
     public function boot(): void
     {

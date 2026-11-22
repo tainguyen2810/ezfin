@@ -8,6 +8,8 @@ use App\Modules\Compare\Models\FinancialProduct;
 use App\Modules\Compare\Models\SavingsRate;
 use App\Modules\Compare\Support\SavingsFilters;
 use App\Modules\Core\Enums\Role;
+use App\Modules\Core\Models\NotificationSetting;
+use App\Modules\Core\Notifications\TemplatedMail;
 use App\Modules\DataSync\Actions\ApproveDraft;
 use App\Modules\DataSync\Actions\RunSource;
 use App\Modules\DataSync\Enums\DraftStatus;
@@ -19,7 +21,6 @@ use App\Modules\DataSync\Filament\Resources\SyncSources\Pages\ListSyncSources;
 use App\Modules\DataSync\Jobs\RunSourceJob;
 use App\Modules\DataSync\Models\SyncDraft;
 use App\Modules\DataSync\Models\SyncSource;
-use App\Modules\DataSync\Notifications\SourceAlert;
 use App\Modules\DataSync\Support\Banks;
 use App\Modules\DataSync\Support\SourceRegistry;
 use Filament\Facades\Filament;
@@ -135,24 +136,24 @@ it('records a failure, alerts admins once per day by bell and email, and announc
         ->and($acb->last_error)->toContain('TK Truyền Thống')
         ->and($acb->consecutive_failures)->toBe(1)
         ->and($acb->last_success_at)->toBeNull();
-    Notification::assertSentTo($admin, SourceAlert::class, fn ($n) => str_contains($n->subject, 'ACB'));
+    Notification::assertSentTo($admin, TemplatedMail::class, fn ($n) => str_contains($n->message->subject, 'ACB') && str_contains($n->message->body, 'TK Truyền Thống'));
     Notification::assertSentTo($admin, DatabaseNotification::class);
-    Notification::assertNotSentTo($editor, SourceAlert::class);
+    Notification::assertNotSentTo($editor, TemplatedMail::class);
 
     // Lỗi tiếp trong ngày: không gửi lại.
     $run->handle(source('savings.acb'));
-    Notification::assertSentToTimes($admin, SourceAlert::class, 1);
+    Notification::assertSentToTimes($admin, TemplatedMail::class, 1);
     expect(source('savings.acb')->consecutive_failures)->toBe(2);
 
     // Sau 24 giờ vẫn lỗi: nhắc lại.
     Carbon::setTestNow('2026-11-16 07:00:00');
     $run->handle(source('savings.acb'));
-    Notification::assertSentToTimes($admin, SourceAlert::class, 2);
+    Notification::assertSentToTimes($admin, TemplatedMail::class, 2);
 
     // Nguồn chạy lại được: báo đã ổn.
     fakeBankSites();
     expect($run->handle(source('savings.acb'))['status'])->toBe('new');
-    Notification::assertSentToTimes($admin, SourceAlert::class, 3);
+    Notification::assertSentToTimes($admin, TemplatedMail::class, 3);
     expect(source('savings.acb')->health())->toBe(SourceHealth::Ok);
 });
 
@@ -321,4 +322,20 @@ it('links the pending count to the drafts of that source', function () {
         ->test(ListSyncDrafts::class)
         ->assertCanSeeTableRecords([$vcb])
         ->assertCanNotSeeTableRecords([$bidv]);
+});
+
+it('follows the repeat interval and channels set in the admin notification settings', function () {
+    Notification::fake();
+    $admin = User::factory()->admin(Role::SuperAdmin)->create();
+    NotificationSetting::create(['key' => 'data_sync.failed', 'channels' => ['database'], 'repeat_hours' => 2]);
+    fakeBankSites(['acb.com.vn/lai-suat-tien-gui' => Http::response('<html><body>Bảo trì</body></html>')]);
+    $run = app(RunSource::class);
+
+    $run->handle(source('savings.acb'));
+    Notification::assertSentToTimes($admin, DatabaseNotification::class, 1);
+    Notification::assertNotSentTo($admin, TemplatedMail::class);
+
+    Carbon::setTestNow(now()->addHours(3));
+    $run->handle(source('savings.acb'));
+    Notification::assertSentToTimes($admin, DatabaseNotification::class, 2);
 });

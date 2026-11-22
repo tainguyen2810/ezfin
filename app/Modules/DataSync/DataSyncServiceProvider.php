@@ -2,11 +2,13 @@
 
 namespace App\Modules\DataSync;
 
+use App\Modules\Core\Notifications\NotificationCatalog;
 use App\Modules\DataSync\Console\ProbeCommand;
 use App\Modules\DataSync\Console\SyncCommand;
 use App\Modules\DataSync\Models\SyncDraft;
 use App\Modules\DataSync\Models\SyncSource;
 use App\Modules\DataSync\Policies\DataSyncPolicy;
+use App\Modules\DataSync\Support\AlertTypes;
 use App\Modules\DataSync\Support\SourceRegistry;
 use App\Support\Modules\ModuleServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -31,6 +33,8 @@ class DataSyncServiceProvider extends ModuleServiceProvider
 
         Gate::policy(SyncSource::class, DataSyncPolicy::class);
         Gate::policy(SyncDraft::class, DataSyncPolicy::class);
+
+        $this->app->make(NotificationCatalog::class)->register(...AlertTypes::all());
 
         if ($this->app->runningInConsole()) {
             $this->commands([SyncCommand::class, ProbeCommand::class]);
