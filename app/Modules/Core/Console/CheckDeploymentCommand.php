@@ -3,7 +3,9 @@
 namespace App\Modules\Core\Console;
 
 use App\Models\User;
+use App\Modules\Core\Actions\NotificationCenter;
 use App\Modules\Core\Enums\Role;
+use App\Modules\Core\Notifications\NotificationCatalog;
 use App\Modules\Core\Support\Heartbeat;
 use App\Modules\DataSync\Actions\SourceStatus;
 use Illuminate\Console\Command;
@@ -86,6 +88,17 @@ class CheckDeploymentCommand extends Command
             $this->check('Dữ liệu tự động', $problems === [], implode('; ', $problems).'. Xem trang quản trị Nguồn dữ liệu.', warn: true);
         } catch (Throwable $e) {
             $this->check('Dữ liệu tự động', false, Str::limit($e->getMessage(), 120), warn: true);
+        }
+
+        try {
+            // Thông báo quản trị bị tắt hẳn (không kênh nào) thì lỗi dữ liệu sẽ không ai biết.
+            $center = app(NotificationCenter::class);
+            $silent = collect(app(NotificationCatalog::class)->all())
+                ->filter(fn ($type) => $type->defaultRepeatHours !== null && $center->channels($type->key) === [])
+                ->map(fn ($type) => $type->label)->values()->all();
+            $this->check('Cảnh báo cho quản trị viên', $silent === [], 'Đang tắt: '.implode(', ', $silent).'. Bật lại trong trang quản trị Thông báo.', warn: true);
+        } catch (Throwable $e) {
+            $this->check('Cảnh báo cho quản trị viên', false, Str::limit($e->getMessage(), 120), warn: true);
         }
 
         $mailer = (string) config('mail.default');
