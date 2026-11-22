@@ -4,6 +4,13 @@ Ghi các thay đổi quan trọng theo phase/task. Mới nhất ở trên.
 
 ## Chưa phát hành
 
+### Tùy chỉnh thông báo trong trang quản trị
+
+- Trang mới Hệ thống → Thông báo (chỉ quản trị cao nhất): bật/tắt từng loại thông báo và từng kênh (chuông, email), vai trò nhận và email nhận thêm, khoảng nhắc lại khi nguồn dữ liệu lỗi.
+- Sửa tiêu đề, lời chào, nội dung (Markdown đơn giản) và chữ trên nút; bấm biến như `{ten_nguon}` để chèn; xem trước trực tiếp, gửi thử cho chính mình, khôi phục mặc định, xem các lần gửi gần đây.
+- Áp dụng cho 9 loại: 4 cảnh báo dữ liệu tự động, thư xác nhận email và nhắc khoản định kỳ của ứng dụng, thư xác nhận nhận tin, bản tin tuần, báo lãi tăng. Thư xác nhận không tắt được; bảng số liệu, lưu ý và link hủy nhận tin luôn do hệ thống thêm.
+- Nhật ký gửi không lưu người nhận, tự xóa sau 90 ngày. `ezfin:check` cảnh báo khi cảnh báo quản trị bị tắt hết kênh.
+
 ### Khoản vay Techcombank, BIDV, ACB; ô lãi suất khi ngân hàng chưa công bố
 
 - Bộ lấy khoản vay chung `HtmlLoanCatalog` + `CatalogParsing::loanTerms`: lãi "chỉ từ X%/năm" (bỏ câu ví dụ, lãi theo ngày, khối tin tức cuối trang), số tháng ưu đãi, thời hạn tối đa, % giá trị tài sản, hạn mức.

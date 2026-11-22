@@ -3,8 +3,10 @@
 namespace App\Modules\Personal\Actions;
 
 use App\Models\User;
+use App\Modules\Core\Actions\NotificationCenter;
 use App\Modules\Personal\Mail\DueReminderMail;
 use App\Modules\Personal\Models\RecurringTransaction;
+use App\Modules\Personal\Support\PersonalNotifications;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
@@ -18,6 +20,11 @@ class SendDueReminders
     /** @return int số email đã đưa vào hàng đợi */
     public function handle(Carbon $today): int
     {
+        // Quản trị viên tắt thư nhắc hạn trong trang Thông báo: không gửi và không đánh dấu đã nhắc.
+        if (! app(NotificationCenter::class)->enabled(PersonalNotifications::DUE_REMINDER)) {
+            return 0;
+        }
+
         $due = RecurringTransaction::withoutGlobalScope('owner')
             ->whereNotNull('remind_days_before')
             ->whereNotNull('next_due_on')

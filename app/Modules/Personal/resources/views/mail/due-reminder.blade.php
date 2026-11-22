@@ -1,7 +1,9 @@
 <x-mail::message>
-# Chào {{ $user->name }},
+@if ($copy->greeting !== '')
+# {{ $copy->greeting }}
+@endif
 
-Các khoản định kỳ dưới đây sắp đến hạn:
+{{ $copy->bodyHtml() }}
 
 <x-mail::table>
 | Khoản | Ngày đến hạn | Số tiền |
@@ -14,7 +16,7 @@ Các khoản định kỳ dưới đây sắp đến hạn:
 Khoản có chữ "tự ghi" sẽ được EzFin ghi vào ví vào ngày đến hạn. Với các khoản còn lại, sau khi thanh toán bạn bấm "Đã trả" trong ứng dụng.
 
 <x-mail::button :url="route('personal.recurring.index')">
-Xem khoản định kỳ
+{{ $copy->actionLabel }}
 </x-mail::button>
 
 Bạn nhận email này vì đã bật nhắc hạn cho các khoản trên. Tắt nhắc trong phần sửa từng khoản.

@@ -113,6 +113,7 @@ class NotificationSettingResource extends Resource
             Section::make('Nội dung')
                 ->description('Bấm vào một biến để chèn vào chỗ con trỏ trong ô đang soạn. Xóa trống một ô = dùng lại chữ mặc định. Thân email dùng Markdown đơn giản: **in đậm**, dòng bắt đầu bằng "- " là danh sách, dòng trống để sang đoạn mới.')
                 ->schema([
+                    Text::make('Phần hệ thống tự thêm, không sửa được: '.$type->fixedParts)->visible($type->fixedParts !== null),
                     View::make('core::filament.notification-variables')->viewData(['variables' => $type->variables]),
                     Tabs::make('channels_tabs')->tabs($tabs),
                 ]),

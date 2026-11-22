@@ -5,7 +5,10 @@ use App\Modules\Compare\Enums\InterestPayment;
 use App\Modules\Compare\Enums\SavingsChannel;
 use App\Modules\Compare\Models\FinancialInstitution;
 use App\Modules\Compare\Models\FinancialProduct;
+use App\Modules\Core\Actions\NotificationCenter;
 use App\Modules\Core\Enums\Role;
+use App\Modules\Core\Models\NotificationSetting;
+use App\Modules\Core\Models\NotificationTemplate;
 use App\Modules\Newsletter\Actions\SendRateAlerts;
 use App\Modules\Newsletter\Actions\SendWeeklyDigest;
 use App\Modules\Newsletter\Mail\ConfirmSubscriptionMail;
@@ -184,4 +187,35 @@ it('renders every email with a manage link', function () {
     expect($alert)->toContain('5,9%')->toContain($subscriber->manageUrl())
         ->and($digest)->toContain('Bài mới')->toContain('5,5%')->toContain($subscriber->manageUrl())
         ->and($confirm)->toContain('12 tháng')->toContain('Xác nhận đăng ký');
+});
+
+it('uses the admin-edited wording but always keeps the fixed parts and unsubscribe links', function () {
+    $subscriber = subscribeAndConfirm(['email' => 'k@example.com', 'ky_han' => '12', 'ban_tin' => '1']);
+    $bank = FinancialInstitution::where('slug', 'alpha')->sole();
+    NotificationTemplate::create(['key' => 'newsletter.rate_alert', 'channel' => 'mail', 'subject' => 'Tin vui: {tom_tat}', 'greeting' => 'Lãi đang lên!', 'body' => "Chào bạn,\n\n**Kỳ hạn {ky_han} tháng** vừa tăng.", 'action_label' => 'So sánh ngay']);
+    NotificationTemplate::create(['key' => 'newsletter.confirm', 'channel' => 'mail', 'subject' => 'Bấm để xác nhận', 'action_label' => 'Đồng ý nhận tin']);
+    NotificationSetting::create(['key' => 'newsletter.confirm', 'enabled' => false]);
+
+    $alert = new RateAlertMail($subscriber, [['term' => 12, 'from' => 5.5, 'to' => 5.9, 'institution' => $bank]]);
+    $html = $alert->render();
+    $confirm = new ConfirmSubscriptionMail('http://ezfin.test/nhan-tin/xac-nhan/x', 12, true);
+
+    expect($alert->envelope()->subject)->toBe('Tin vui: Lãi suất tiết kiệm 12 tháng tăng lên 5,9%/năm')
+        ->and($html)->toContain('Lãi đang lên!</h1>')->toContain('<strong')->toContain('Kỳ hạn 12 tháng')->toContain('So sánh ngay')
+        ->toContain('không phải khuyến nghị tài chính')->toContain($subscriber->manageUrl())
+        ->and($confirm->envelope()->subject)->toBe('Bấm để xác nhận')
+        ->and($confirm->render())->toContain('Đồng ý nhận tin')->toContain('12 tháng')->toContain('Link có hiệu lực')
+        ->and(app(NotificationCenter::class)->enabled('newsletter.confirm'))->toBeTrue();
+});
+
+it('stops weekly digests and rate alerts when switched off in the admin', function () {
+    subscribeAndConfirm(['email' => 'm@example.com', 'ky_han' => '12', 'ban_tin' => '1']);
+    NotificationSetting::create(['key' => 'newsletter.weekly', 'enabled' => false]);
+    NotificationSetting::create(['key' => 'newsletter.rate_alert', 'enabled' => false]);
+    newsletterRate(5.9, daysAgo: 0);
+
+    expect(app(SendWeeklyDigest::class)->handle())->toBe(0)
+        ->and(app(SendRateAlerts::class)->handle())->toBe(0);
+    Mail::assertNotQueued(WeeklyDigestMail::class);
+    Mail::assertNotQueued(RateAlertMail::class);
 });

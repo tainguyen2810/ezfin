@@ -3,9 +3,11 @@
 namespace App\Modules\Newsletter\Actions;
 
 use App\Modules\Compare\Actions\BestSavingsRates;
+use App\Modules\Core\Actions\NotificationCenter;
 use App\Modules\Newsletter\Mail\RateAlertMail;
 use App\Modules\Newsletter\Models\RateAlert;
 use App\Modules\Newsletter\Models\Subscriber;
+use App\Modules\Newsletter\Support\NewsletterNotifications;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -24,6 +26,11 @@ class SendRateAlerts
     /** @return int số email đã xếp gửi */
     public function handle(): int
     {
+        // Quản trị viên tắt báo lãi tăng trong trang Thông báo: không gửi, giữ nguyên mức gốc để bật lại vẫn so đúng.
+        if (! app(NotificationCenter::class)->enabled(NewsletterNotifications::RATE_ALERT)) {
+            return 0;
+        }
+
         $terms = RateAlert::query()->distinct()->pluck('term_months')->map(fn ($term) => (int) $term)->all();
         if ($terms === []) {
             return 0;

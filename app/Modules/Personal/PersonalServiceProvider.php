@@ -2,6 +2,7 @@
 
 namespace App\Modules\Personal;
 
+use App\Modules\Core\Notifications\NotificationCatalog;
 use App\Modules\Personal\Console\DemoDataCommand;
 use App\Modules\Personal\Console\RecurringCommand;
 use App\Modules\Personal\Models\Budget;
@@ -13,6 +14,7 @@ use App\Modules\Personal\Models\RecurringTransaction;
 use App\Modules\Personal\Models\Transaction;
 use App\Modules\Personal\Models\Wallet;
 use App\Modules\Personal\Policies\OwnedRecordPolicy;
+use App\Modules\Personal\Support\PersonalNotifications;
 use App\Support\Modules\ModuleServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -27,6 +29,8 @@ class PersonalServiceProvider extends ModuleServiceProvider
     public function boot(): void
     {
         parent::boot();
+
+        $this->app->make(NotificationCatalog::class)->register(...PersonalNotifications::all());
 
         foreach ([Wallet::class, Category::class, Transaction::class, Budget::class, Goal::class, GoalContribution::class, NetWorthItem::class, RecurringTransaction::class] as $model) {
             Gate::policy($model, OwnedRecordPolicy::class);

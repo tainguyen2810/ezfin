@@ -2,10 +2,12 @@
 
 namespace App\Modules\Newsletter;
 
+use App\Modules\Core\Notifications\NotificationCatalog;
 use App\Modules\Newsletter\Console\RateAlertsCommand;
 use App\Modules\Newsletter\Console\WeeklyDigestCommand;
 use App\Modules\Newsletter\Models\Subscriber;
 use App\Modules\Newsletter\Policies\SubscriberPolicy;
+use App\Modules\Newsletter\Support\NewsletterNotifications;
 use App\Support\Modules\ModuleServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -25,6 +27,8 @@ class NewsletterServiceProvider extends ModuleServiceProvider
     public function boot(): void
     {
         parent::boot();
+
+        $this->app->make(NotificationCatalog::class)->register(...NewsletterNotifications::all());
 
         Gate::policy(Subscriber::class, SubscriberPolicy::class);
 

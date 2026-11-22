@@ -4,8 +4,10 @@ namespace App\Modules\Newsletter\Actions;
 
 use App\Modules\Compare\Actions\BestSavingsRates;
 use App\Modules\Content\Actions\LatestArticles;
+use App\Modules\Core\Actions\NotificationCenter;
 use App\Modules\Newsletter\Mail\WeeklyDigestMail;
 use App\Modules\Newsletter\Models\Subscriber;
+use App\Modules\Newsletter\Support\NewsletterNotifications;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Pennant\Feature;
@@ -23,6 +25,11 @@ class SendWeeklyDigest
     /** @return int số email đã xếp gửi */
     public function handle(): int
     {
+        // Quản trị viên tắt bản tin tuần trong trang Thông báo.
+        if (! app(NotificationCenter::class)->enabled(NewsletterNotifications::WEEKLY)) {
+            return 0;
+        }
+
         $content = $this->content();
         if ($content['rates'] === [] && $content['articles'] === []) {
             return 0;
